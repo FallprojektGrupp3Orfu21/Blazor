@@ -1,0 +1,27 @@
+﻿@page "/expense"
+@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@inject AppState _appState
+@inject ExpenseService _expenseService
+@implements IDisposable
+
+<h3>Expense</h3>
+
+@foreach(var item in expenses)
+{
+    <p>@item.Amount</p>
+}
+
+@code {
+    private List<GetExpenseDTO> expenses = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        expenses = await _expenseService.GetExpenses();
+    }
+
+    public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
+    }
+}

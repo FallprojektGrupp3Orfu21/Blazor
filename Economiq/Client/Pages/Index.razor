@@ -1,0 +1,27 @@
+﻿@page "/"
+@using Economiq.Client.Service
+@inject AppState _appState
+@inject UserService _userService
+@implements IDisposable
+
+<h1>Welcome!</h1>
+
+
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!_appState.IsLoggedIn)
+        {
+            await _userService.Login();
+            _appState.SetUserLoggedIn();
+        }
+        _appState.SetPageTitle("Economiq");
+        _appState.OnStateChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
+    }
+}
