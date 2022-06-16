@@ -5,22 +5,12 @@
 @inject ExpenseService _expenseService
 @implements IDisposable
 
-
-
- <form action="" id="ACHform">
-     <h3>Expense</h3>
+ <EditForm id="ACHform">
+ <h3>Expense</h3>
 <div id="showswhereheaderis"></div>
-
-	<div class="contents">
-
-
-		
-			<h6>Register monetary expense</h6>
-
-
+	<div class="contents">		
+	   <h6>Register monetary expense</h6>
 		<div class="inset">
-	
-
         	<div class="block">
           		<h3>Type of monetary expense</h3>
             	<div class="radiogrid">
@@ -28,63 +18,37 @@
                 		<div class="radiocell">
                   			<input type="radio" name="option"value="NextAmountDue">
                  			 <label for="CurrentAmountDue">Bitcoin</label>
-                		</div>
-                  			<div class="radiocell paddingtop2"><span class="light">+2,13% Btc</span></div>
-             		</div>
-     
-              		<div class="radiorow">
+                		</div><div class="radiocell"><span class="light">+2,13%</span></div>
+             	     	</div>
+                  		<div class="radiorow">
                 		<div class="radiocell">
-                      <input type="radio" name="option" value="RemainingBalance" />
-                  			<label for="RemainingBalance">Cash</label>
-              			</div>  
-                 			<div class="radiocell"><span class="light" id="ctl00_ContentPlaceHolderBody_lblRemainingAmount">-46,1%</span></div>
-              		</div>
-         
-              		<div class="radiorow">
-               			<div class="radiocell">
+                         <input type="radio" name="option" value="RemainingBalance" />
+                  		<label for="RemainingBalance">Cash</label>
+              			</div>  <div class="radiocell"><span class="light" id="ctl00_ContentPlaceHolderBody_lblRemainingAmount">-46,1%</span></div>
+              		</div>	         <div class="radiorow">
+               			                 <div class="radiocell">
                   			<input type="radio" name="otheramount" id="otheramount">
                   			<label for="otheramount">Amount $/Btc</label>
-                		</div>
+                	        	</div>
                   			<input type="text" class="textbox small" width="10" name="otheramountvalue">
               		</div>
             	</div>     
         	</div>
-            
-                    
-           
-              	<div class="textgrid">
-            
-                  
-                   	<div class="textrow">
-	<div class="lefttextinput">
+              	<div class="textgrid">                 
+                 <div class="textrow">	<div class="lefttextinput">
                 	<label class="lefttextlbl" for="RemainingBalance">Expense title</label>
-                  	
-                    		<input type="text" class="textbox medium" name="email" > <br />
-                    	<label class="lefttextlbl" for="RemainingBalance">Expense date</label>
-                  		<div class="lefttextinput">
-                    		<input type="text" class="textbox medium" name="email" > <br />
-                                          	<label class="lefttextlbl" for="RemainingBalance">Expense description</label>
-                  		<div class="lefttextinput">
-                    		<input type="text" class="textbox medium" name="email" > <br />
-                                         	<label class="lefttextlbl" for="RemainingBalance">Expense category</label>
-                  		<div class="lefttextinput">
-                    		<input type="text" class="textbox medium" name="email" > <br />
-                
-
-                
-		
-				<input type="submit" name="ctl00$ContentPlaceHolderBody$btnSubmit" value="Register expense to your budget" class="btnPrimary">
-			</div>
-	</div>
-                	</div>
-           
-                  	</div></div>
-    		</div>  
-		</div>
-               </div>
-		
-
-                  </form>
+                  	  <input type="text" class="textbox medium" name="email" > <br />
+                    	 <label class="lefttextlbl" for="RemainingBalance">Expense date</label>
+                  	    	<div class="lefttextinput">
+                    	    	<input type="text" class="textbox medium" name="email" > <br />
+                                  	<label class="lefttextlbl" for="RemainingBalance">Expense description</label>
+                  		                <div class="lefttextinput">
+                    		                <input type="text" class="textbox medium" name="email" > <br />
+                                         	    <label class="lefttextlbl" for="RemainingBalance">Expense category</label>
+                  	                            	<div class="lefttextinput">
+                                                 		<input type="text" class="textbox medium" name="email" > <br />
+                                                			<input type="submit" name="ctl00$ContentPlaceHolderBody$btnSubmit" value="Register expense to your budget" class="btnPrimary">
+			</div></div></div>	</div></div></div>  </div>          </div>           </EditForm>
 
 
 @foreach(var item in expenses)
