@@ -29,7 +29,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    _recipientService.CreateRecipient(TempUser.Username, recipientDTO.Name, recipientDTO.City);
+                    _recipientService.CreateRecipient(TempUser.Username, recipientDTO.Name, recipientDTO.City, recipientDTO.Street, recipientDTO.Zipcode);
                     return Ok(recipientDTO);
                 }
 

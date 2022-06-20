@@ -21,6 +21,16 @@
             <label for="city">City:</label>
             <ValidationMessage For="@(()=> NewRecipient.City)" />
         </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText class="form-control" id="street" placeholder="street" @bind-Value="@NewRecipient.Street" />
+            <label for="street">Street:</label>
+            <ValidationMessage For="@(()=> NewRecipient.Street)" />
+        </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText class="form-control" id="zipcode" placeholder="zipcode" @bind-Value="@NewRecipient.Zipcode" />
+            <label for="zipcode">Zipcode:</label>
+            <ValidationMessage For="@(()=> NewRecipient.Zipcode)" />
+        </div>
         <div class="mb-2">
       <button class="mx-auto w-25 btn btn-success">Add Recipient</button>
     </div>
@@ -34,7 +44,8 @@
         _recipientService.CreateRecipient(NewRecipient);
         NewRecipient.Name = String.Empty;
         NewRecipient.City = String.Empty;
-
+        NewRecipient.Street = String.Empty;
+        NewRecipient.Zipcode = String.Empty;
     }
     protected override Task OnInitializedAsync()
     {
