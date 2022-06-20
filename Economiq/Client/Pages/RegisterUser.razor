@@ -8,7 +8,7 @@
 <PageTitle>Register</PageTitle>
 
 
-<EditForm Model=@userDTO OnValidSubmit="@OnSubmit">
+<EditForm Model=@createUser OnValidSubmit="@OnSubmit">
 <DataAnnotationsValidator />
 
     <label for="FirstName">FirstName</label>
@@ -28,12 +28,13 @@
 </EditForm>
 
 @code {
+    public UserDTO createUser = new();
 
     public UserDTO userDTO { get; set; } 
 
     public async Task OnSubmit()
     {
-        await _userService.CreateUser(userDTO);
+       await _userService.CreateUser(userDTO);
     }
 
 
