@@ -1,10 +1,8 @@
 ﻿using Economiq.Server;
+using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Service;
-using Service.Models;
-using System.Net.Http.Headers;
 
 namespace API.Controllers
 {
@@ -15,10 +13,10 @@ namespace API.Controllers
     {
         private UserService _userService;
         private RecipientService _recipientService;
-        public RecipientController()
+        public RecipientController(UserService userService, RecipientService recipientService)
         {
-            _userService = new UserService();
-            _recipientService = new RecipientService();
+            _userService = userService;
+            _recipientService = recipientService;
         }
         [HttpPost("createRecipient")]
         public IActionResult CreateRecipient([FromBody] RecipientDTO recipientDTO)

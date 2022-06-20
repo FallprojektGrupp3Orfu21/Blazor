@@ -2,20 +2,21 @@
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using Service.Models;
 
-namespace Service
+namespace Economiq.Server.Service
 {
     public class ExpenseService
     {
         private ExpenseCategoryService _expenseCategoryService;
-        private UserService _userService;
-        public ExpenseService()
-        {
-            _expenseCategoryService = new ExpenseCategoryService();
-            _userService = new UserService();
+        private readonly EconomiqContext _context;
 
+        public ExpenseService(EconomiqContext context, ExpenseCategoryService expenseCategoryService)
+        {
+            _expenseCategoryService = expenseCategoryService;
+            _context = context;
         }
+
+
         public bool AddExpense(ExpenseDTO expense, string userName)
         {
             using (var context = new EconomiqContext())
@@ -77,9 +78,6 @@ namespace Service
 
             using (var context = new EconomiqContext())
             {
-
-
-
                 var user = context.Users.Include(e => e.UserExpensesNav).ThenInclude(e=>e.CategoryNav).Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
                 var expenses = user.UserExpensesNav.ToList();
 
@@ -90,11 +88,29 @@ namespace Service
 
                 }
                 return listToReturn;
-
-
             }
         }
 
+        public async Task<List<GetExpenseDTO>> GetRecentExpenses(string username)
+        {
+            List<GetExpenseDTO> recentExpenses = new();
 
+            User? user = await _context.Users
+                .Include(e => e.UserExpensesNav)
+                .ThenInclude(e => e.CategoryNav)
+                .Include(e => e.RecipientNav)
+                .FirstOrDefaultAsync(x => x.UserName == username);
+
+            List<Expense> expenses = user.UserExpensesNav
+                .OrderByDescending(x => x.ExpenseDate)
+                .Take(5)
+                .ToList();
+
+            foreach (var expense in expenses)
+            {
+                recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
+            }
+            return recentExpenses;
+        }
     }
 }

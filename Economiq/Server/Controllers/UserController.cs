@@ -1,9 +1,8 @@
 ﻿using Economiq.Server;
+using Economiq.Server.Service;
 using Economiq.Shared.DTO;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Service.Models;
-using System.Net.Http.Headers;
+
 
 namespace API.Controllers
 {
@@ -11,8 +10,12 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private UserService _us;
 
-        private UserService _us = new UserService();
+        public UserController(UserService userService)
+        {
+            _us = userService;
+        }
 
         [HttpPost("createUser")]
         public IActionResult CreateUser([FromBody] UserDTO userDTO)

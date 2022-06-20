@@ -11,10 +11,15 @@ namespace Economiq.Server.Data
         public DbSet<ExpenseCategory> ExpensesCategory { get; set; }
         public DbSet<Recipient> Recipients { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        public EconomiqContext()
         {
-            var connectionString = @"Server=localhost\SQLEXPRESS;Database=FallprojektGrupp3New;Integrated Security=True;";
-            builder.UseSqlServer(connectionString);
+
+        }
+
+        public EconomiqContext(DbContextOptions<EconomiqContext> options)
+            : base(options)
+        {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)

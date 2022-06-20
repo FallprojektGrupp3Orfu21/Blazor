@@ -1,9 +1,7 @@
 ﻿using Economiq.Server;
+using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Service;
-using Service.Models;
-using System.Net.Http.Headers;
 
 namespace API.Controllers
 {
@@ -14,10 +12,10 @@ namespace API.Controllers
         private UserService _userService;
         private ExpenseService _expenseService;
        
-        public ExpenseController()
+        public ExpenseController(ExpenseService expenseService, UserService userService)
         {
-            _expenseService = new ExpenseService();
-            _userService = new UserService();
+            _expenseService = expenseService;
+            _userService = userService;
             
         }
 
@@ -48,6 +46,7 @@ namespace API.Controllers
             }
 
         }
+
         [HttpGet("listExpense")]
         public IActionResult GetExpenses()
         {
@@ -73,7 +72,27 @@ namespace API.Controllers
             {
                 return BadRequest("User not logged in");
             }
+        }
 
+        [HttpGet("getRecent")]
+        public async Task<IActionResult> GetRecentExpenses()
+        {
+            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+            {
+                try
+                {
+                    List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Username);
+                    return Ok(recentExpenses);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500);
+                }
+            }
+            else
+            {
+                return BadRequest("User not logged in");
+            }
         }
     }
 }

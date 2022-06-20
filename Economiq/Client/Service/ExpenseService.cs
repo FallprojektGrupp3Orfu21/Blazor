@@ -21,5 +21,10 @@ namespace Economiq.Client.Service
         {
             return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("listExpense");
         }
+
+        public async Task<List<GetExpenseDTO>> GetRecentExpenses()
+        {
+            return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("getRecent");
+        }
     }
 }

@@ -1,6 +1,16 @@
+using Economiq.Server.Service;
+using Economiq.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<EconomiqContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EconomiqContext")));
+builder.Services.AddTransient<ExpenseCategoryService>();
+builder.Services.AddTransient<ExpenseService>();
+builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<RecipientService>();
 
 // Add services to the container.
 

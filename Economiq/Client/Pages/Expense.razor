@@ -9,7 +9,7 @@
 
 @foreach(var item in expenses)
 {
-    <p>@item.Amount</p>
+    <p>@item.Amount , @item.Title , @item.ExpenseDate</p>
 }
 
 @code {
@@ -17,7 +17,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        expenses = await _expenseService.GetExpenses();
+        expenses = await _expenseService.GetRecentExpenses();
     }
 
     public void Dispose()

@@ -1,8 +1,6 @@
-﻿using Economiq.Shared.DTO;
+﻿using Economiq.Server.Service;
+using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Service;
-using Service.Models;
-using System.Net.Http.Headers;
 
 namespace Economiq.Server.Controllers
 {
@@ -12,10 +10,10 @@ namespace Economiq.Server.Controllers
     {
         private UserService _userService;
         private ExpenseCategoryService _categoryService;
-        public ExpenseCategoryController()
+        public ExpenseCategoryController(UserService userService, ExpenseCategoryService categoryService)
         {
-            _userService = new UserService();
-            _categoryService = new ExpenseCategoryService();
+            _userService = userService;
+            _categoryService = categoryService;
         }
 
 
