@@ -7,44 +7,74 @@
 
 <PageTitle>Register</PageTitle>
 
+<h3>Register</h3>
+<fieldset>
 
-<EditForm Model=@createUser OnValidSubmit="@OnSubmit">
-<DataAnnotationsValidator />
+    <EditForm Model=@NewUser OnValidSubmit="OnSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <label for="FirstName">FirstName</label>
-    <div>
-        <InputText id="Fname" @bind-Value=userDTO.Fname class="form-control"/>
-    </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText id="Fname" placeholder="FirstName" @bind-Value="@NewUser.Fname" class="form-control" />
+            <label for="Fname">FirstName:</label>
+            <ValidationMessage For="@(() => NewUser.Fname)" />
+        </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText id="Lname" placeholder="LastName" @bind-Value="@NewUser.Lname" class="form-control" />
+            <label for="Lname">LastName:</label>
+            <ValidationMessage For="@(() => NewUser.Lname)" />
+        </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText id="Username" placeholder="Username" @bind-Value="@NewUser.Username" class="form-control" />
+            <label for="Username">Username:</label>
+            <ValidationMessage For="@(() => NewUser.Username)" />
+        </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText id="email" placeholder="email" @bind-Value="@NewUser.email" class="form-control" />
+            <label for="email">Email:</label>
+            <ValidationMessage For="@(() => NewUser.email)" />
+        </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText id="password" placeholder="password" @bind-Value="@NewUser.password" class="form-control" />
+            <label for="password">Password:</label>
+            <ValidationMessage For="@(() => NewUser.password)" />
+        </div>
+       
+        
+        <div class="mb-2 form-group form-floating">
+            <InputText id="City" placeholder="City" @bind-Value="@NewUser.City" class="form-control" />
+            <label for="City">City:</label>
+            <ValidationMessage For="@(() => NewUser.City)" />
+        </div>
 
-     <label for="LastName">LastName</label>
-    <div>
-        <InputText id="Fname" @bind-Value=userDTO.Lname class="form-control"/>
-    </div>
-    
+
+        <div>
+            <button class="mx-auto w-25 btn btn-success">Register</button>
+
+        </div>
+        
+    </EditForm>
 
 
-    <button type="submit" class="btn btn-primary"></button>
+</fieldset>
 
-</EditForm>
 
 @code {
-    public UserDTO createUser = new();
-
-    public UserDTO userDTO { get; set; } 
-
-    public async Task OnSubmit()
+    public UserDTO NewUser = new();
+    private void OnSubmit()
     {
-       await _userService.CreateUser(userDTO);
+        _userService.CreateUser(NewUser);
+        NewUser.Fname = string.Empty;
+        NewUser.Lname = string.Empty;
+        NewUser.Username = string.Empty;
+        NewUser.email = string.Empty;
+        NewUser.password = string.Empty;
+        NewUser.City = string.Empty;
+        
     }
 
 
-    protected override async Task OnInitializedAsync()
-    {
-      
-    }
-
-
-     public void Dispose()
+    public void Dispose()
     {
         _appState.OnStateChange -= StateHasChanged;
     }
