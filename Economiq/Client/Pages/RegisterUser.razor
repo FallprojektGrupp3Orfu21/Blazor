@@ -1,0 +1,52 @@
+﻿@page "/register"
+@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@inject AppState _appState
+@inject UserService _userService
+@implements IDisposable
+
+<PageTitle>Register</PageTitle>
+
+
+<EditForm Model=@userDTO OnValidSubmit="@OnSubmit">
+<DataAnnotationsValidator />
+
+    <label for="FirstName">FirstName</label>
+    <div>
+        <InputText id="Fname" @bind-Value=userDTO.Fname class="form-control"/>
+    </div>
+
+     <label for="LastName">LastName</label>
+    <div>
+        <InputText id="Fname" @bind-Value=userDTO.Lname class="form-control"/>
+    </div>
+    
+
+
+    <button type="submit" class="btn btn-primary"></button>
+
+</EditForm>
+
+@code {
+
+    public UserDTO userDTO { get; set; } 
+
+    public async Task OnSubmit()
+    {
+        await _userService.CreateUser(userDTO);
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+      
+    }
+
+
+     public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
+    }
+
+
+}
