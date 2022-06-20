@@ -2,7 +2,6 @@
 @using Economiq.Client.Service
 @using Economiq.Shared.DTO
 @inject AppState _appState
-@inject ExpenseService _expenseService
 @inject RecipientService _recipientService
 @implements IDisposable
 
@@ -33,7 +32,10 @@
     private RecipientDTO NewRecipient = new();
     private void AddRecipient()
     {
-        Console.WriteLine("Adding Recipient");
+        _recipientService.CreateRecipient(NewRecipient);
+        NewRecipient.Name = String.Empty;
+        NewRecipient.City = String.Empty;
+
     }
     public void Dispose()
     {
