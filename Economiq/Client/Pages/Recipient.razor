@@ -1,0 +1,44 @@
+﻿@page "/recipient"
+@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@inject AppState _appState
+@inject RecipientService _recipientService
+@implements IDisposable
+
+<h3>Add Recipient</h3>
+<fieldset>
+    <legend>Add Recipient Details</legend>
+<EditForm Model ="@NewRecipient" OnValidSubmit="AddRecipient">
+        <DataAnnotationsValidator />
+    <ValidationSummary />
+
+        <div class="mb-2 form-group form-floating">
+            <InputText class="form-control" id="name" placeholder="name" @bind-Value="@NewRecipient.Name" />
+            <label for="name">Name:</label>
+            <ValidationMessage For="@(() => NewRecipient.Name)" />
+        </div>
+        <div class="mb-2 form-group form-floating">
+            <InputText class="form-control" id="city" placeholder="city" @bind-Value="@NewRecipient.City" />
+            <label for="city">City:</label>
+            <ValidationMessage For="@(()=> NewRecipient.City)" />
+        </div>
+        <div class="mb-2">
+      <button class="mx-auto w-25 btn btn-success">Add Recipient</button>
+    </div>
+        </EditForm>
+</fieldset>
+
+@code {
+    private RecipientDTO NewRecipient = new();
+    private void AddRecipient()
+    {
+        _recipientService.CreateRecipient(NewRecipient);
+        NewRecipient.Name = String.Empty;
+        NewRecipient.City = String.Empty;
+
+    }
+    public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
+    }
+}

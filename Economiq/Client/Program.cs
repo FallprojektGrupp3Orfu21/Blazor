@@ -25,7 +25,7 @@ builder.Services.AddHttpClient("recipient", client =>
 {
     client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/recipient");
 });
-
+builder.Services.AddTransient<RecipientService>();
 builder.Services.AddSingleton<ApiService>();
 builder.Services.AddSingleton<AppState>();
 builder.Services.AddTransient<ExpenseService>();
