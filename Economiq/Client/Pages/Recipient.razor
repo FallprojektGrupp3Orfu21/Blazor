@@ -7,7 +7,6 @@
 
 <h3>Add Recipient</h3>
 <fieldset>
-    <legend>Add Recipient Details</legend>
 <EditForm Model ="@NewRecipient" OnValidSubmit="AddRecipient">
         <DataAnnotationsValidator />
     <ValidationSummary />
@@ -36,6 +35,12 @@
         NewRecipient.Name = String.Empty;
         NewRecipient.City = String.Empty;
 
+    }
+    protected override Task OnInitializedAsync()
+    {
+        var recipients = _recipientService.GetRecipients();
+        Console.WriteLine(recipients);
+        return base.OnInitializedAsync();
     }
     public void Dispose()
     {
