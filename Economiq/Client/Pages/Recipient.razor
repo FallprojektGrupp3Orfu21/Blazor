@@ -38,14 +38,26 @@
 </fieldset>
 
 <h2>Recipients</h2>
-<dl>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Street</th>
+        <th>Zipcode</th>
+        <th>City</th>
+    </tr>
+    </thead>
+    <tbody>
 @foreach(RecipientDTO recipient in recipients){
-    <dt>@recipient.Name</dt>
-    <dd>@recipient.Street</dd>
-    <dd>@recipient.Zipcode</dd>
-    <dd>@recipient.City</dd>
-}   
-</dl>
+    <tr>    
+     <td>@recipient.Name</td>
+    <td>@recipient.Street</td>
+    <td>@recipient.Zipcode</td>
+    <td>@recipient.City</td>
+  </tr>
+}
+</tbody>
+</table>
 
 @code {
     private RecipientDTO NewRecipient = new();
@@ -54,14 +66,17 @@
     {
         await _recipientService.CreateRecipient(NewRecipient);
         recipients = await _recipientService.GetRecipients();
+        recipients.Reverse();
         NewRecipient.Name = String.Empty;
         NewRecipient.City = String.Empty;
         NewRecipient.Street = String.Empty;
         NewRecipient.Zipcode = String.Empty;
+        StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
     {
         recipients = await _recipientService.GetRecipients();
+        recipients.Reverse();
     }
     public void Dispose()
     {
