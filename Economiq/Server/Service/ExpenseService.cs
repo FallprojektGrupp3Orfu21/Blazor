@@ -98,7 +98,7 @@ namespace Economiq.Server.Service
                 .FirstOrDefaultAsync(x => x.UserName == username);
 
             List<Expense> expenses = user.UserExpensesNav
-                .OrderByDescending(x => x.ExpenseDate)
+                .OrderByDescending(x => x.CreationDate)
                 .Take(5)
                 .ToList();
 

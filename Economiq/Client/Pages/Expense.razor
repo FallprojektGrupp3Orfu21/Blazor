@@ -12,14 +12,15 @@
 </div>
 @if (!ShowList)
 {
-    <ExpenseForm></ExpenseForm>
-    <RecentExpense></RecentExpense>
+    <ExpenseForm UpdateList="RefreshRecent"></ExpenseForm>
+    <RecentExpense @ref="_recentExpenseRef"></RecentExpense>
 }
 else
 {
     <ListExpense></ListExpense>
 }
 @code {
+    private RecentExpense _recentExpenseRef;
     private List<GetExpenseDTO> _expenses = new();
     public bool ShowList { get; set; }
 
@@ -27,6 +28,11 @@ else
     {
         ShowList = false;
         _expenses = await _expenseService.GetRecentExpenses();
+    }
+
+    private async Task RefreshRecent()
+    {
+        await _recentExpenseRef.RefreshList();
     }
 
     public void Dispose()

@@ -1,7 +1,9 @@
 ﻿@using Economiq.Client.Service
 @using Economiq.Shared.DTO
 @inject ExpenseService _expenseService
+@inject RecipientService _recipientService
 
+<p>@Confirmation</p>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -36,28 +38,19 @@
     <button type="submit">Create Expense</button>
 </EditForm>
 @code {
-    private List<RecipientDTO> _recipients;
+    [Parameter]
+    public EventCallback UpdateList { get; set; }
+    public string Confirmation { get; set; } = String.Empty;
+    private List<RecipientDTO> _recipients = new();
     public ExpenseDTO NewExpense { get; set; } = new();
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
     protected override async Task OnInitializedAsync()
     {
-        _recipients = new List<RecipientDTO>()
-        {
-            new RecipientDTO()
-            {
-                Name = "Bob",
-                City = "Stockholm"
-            },
-            new RecipientDTO()
-            {
-                Name = "Olle",
-                City = "Örebro"
-            }
-        };
+        _recipients = await _recipientService.GetRecipients();
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
 
-        if(_recipients.Count > 0)
+        if (_recipients.Count > 0)
         {
             NewExpense.RecipientName = _recipients[0].Name;
         }
@@ -68,5 +61,14 @@
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
         await _expenseService.CreateExpense(NewExpense);
+
+        CreationDate = DateOnly.FromDateTime(DateTime.Now);
+        NewExpense = new ExpenseDTO()
+            {
+                ExpenseDate = CreationDate.ToString("yyyy-MM-dd"),
+                RecipientName = _recipients[0].Name
+            };
+        Confirmation = "Expense Created";
+        await UpdateList.InvokeAsync();
     }
 }
