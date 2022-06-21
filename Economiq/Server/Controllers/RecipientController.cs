@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class RecipientController : ControllerBase
     {
@@ -29,7 +29,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    _recipientService.CreateRecipient(TempUser.Username, recipientDTO.Name, recipientDTO.City);
+                    _recipientService.CreateRecipient(TempUser.Username, recipientDTO.Name, recipientDTO.City, recipientDTO.Street, recipientDTO.Zipcode);
                     return Ok(recipientDTO);
                 }
 
@@ -44,7 +44,6 @@ namespace API.Controllers
             }
 
         }
-        [EnableCors("corsapp")]
         [HttpPost("listRecipients")]
         public IActionResult GetRecipients(string? searchString=null)
         {

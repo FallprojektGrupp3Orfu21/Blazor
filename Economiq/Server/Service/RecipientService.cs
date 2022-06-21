@@ -12,7 +12,7 @@ namespace Economiq.Server.Service
         {
             _context = context;
         }
-        public bool CreateRecipient(string userName, string recipientName, string recipientCity)
+        public bool CreateRecipient(string userName, string recipientName, string recipientCity, string recipientStreet, string recipientZipcode)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
             if (user == null)
@@ -23,6 +23,8 @@ namespace Economiq.Server.Service
             {
                 Name = recipientName,
                 City = recipientCity,
+                Street = recipientStreet,
+                Zipcode = recipientZipcode
             };
 
             if (user.RecipientNav == null)
@@ -42,7 +44,6 @@ namespace Economiq.Server.Service
                 throw ex;
             }
         }
-
         public List<RecipientDTO> GetRecipients(string Username, string? SearchString = null)
         {
             List<RecipientDTO> listToReturn = new List<RecipientDTO>();
@@ -54,11 +55,11 @@ namespace Economiq.Server.Service
             {
                 if (SearchString == null)
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City });
+                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street=recipient.Street, Zipcode=recipient.Zipcode });
                 }
                 else if (recipient.Name.ToLower().StartsWith(SearchString.ToLower()))
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City });
+                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street=recipient.Street, Zipcode=recipient.Zipcode });
                 }
             }
             return listToReturn;
