@@ -19,23 +19,21 @@ namespace Economiq.Server.Service
 
         public bool AddExpense(ExpenseDTO expense, string userName)
         {
-            using (var context = new EconomiqContext())
-            {
                 //Gest the user by username
-                var user = context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).FirstOrDefault();
+                var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).FirstOrDefault();
                 var recipient = user.RecipientNav.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
                 if (user == null)
                 {
                     throw new Exception("No User with this Username.");
                 }
                 //Gets the category the expense belongs to, or creates one if it doesnt exist.
-                var category = context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
+                var category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
                 if (category == null)
                 {
                     try
                     {
                         _expenseCategoryService.CreateExpenseCategory(userName, expense.CategoryName);
-                        category = context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
+                        category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
                     }
                     catch
                     {
@@ -62,23 +60,21 @@ namespace Economiq.Server.Service
                 }
                 try
                 {
-                    context.SaveChanges();
+                    _context.SaveChanges();
                     return true;
                 }
                 catch
                 {
                     throw new Exception("Something went wrong");
                 }
-            }
+            
         }
 
         public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
         {
             List<GetExpenseDTO> listToReturn = new List<GetExpenseDTO>();
 
-            using (var context = new EconomiqContext())
-            {
-                var user = context.Users.Include(e => e.UserExpensesNav).ThenInclude(e=>e.CategoryNav).Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
+                var user = _context.Users.Include(e => e.UserExpensesNav).ThenInclude(e=>e.CategoryNav).Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
                 var expenses = user.UserExpensesNav.ToList();
 
 
@@ -88,7 +84,7 @@ namespace Economiq.Server.Service
 
                 }
                 return listToReturn;
-            }
+            
         }
 
         public async Task<List<GetExpenseDTO>> GetRecentExpenses(string username)

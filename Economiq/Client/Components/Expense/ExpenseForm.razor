@@ -1,5 +1,72 @@
-﻿<h3>ExpenseForm</h3>
+﻿@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@inject ExpenseService _expenseService
 
+<EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="title"></label>
+        <InputTextArea id="title" placeholder="Expense" @bind-Value="@NewExpense.Title"></InputTextArea>
+        <ValidationMessage For="@(() => @NewExpense.Title)" />
+    </div>
+    <div>
+        <label for="amount"></label>
+        <InputNumber id="amount" @bind-Value="@NewExpense.Amount"></InputNumber>
+        <ValidationMessage For="@(() => @NewExpense.Amount)" />
+    </div>
+    <div>
+        <label for="category"></label>
+        <InputTextArea id="category" placeholder="Category" @bind-Value="@NewExpense.CategoryName"></InputTextArea>
+        <ValidationMessage For="@(() => @NewExpense.CategoryName)" />
+    </div>
+    <div>
+        <label for="date"></label>
+        <InputDate id="date" @bind-Value="@CreationDate"></InputDate>
+        <ValidationMessage For="@(() => @NewExpense.ExpenseDate)" />
+    </div>
+    <InputSelect id="Type" @bind-Value=NewExpense.RecipientName>
+        @foreach (RecipientDTO recipient in _recipients)
+        {
+            <option Value=@recipient.Name>@recipient.Name</option>
+        }
+    </InputSelect>
+
+    <button type="submit">Create Expense</button>
+</EditForm>
 @code {
+    private List<RecipientDTO> _recipients;
+    public ExpenseDTO NewExpense { get; set; } = new();
+    public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
+    protected override async Task OnInitializedAsync()
+    {
+        _recipients = new List<RecipientDTO>()
+        {
+            new RecipientDTO()
+            {
+                Name = "Bob",
+                City = "Stockholm"
+            },
+            new RecipientDTO()
+            {
+                Name = "Olle",
+                City = "Örebro"
+            }
+        };
+        NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
+
+        if(_recipients.Count > 0)
+        {
+            NewExpense.RecipientName = _recipients[0].Name;
+        }
+        StateHasChanged();
+    }
+
+    public async Task HandleSubmit()
+    {
+        NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
+        await _expenseService.CreateExpense(NewExpense);
+    }
 }
