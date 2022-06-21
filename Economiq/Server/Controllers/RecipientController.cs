@@ -44,7 +44,6 @@ namespace API.Controllers
             }
 
         }
-        [EnableCors("corsapp")]
         [HttpPost("listRecipients")]
         public IActionResult GetRecipients(string? searchString=null)
         {

@@ -37,21 +37,31 @@
         </EditForm>
 </fieldset>
 
+<h2>Recipients</h2>
+<dl>
+@foreach(RecipientDTO recipient in recipients){
+    <dt>@recipient.Name</dt>
+    <dd>@recipient.Street</dd>
+    <dd>@recipient.Zipcode</dd>
+    <dd>@recipient.City</dd>
+}   
+</dl>
+
 @code {
     private RecipientDTO NewRecipient = new();
-    private void AddRecipient()
+    private List<RecipientDTO> recipients = new();
+    private async void AddRecipient()
     {
-        _recipientService.CreateRecipient(NewRecipient);
+        await _recipientService.CreateRecipient(NewRecipient);
+        recipients = await _recipientService.GetRecipients();
         NewRecipient.Name = String.Empty;
         NewRecipient.City = String.Empty;
         NewRecipient.Street = String.Empty;
         NewRecipient.Zipcode = String.Empty;
     }
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        var recipients = _recipientService.GetRecipients();
-        Console.WriteLine(recipients);
-        return base.OnInitializedAsync();
+        recipients = await _recipientService.GetRecipients();
     }
     public void Dispose()
     {
