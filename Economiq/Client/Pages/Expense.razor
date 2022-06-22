@@ -7,8 +7,8 @@
 @implements IDisposable
 
 <div>
-    <button @onclick="()=> {ShowList=false;}">Create</button>
-    <button @onclick="()=> {ShowList=true;}">List</button>
+    <button class="mx-auto w-25 btn btn-success" @onclick="()=> {ShowList=false;}">Create</button>
+    <button class="mx-auto w-25 btn btn-success" @onclick="()=> {ShowList=true;}">List</button>
 </div>
 @if (!ShowList)
 {
