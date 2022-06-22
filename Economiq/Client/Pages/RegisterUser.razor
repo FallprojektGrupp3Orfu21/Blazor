@@ -8,6 +8,7 @@
 <PageTitle>Register</PageTitle>
 
 <h3>Register</h3>
+<p>@_succesMessage</p>
 <fieldset>
 
     <EditForm Model=@NewUser OnValidSubmit="OnSubmit">
@@ -35,12 +36,12 @@
             <ValidationMessage For="@(() => NewUser.email)" />
         </div>
         <div class="mb-2 form-group form-floating">
-            <InputText id="password" placeholder="password" @bind-Value="@NewUser.password" class="form-control" />
+            <InputText id="password" type="password" placeholder="password" @bind-Value="@NewUser.password" class="form-control" />
             <label for="password">Password:</label>
             <ValidationMessage For="@(() => NewUser.password)" />
         </div>
-       
-        
+
+
         <div class="mb-2 form-group form-floating">
             <InputText id="City" placeholder="City" @bind-Value="@NewUser.City" class="form-control" />
             <label for="City">City:</label>
@@ -52,7 +53,7 @@
             <button class="mx-auto w-25 btn btn-success">Register</button>
 
         </div>
-        
+
     </EditForm>
 
 
@@ -61,17 +62,23 @@
 
 @code {
     public UserDTO NewUser = new();
-    private void OnSubmit()
+    private string _succesMessage = string.Empty;
+
+    private async void OnSubmit()
     {
-        _userService.CreateUser(NewUser);
+        NewUser.Gender = string.Empty;
+        await _userService.CreateUser(NewUser);
         NewUser.Fname = string.Empty;
         NewUser.Lname = string.Empty;
         NewUser.Username = string.Empty;
         NewUser.email = string.Empty;
         NewUser.password = string.Empty;
         NewUser.City = string.Empty;
-        
+        _succesMessage = "Registration has been succesful!";
+
     }
+
+
 
 
     public void Dispose()
