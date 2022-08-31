@@ -12,14 +12,18 @@ namespace Economiq.Client.Service
             _apiService = apiService;
         }
 
-        public async Task CreateUser(UserDTO userDTO)
+        public async Task<string> CreateUser(UserDTO userDTO)
         {
-            await _apiService.GetUserClient().PostAsJsonAsync("createUser", userDTO);
+            HttpResponseMessage response = await _apiService.GetUserClient().PostAsJsonAsync("createUser", userDTO);
+            string responseString = await response.Content.ReadAsStringAsync();
+            return responseString;
         }
 
-        public async Task Login()
+        public async Task<string> Login()
         {
-            await _apiService.GetUserClient().PostAsJsonAsync("login", String.Empty);
+            HttpResponseMessage response = await _apiService.GetUserClient().PostAsJsonAsync("login", String.Empty);
+            string responseString = await response.Content.ReadAsStringAsync();
+            return responseString;
         }
     }
 }

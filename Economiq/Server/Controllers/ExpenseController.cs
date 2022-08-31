@@ -32,12 +32,12 @@ namespace API.Controllers
                 try
                 {
                     _expenseService.AddExpense(expenseDTO, TempUser.Username);
-                    return Ok(expenseDTO);
+                    return StatusCode(200, "Expense Successfully Created");
                 }
 
                 catch (Exception err)
                 {
-                    return BadRequest(err.Message);
+                    return StatusCode(500, "Failed to create Expense");
                 }
             }
             else
@@ -59,13 +59,12 @@ namespace API.Controllers
                 try
                 {
                     List<GetExpenseDTO> listToReturn = _expenseService.GetAllExpensesByUsername(TempUser.Username);
-                   
-                    return Ok(listToReturn);
+                    return StatusCode(200, listToReturn);
                 }
 
                 catch (Exception err)
                 {
-                    return BadRequest(err.Message);
+                    return StatusCode(500, "Could not fetch Expenses");
                 }
             }
             else
@@ -82,11 +81,11 @@ namespace API.Controllers
                 try
                 {
                     List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Username);
-                    return Ok(recentExpenses);
+                    return StatusCode(200, recentExpenses);
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode(500);
+                    return StatusCode(500, "Failed to fetch recent Expenses");
                 }
             }
             else

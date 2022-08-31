@@ -30,12 +30,12 @@ namespace API.Controllers
                 try
                 {
                     _recipientService.CreateRecipient(TempUser.Username, recipientDTO.Name, recipientDTO.City, recipientDTO.Street, recipientDTO.Zipcode);
-                    return Ok(recipientDTO);
+                    return Ok("Recipient Created");
                 }
 
-                catch (Exception err)
+                catch (Exception ex)
                 {
-                    return BadRequest(err.Message);
+                    return StatusCode(500, "Failed To create Recipient");
                 }
             }
             else
@@ -57,12 +57,12 @@ namespace API.Controllers
                 {
                     var listToReturn = _recipientService.GetRecipients(TempUser.Username, searchString);
 
-                    return Ok(listToReturn);
+                    return StatusCode(200,listToReturn);
                 }
 
                 catch (Exception err)
                 {
-                    return BadRequest(err.Message);
+                    return StatusCode(200, "Failed to fetch recipients");
                 }
             }
             else
