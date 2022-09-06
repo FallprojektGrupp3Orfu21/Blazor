@@ -2,6 +2,12 @@
 @using Economiq.Shared.DTO
 @inject ExpenseService _expenseService
 
+@if(loading){
+    <div class="spinner-grow" style="width: 3rem; height: 3rem; color: rebeccapurple;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
+else {
 <table class="table">
         <thead>
             <tr>
@@ -25,13 +31,14 @@
             }
         </tbody>
     </table>
-
+ }
 @code {
     private List<GetExpenseDTO> _expenses = new();
-
+    private bool loading = true; 
     protected override async Task OnInitializedAsync()
     {
         _expenses = await _expenseService.GetExpenses();
+        loading = false; 
     }
 
     public async Task RefreshList()
