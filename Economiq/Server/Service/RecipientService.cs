@@ -41,7 +41,7 @@ namespace Economiq.Server.Service
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false; 
             }
         }
         public List<RecipientDTO> GetRecipients(string Username, string? SearchString = null)

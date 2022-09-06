@@ -29,12 +29,12 @@ namespace Economiq.Server.Controllers
                 try
                 {
                     _categoryService.CreateExpenseCategory(TempUser.Username, expenseCategoryDTO.CategoryName);
-                    return Ok(expenseCategoryDTO);
+                    return StatusCode(200, "Category Successfully Created");
                 }
 
                 catch (Exception err)
                 {
-                    return BadRequest(err.Message);
+                    return StatusCode(500, "Failed to create Category");
                 }
             }
             else

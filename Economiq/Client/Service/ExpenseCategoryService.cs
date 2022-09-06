@@ -12,9 +12,11 @@ namespace Economiq.Client.Service
             _apiService = apiService;
         }
 
-        public async Task CreateExpenseCategory(ExpenseCategoryDTO dto)
+        public async Task<string> CreateExpenseCategory(ExpenseCategoryDTO dto)
         {
-            await _apiService.GetExpenseCategoryClient().PostAsJsonAsync("create", dto);
+            HttpResponseMessage response = await _apiService.GetExpenseCategoryClient().PostAsJsonAsync("create", dto);
+            string responseString = await response.Content.ReadAsStringAsync();
+            return responseString;
         }
     }
 }
