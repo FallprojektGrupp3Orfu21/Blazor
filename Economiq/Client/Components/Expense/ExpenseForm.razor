@@ -64,7 +64,7 @@
     public async Task HandleSubmit()
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
-        await _expenseService.CreateExpense(NewExpense);
+        Confirmation = await _expenseService.CreateExpense(NewExpense);
 
         CreationDate = DateOnly.FromDateTime(DateTime.Now);
         NewExpense = new ExpenseDTO()
@@ -72,7 +72,6 @@
                 ExpenseDate = CreationDate.ToString("yyyy-MM-dd"),
                 RecipientName = _recipients[0].Name
             };
-        Confirmation = "Expense Created";
         await UpdateList.InvokeAsync();
     }
 }
