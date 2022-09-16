@@ -1,25 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+   
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/app.css" />
+    <link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css" />
+  </head>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Economiq</title>
-    <base href="/" />
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/app.css" rel="stylesheet" />
-    <link href="Economiq.Client.styles.css" rel="stylesheet" />
-</head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="landingpage">
+      <div class="navbar">
+        <a class="navlogo">Economiq</a>
+        <button class="hamburger">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-menu"
+          >
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        </button>
+        <div class="navlinkwrap">
+          <span class="navlink selectedlink">Home</span>
+          <span class="navlink">My Profile</span>
+          <span class="navlink">Activity</span>
+          <span class="navlink">How It Works</span>
+        </div>
+        <div class="buttonwrap">
+          <button class="createbtn selectedbtn">CREATE</button>
+          <button class="createbtn">SIGN IN</button>
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
 
-<body>
-    <div id="app">Loading...</div>
+      <div class="box">
+        <div class="infobox">
+          <p class="infobox-boldtext">Upptäck nya Economiq från NORRSKEN</p>
+          <p class="infobox-slimtext">NORRSKENS vs. ECONOMIQ</p>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+          <div class="infobox-btnwrapper"></div>
+        </div>
+        <div class="display">
+          <div class="infowrapper">
+            <div class="info">
+              <div></div>
+            </div>
+            <div class="info2">
+              <p></p>
+              <div class="iconwrapper"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="auction">
+        <div class="title">
+          <p class="titlebold"></p>
+          <p class="titleslim"></p>
+        </div>
+        <div class="nft">
+          <div class="item">
+            <div class="item-title"></div>
+          </div>
+          <div class="item">
+            <div class="item-title"></div>
+          </div>
+          <div class="item">
+            <div class="item-title"></div>
+          </div>
+          <div class="item"></div>
+        </div>
+      </div>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
-</body>
 
+    <div class="itemwrapper"></div>
+    <div class="itemwrapper"></div>
+
+    <div class="discover">
+      <div class="discover-title">
+        <div class="filters">
+          <div class="filter"></div>
+          <div class="filter"></div>
+          <div class="filter"></div>
+        </div>
+      </div>
+      <div class="discover-items">
+        <div class="item">
+          <div class="item-title"></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title"></div>
+        </div>
+        <div class="item">
+          <div class="item-title"></div>
+        </div>
+        <div class="item">
+          <div class="item-title"></div>
+        </div>
+        <div class="item">
+          <div class="item-title"></div>
+        </div>
+      </div>
+      <div class="item"></div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-main"></div>
+      <div class="footer-navigate">
+        <div class="nav"></div>
+        <div class="nav"></div>
+        <div class="nav"></div>
+      </div>
+    </div>
+    <div class="footer2">
+      <div></div>
+    </div>
+    <!-- partial -->
+  </body>
 </html>
