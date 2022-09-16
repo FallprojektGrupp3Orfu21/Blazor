@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace Economiq.Client.Service
+﻿namespace Economiq.Client.Service
 {
     public class ApiService
     {
@@ -30,7 +28,5 @@ namespace Economiq.Client.Service
         {
             return _httpClient.CreateClient("user");
         }
-
-
     }
 }

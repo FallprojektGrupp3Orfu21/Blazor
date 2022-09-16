@@ -13,13 +13,11 @@ namespace Economiq.Server.Data
 
         public EconomiqContext()
         {
-
         }
 
         public EconomiqContext(DbContextOptions<EconomiqContext> options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
@@ -65,10 +63,7 @@ namespace Economiq.Server.Data
                 .HasForeignKey(e => e.RecipientNavId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-
-
             modelbuilder.Seed();
         }
-
     }
 }

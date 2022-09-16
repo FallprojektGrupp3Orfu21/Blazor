@@ -1,6 +1,5 @@
-using Economiq.Server.Service;
 using Economiq.Server.Data;
-using Microsoft.AspNetCore.ResponseCompression;
+using Economiq.Server.Service;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +36,6 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 
 app.MapRazorPages();
 app.MapControllers();

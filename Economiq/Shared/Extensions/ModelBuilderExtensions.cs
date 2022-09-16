@@ -7,7 +7,6 @@ namespace Economiq.Shared.Extensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-
             var u1 = new User() { Id = 1, UserName = "JuliaH", Fname = "Julia", Lname = "Hook", Password = "Testing123", Gender = "Female", City = "Orebro", CreationDate = DateTime.Now };
             var u2 = new User() { Id = 2, UserName = "AlexV", Fname = "Alexander", Lname = "Volonen", Password = "Testing234", Gender = "Male", City = "Orebro", CreationDate = DateTime.Now };
             var u3 = new User() { Id = 3, UserName = "Peppo", Fname = "Stefan", Lname = "Krakowsky", Password = "Testing345", Gender = "Male", City = "Orebro", CreationDate = DateTime.Now };
@@ -35,14 +34,13 @@ namespace Economiq.Shared.Extensions
             var ec5 = new ExpenseCategory() { Id = 5, CategoryName = "Entertainment", CreationDate = DateTime.Now };
             modelBuilder.Entity<ExpenseCategory>().HasData(ec, ec2, ec3, ec4, ec5);
 
-            var r1 = new Recipient() { Id = 1, Name = "ICA", City = "Örebro" , UserNavId = 1};
-            var r2 = new Recipient() { Id = 2, Name = "H&M", City = "Stockholm" , UserNavId = 5 };
-            var r3 = new Recipient() { Id = 3, Name = "Alfred", City = "Göteborg" , UserNavId = 3 };
-            var r4 = new Recipient() { Id = 4, Name = "Hanna", City = "Örebro" , UserNavId = 4 };
-            var r5 = new Recipient() { Id = 5, Name = "ICA", City = "Nora" , UserNavId = 7 };
-            var r6 = new Recipient() { Id = 6, Name = "Coop", City = "Morgongåva" , UserNavId = 7 };
+            var r1 = new Recipient() { Id = 1, Name = "ICA", City = "Örebro", UserNavId = 1 };
+            var r2 = new Recipient() { Id = 2, Name = "H&M", City = "Stockholm", UserNavId = 5 };
+            var r3 = new Recipient() { Id = 3, Name = "Alfred", City = "Göteborg", UserNavId = 3 };
+            var r4 = new Recipient() { Id = 4, Name = "Hanna", City = "Örebro", UserNavId = 4 };
+            var r5 = new Recipient() { Id = 5, Name = "ICA", City = "Nora", UserNavId = 7 };
+            var r6 = new Recipient() { Id = 6, Name = "Coop", City = "Morgongåva", UserNavId = 7 };
             modelBuilder.Entity<Recipient>().HasData(r1, r2, r3, r4, r5, r6);
-
 
             var e1 = new Expense() { Id = 1, Amount = 25, Comment = "Glass", CategoryNavId = 2, CreationDate = DateTime.Now, ExpenseDate = DateTime.Now.Date, UserNavId = 1 };
             modelBuilder.Entity<Expense>().HasData(e1);

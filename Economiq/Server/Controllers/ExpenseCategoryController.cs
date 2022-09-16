@@ -10,12 +10,12 @@ namespace Economiq.Server.Controllers
     {
         private UserService _userService;
         private ExpenseCategoryService _categoryService;
+
         public ExpenseCategoryController(UserService userService, ExpenseCategoryService categoryService)
         {
             _userService = userService;
             _categoryService = categoryService;
         }
-
 
         [HttpPost("create")]
         public IActionResult CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
@@ -31,7 +31,6 @@ namespace Economiq.Server.Controllers
                     _categoryService.CreateExpenseCategory(TempUser.Username, expenseCategoryDTO.CategoryName);
                     return StatusCode(200, "Category Successfully Created");
                 }
-
                 catch (Exception err)
                 {
                     return StatusCode(500, "Failed to create Category");
@@ -41,9 +40,6 @@ namespace Economiq.Server.Controllers
             {
                 return BadRequest("User not logged in");
             }
-
-
         }
-
     }
 }

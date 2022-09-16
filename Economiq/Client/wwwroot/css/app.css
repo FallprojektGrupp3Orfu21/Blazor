@@ -1,12 +1,9 @@
-﻿
-
-@font-face {
+﻿@font-face {
     font-family: 'Comfortaa';
     font-style: normal;
     font-weight: normal;
     src: local('Comfortaa'), url('Comfortaa_Regular.woff') format('woff');
 }
-
 
 @font-face {
     font-family: 'Comfortaa Thin';
@@ -14,7 +11,6 @@
     font-weight: normal;
     src: local('Comfortaa Thin'), url('Comfortaa_Thin.woff') format('woff');
 }
-
 
 @font-face {
     font-family: 'Comfortaa Bold';

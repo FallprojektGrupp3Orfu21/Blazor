@@ -18,7 +18,6 @@ namespace Economiq.Client.Service
             HttpResponseMessage response = await _apiService.GetRecipientClient().PostAsJsonAsync("createRecipient", recipientDTO);
             string responseString = await response.Content.ReadAsStringAsync();
             return responseString;
-
         }
 
         public async Task<List<RecipientDTO>> GetRecipients(string? searchString = null)

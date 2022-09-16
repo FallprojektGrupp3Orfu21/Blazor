@@ -11,12 +11,11 @@ namespace API.Controllers
     {
         private UserService _userService;
         private ExpenseService _expenseService;
-       
+
         public ExpenseController(ExpenseService expenseService, UserService userService)
         {
             _expenseService = expenseService;
             _userService = userService;
-            
         }
 
         [HttpPost("createExpense")]
@@ -26,7 +25,6 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid Username");
             }
-
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
                 try
@@ -34,7 +32,6 @@ namespace API.Controllers
                     _expenseService.AddExpense(expenseDTO, TempUser.Username);
                     return StatusCode(200, "Expense Successfully Created");
                 }
-
                 catch (Exception err)
                 {
                     return StatusCode(500, "Failed to create Expense");
@@ -44,7 +41,6 @@ namespace API.Controllers
             {
                 return BadRequest("User not logged in");
             }
-
         }
 
         [HttpGet("listExpense")]
@@ -61,7 +57,6 @@ namespace API.Controllers
                     List<GetExpenseDTO> listToReturn = _expenseService.GetAllExpensesByUsername(TempUser.Username);
                     return StatusCode(200, listToReturn);
                 }
-
                 catch (Exception err)
                 {
                     return StatusCode(500, "Could not fetch Expenses");

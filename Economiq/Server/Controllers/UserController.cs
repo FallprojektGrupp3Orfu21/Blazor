@@ -3,7 +3,6 @@ using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace API.Controllers
 {
     [Route("api/[controller]")]
@@ -25,12 +24,12 @@ namespace API.Controllers
                 _us.RegisterUser(userDTO);
                 return Ok(userDTO);
             }
-
             catch (Exception err)
             {
                 return BadRequest(err.Message);
             }
         }
+
         [HttpPost("login")]
         public IActionResult LoginUser()
         {
@@ -44,6 +43,7 @@ namespace API.Controllers
                 return Ok("User Logged In");
             }
         }
+
         [HttpPost("logout")]
         public IActionResult LogoutUser()
         {
@@ -61,8 +61,5 @@ namespace API.Controllers
             }
             return Ok("User logged out");
         }
-        
-        
     }
 }
-

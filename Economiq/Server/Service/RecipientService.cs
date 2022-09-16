@@ -8,10 +8,12 @@ namespace Economiq.Server.Service
     public class RecipientService
     {
         private readonly EconomiqContext _context;
+
         public RecipientService(EconomiqContext context)
         {
             _context = context;
         }
+
         public bool CreateRecipient(string userName, string recipientName, string recipientCity, string recipientStreet, string recipientZipcode)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
@@ -41,9 +43,10 @@ namespace Economiq.Server.Service
             }
             catch (Exception ex)
             {
-                return false; 
+                return false;
             }
         }
+
         public List<RecipientDTO> GetRecipients(string Username, string? SearchString = null)
         {
             List<RecipientDTO> listToReturn = new List<RecipientDTO>();
@@ -55,15 +58,14 @@ namespace Economiq.Server.Service
             {
                 if (SearchString == null)
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street=recipient.Street, Zipcode=recipient.Zipcode });
+                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street = recipient.Street, Zipcode = recipient.Zipcode });
                 }
                 else if (recipient.Name.ToLower().StartsWith(SearchString.ToLower()))
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street=recipient.Street, Zipcode=recipient.Zipcode });
+                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street = recipient.Street, Zipcode = recipient.Zipcode });
                 }
             }
             return listToReturn;
         }
-
     }
 }

@@ -11,6 +11,7 @@ namespace Economiq.Server.Service
         {
             _context = context;
         }
+
         public bool CreateExpenseCategory(string userName, string categoryName)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
@@ -32,7 +33,6 @@ namespace Economiq.Server.Service
                 else
                 {
                     user.ExpensesCategoryNav.Add(expenseCategory);
-
                 }
                 try
                 {
