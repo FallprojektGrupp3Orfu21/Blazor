@@ -27,6 +27,7 @@ namespace API.Controllers
             }
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
+#pragma warning disable CS0168 // The variable 'err' is declared but never used
                 try
                 {
                     _expenseService.AddExpense(expenseDTO, TempUser.Username);
@@ -36,6 +37,7 @@ namespace API.Controllers
                 {
                     return StatusCode(500, "Failed to create Expense");
                 }
+#pragma warning restore CS0168 // The variable 'err' is declared but never used
             }
             else
             {
@@ -52,6 +54,7 @@ namespace API.Controllers
             }
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
+#pragma warning disable CS0168 // The variable 'err' is declared but never used
                 try
                 {
                     List<GetExpenseDTO> listToReturn = _expenseService.GetAllExpensesByUsername(TempUser.Username);
@@ -61,6 +64,7 @@ namespace API.Controllers
                 {
                     return StatusCode(500, "Could not fetch Expenses");
                 }
+#pragma warning restore CS0168 // The variable 'err' is declared but never used
             }
             else
             {
@@ -73,6 +77,7 @@ namespace API.Controllers
         {
             if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 try
                 {
                     List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Username);
@@ -82,6 +87,7 @@ namespace API.Controllers
                 {
                     return StatusCode(500, "Failed to fetch recent Expenses");
                 }
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             }
             else
             {

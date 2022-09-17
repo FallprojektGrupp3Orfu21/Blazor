@@ -99,7 +99,9 @@ namespace Economiq.Server.Service
         public bool DoesPasswordMatch(string username, string password)
         {
             var user = _context.Users.Where(user => user.UserName == username).FirstOrDefault();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             return (user.Password == password);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         public bool LogoutUser(string userName, string password)

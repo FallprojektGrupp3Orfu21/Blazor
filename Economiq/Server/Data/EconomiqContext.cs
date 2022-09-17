@@ -11,11 +11,27 @@ namespace Economiq.Server.Data
         public DbSet<ExpenseCategory> ExpensesCategory { get; set; }
         public DbSet<Recipient> Recipients { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning disable CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning disable CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning disable CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public EconomiqContext()
+#pragma warning restore CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning restore CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning restore CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning restore CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         {
         }
 
+#pragma warning disable CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning disable CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning disable CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning disable CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public EconomiqContext(DbContextOptions<EconomiqContext> options)
+#pragma warning restore CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning restore CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning restore CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+#pragma warning restore CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
             : base(options)
         {
         }

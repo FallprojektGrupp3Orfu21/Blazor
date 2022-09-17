@@ -26,6 +26,7 @@ namespace Economiq.Server.Controllers
             }
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
+#pragma warning disable CS0168 // The variable 'err' is declared but never used
                 try
                 {
                     _categoryService.CreateExpenseCategory(TempUser.Username, expenseCategoryDTO.CategoryName);
@@ -35,6 +36,7 @@ namespace Economiq.Server.Controllers
                 {
                     return StatusCode(500, "Failed to create Category");
                 }
+#pragma warning restore CS0168 // The variable 'err' is declared but never used
             }
             else
             {

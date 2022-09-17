@@ -36,6 +36,7 @@ namespace Economiq.Server.Service
 
             user.RecipientNav.Add(newRecipient);
 
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             try
             {
                 _context.SaveChanges();
@@ -45,6 +46,7 @@ namespace Economiq.Server.Service
             {
                 return false;
             }
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
         }
 
         public List<RecipientDTO> GetRecipients(string Username, string? SearchString = null)
@@ -52,7 +54,11 @@ namespace Economiq.Server.Service
             List<RecipientDTO> listToReturn = new List<RecipientDTO>();
 
             var user = _context.Users.Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument for parameter 'source' in 'List<Recipient> Enumerable.ToList<Recipient>(IEnumerable<Recipient> source)'.
             var recipients = user.RecipientNav.ToList();
+#pragma warning restore CS8604 // Possible null reference argument for parameter 'source' in 'List<Recipient> Enumerable.ToList<Recipient>(IEnumerable<Recipient> source)'.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             foreach (var recipient in recipients)
             {

@@ -27,6 +27,7 @@ namespace API.Controllers
             }
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 try
                 {
                     _recipientService.CreateRecipient(TempUser.Username, recipientDTO.Name, recipientDTO.City, recipientDTO.Street, recipientDTO.Zipcode);
@@ -36,6 +37,7 @@ namespace API.Controllers
                 {
                     return StatusCode(500, "Failed To create Recipient");
                 }
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             }
             else
             {
@@ -52,6 +54,7 @@ namespace API.Controllers
             }
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
+#pragma warning disable CS0168 // The variable 'err' is declared but never used
                 try
                 {
                     var listToReturn = _recipientService.GetRecipients(TempUser.Username, searchString);
@@ -62,6 +65,7 @@ namespace API.Controllers
                 {
                     return StatusCode(200, "Failed to fetch recipients");
                 }
+#pragma warning restore CS0168 // The variable 'err' is declared but never used
             }
             else
             {

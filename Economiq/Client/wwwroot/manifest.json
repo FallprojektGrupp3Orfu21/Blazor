@@ -1,0 +1,11 @@
+{
+    "short_name": "Blazing Pizza",
+    "name": "Blazing Pizza",
+    "icons": [
+    ],
+    "start_url": "/",
+
+    "display": "standalone",
+    "scope": "/",
+
+  }
