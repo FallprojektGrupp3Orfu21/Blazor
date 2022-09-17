@@ -1,6 +1,7 @@
 ﻿html, body {
     margin: 0 auto;
     background-color: #252954;
+    font-family:'Comfortaa';
 }
 
 .hidden {
@@ -16,6 +17,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     background-color: #1F1D2B;
+    font-family: 'Comfortaa';
 }
 
     .landingpage::before {
@@ -98,7 +100,7 @@
     width: 126px;
     height: 45px;
     color: #BCBCBC;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -114,14 +116,14 @@
     background: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
 }
 
 .navbar .navlink {
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -149,7 +151,7 @@
 
 .box .infobox-boldtext {
     margin: 0;
-    font-family: Poppins;
+    font-family: 'Comfortaa';
     color: #FFFFFF;
     font-size: 65px;
     font-weight: 600;
@@ -160,7 +162,7 @@
 
 .box .infobox-slimtext {
     margin: 24px 0;
-    font-family: Poppins;
+    font-family: 'Comfortaa';
     color: #FFFFFF;
     font-size: 16px;
     font-weight: 400;
@@ -181,7 +183,7 @@
     background-color: #1F1D2B;
     padding: 8px 38px;
     border-radius: 16px;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 600;
     font-size: 13px;
@@ -199,7 +201,7 @@
     padding: 8px 38px;
     border: 1px solid #D7D7D7;
     border-radius: 16px;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 600;
     font-size: 13px;
@@ -246,7 +248,7 @@
 .box .display .info {
     display: flex;
     align-items: center;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     color: #FFFFFF;
     font-weight: 600;
@@ -270,7 +272,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     color: #FFFFFF;
     font-style: normal;
     font-weight: 600;
@@ -299,7 +301,7 @@
 
     .auction .title .titlebold {
         margin: 0;
-        font-family: "Poppins";
+        font-family: 'Comfortaa';
         font-style: normal;
         color: #FFFFFF;
         font-weight: 500;
@@ -309,7 +311,7 @@
 
     .auction .title .titleslim {
         margin: 0;
-        font-family: "Poppins";
+        font-family: 'Comfortaa';
         font-style: normal;
         color: #D7D7D7;
         font-weight: 600;
@@ -335,7 +337,7 @@
 .started-boldtext {
     margin: 0;
     align-self: center;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     color: #FFFFFF;
     font-weight: 500;
@@ -346,7 +348,7 @@
 .started-slimtext {
     margin: 0;
     align-self: center;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -380,7 +382,7 @@
         margin: 0;
         margin-top: 10px;
         text-align: center;
-        font-family: "Poppins";
+        font-family: 'Comfortaa';
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
@@ -406,7 +408,7 @@
 }
 
     .discover-title p {
-        font-family: "Poppins";
+        font-family: 'Comfortaa';
         font-style: normal;
         font-weight: 500;
         font-size: 36px;
@@ -431,7 +433,7 @@
     border: 1px solid #D7D7D7;
     border-radius: 10px;
     background-color: transparent;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -441,7 +443,7 @@
 
 .footer-main {
     max-width: 40%;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 500;
     font-size: 30px;
@@ -459,7 +461,7 @@
 
         .footer-navigate .nav h5 {
             margin: 0;
-            font-family: "Poppins";
+            font-family: 'Comfortaa';
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -468,7 +470,7 @@
         }
 
         .footer-navigate .nav p {
-            font-family: "Poppins";
+            font-family: 'Comfortaa';
             font-style: normal;
             font-weight: 400;
             font-size: 12px;
@@ -478,7 +480,7 @@
         }
 
 .footer2 p {
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -511,7 +513,7 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid white;
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
@@ -520,7 +522,7 @@
 }
 
 .item-date {
-    font-family: "Poppins";
+    font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -537,7 +539,7 @@
         display: flex;
         align-items: center;
         margin-right: 30px;
-        font-family: "Poppins";
+        font-family: 'Comfortaa';
         font-style: normal;
         font-weight: 500;
         font-size: 12px;
@@ -558,7 +560,7 @@
         background: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
         border: none;
         border-radius: 10px;
-        font-family: "Poppins";
+        font-family: 'Comfortaa';
         font-style: normal;
         font-weight: 500;
         font-size: 12px;
