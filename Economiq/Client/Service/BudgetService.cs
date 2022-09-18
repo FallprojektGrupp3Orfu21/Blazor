@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace Economiq.Client.Service
+﻿namespace Economiq.Client.Service
 {
     public class BudgetService
 

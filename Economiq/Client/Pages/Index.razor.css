@@ -58,7 +58,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 80px;
+        margin-top: 25px;
     }
 
     .landingpage .auction {
@@ -131,9 +131,10 @@
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    color: #BCBCBC;
+    color: #fff;
+    text-decoration: none;
     position: absolute;
-    z-index: 1;
+
 }
 
     .navbar .navlink.selectedlink {

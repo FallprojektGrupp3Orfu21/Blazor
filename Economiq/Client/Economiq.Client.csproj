@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <None Remove="Pages\Budget.razor.css" />
+    <None Remove="Pages\Expense.razor.css" />
     <None Remove="Pages\Index.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Pages\Budget.razor.css" />
+    <Content Include="Pages\Expense.razor.css" />
     <Content Include="Pages\Index.razor.css" />
   </ItemGroup>
 
