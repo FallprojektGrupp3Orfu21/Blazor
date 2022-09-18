@@ -48,7 +48,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-    
         max-height: 3rem;
         width: 100%;
         position: absolute;
@@ -152,7 +151,6 @@
     animation-name: leftslide;
     animation-duration: 0.8s;
     max-height: 600px;
-
     overflow: hidden;
 }
 
