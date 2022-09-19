@@ -23,5 +23,9 @@ namespace Economiq.Shared.Models
         //For Recipient
         public int? RecipientNavId { get; set; }
         public Recipient? RecipientNav { get; set; }
+
+        public Budget? Budget { get; set; }
+
+        public Guid? BudgetNav { get; set; }
     }
 }
