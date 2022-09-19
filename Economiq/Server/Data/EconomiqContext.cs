@@ -11,6 +11,8 @@ namespace Economiq.Server.Data
         public DbSet<ExpenseCategory> ExpensesCategory { get; set; }
         public DbSet<Recipient> Recipients { get; set; }
 
+        public DbSet<Budget> Budgets { get; set; }
+
         public EconomiqContext()
         {
 
@@ -35,13 +37,24 @@ namespace Economiq.Server.Data
                 .HasKey(r => r.Id);
             modelbuilder.Entity<Email>()
                 .HasKey(c => new { c.UserNavId, c.Mail });
+            modelbuilder.Entity<Budget>()
+                .HasKey(b => b.Id);
             //Relations
             modelbuilder.Entity<Expense>()
                 .HasOne(u => u.UserNav)
                 .WithMany(e => e.UserExpensesNav)
                 .HasForeignKey(e => e.UserNavId)
                 .OnDelete(DeleteBehavior.NoAction);
-            //Does Below Work?
+            modelbuilder.Entity<Budget>()
+                .HasOne(u => u.User)
+                .WithMany(b => b.Budgets)
+                .HasForeignKey(b => b.UserNav)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelbuilder.Entity<Expense>()
+                .HasOne(b => b.Budget)
+                .WithMany(e => e.Expenses)
+                .HasForeignKey(b => b.BudgetNav)
+                .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<User>()
                 .HasMany(e => e.UserExpensesNav)
                 .WithOne(u => u.UserNav)

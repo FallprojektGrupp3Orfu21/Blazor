@@ -25,5 +25,7 @@ namespace Economiq.Shared.Models
         public bool IsLoggedIn { get; set; }
         //For recipients
         public List<Recipient>? RecipientNav { get; set; }
+
+        public List<Budget> Budgets { get; set; }
     }
 }
