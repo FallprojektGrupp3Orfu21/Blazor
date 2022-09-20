@@ -11,6 +11,7 @@ builder.Services.AddTransient<ExpenseCategoryService>();
 builder.Services.AddTransient<ExpenseService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<RecipientService>();
+builder.Services.AddTransient<BudgetService>();
 
 // Add services to the container.
 
