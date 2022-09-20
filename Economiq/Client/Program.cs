@@ -17,6 +17,10 @@ builder.Services.AddHttpClient("expenseCategory", client =>
 {
     client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/expenseCategory");
 });
+builder.Services.AddHttpClient("budget", client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/budget");
+});
 builder.Services.AddHttpClient("user", client =>
 {
     client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/user/");
@@ -28,6 +32,7 @@ builder.Services.AddHttpClient("recipient", client =>
 builder.Services.AddTransient<RecipientService>();
 builder.Services.AddSingleton<ApiService>();
 builder.Services.AddSingleton<AppState>();
+builder.Services.AddTransient<BudgetService>();
 builder.Services.AddTransient<ExpenseService>();
 builder.Services.AddTransient<UserService>();
 await builder.Build().RunAsync();

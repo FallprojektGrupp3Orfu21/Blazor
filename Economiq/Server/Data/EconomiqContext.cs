@@ -1,4 +1,5 @@
-﻿using Economiq.Shared.Extensions;
+﻿
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,31 +12,26 @@ namespace Economiq.Server.Data
         public DbSet<ExpenseCategory> ExpensesCategory { get; set; }
         public DbSet<Recipient> Recipients { get; set; }
 
-#pragma warning disable CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning disable CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning disable CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning disable CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+        public DbSet<Budget> Budgets { get; set; }
+
         public EconomiqContext()
-#pragma warning restore CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning restore CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning restore CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning restore CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         {
+
         }
 
-#pragma warning disable CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning disable CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning disable CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning disable CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
         public EconomiqContext(DbContextOptions<EconomiqContext> options)
-#pragma warning restore CS8618 // Non-nullable property 'Expenses' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning restore CS8618 // Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning restore CS8618 // Non-nullable property 'ExpensesCategory' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
-#pragma warning restore CS8618 // Non-nullable property 'Recipients' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
             : base(options)
         {
-        }
 
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(
+               "Server=localhost\\SQLEXPRESS;Database=FallprojektGrupp3New;Integrated Security=True;Trusted_Connection=True;");
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             //Primary Keys
@@ -49,13 +45,24 @@ namespace Economiq.Server.Data
                 .HasKey(r => r.Id);
             modelbuilder.Entity<Email>()
                 .HasKey(c => new { c.UserNavId, c.Mail });
+            modelbuilder.Entity<Budget>()
+                .HasKey(b => b.Id);
             //Relations
             modelbuilder.Entity<Expense>()
                 .HasOne(u => u.UserNav)
                 .WithMany(e => e.UserExpensesNav)
                 .HasForeignKey(e => e.UserNavId)
                 .OnDelete(DeleteBehavior.NoAction);
-            //Does Below Work?
+            modelbuilder.Entity<Budget>()
+                .HasOne(u => u.User)
+                .WithMany(b => b.Budgets)
+                .HasForeignKey(b => b.UserNav)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelbuilder.Entity<Expense>()
+                .HasOne(b => b.Budget)
+                .WithMany(e => e.Expenses)
+                .HasForeignKey(b => b.BudgetNav)
+                .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<User>()
                 .HasMany(e => e.UserExpensesNav)
                 .WithOne(u => u.UserNav)
@@ -79,7 +86,10 @@ namespace Economiq.Server.Data
                 .HasForeignKey(e => e.RecipientNavId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+
+
             modelbuilder.Seed();
         }
+
     }
 }

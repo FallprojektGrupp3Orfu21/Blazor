@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -40,6 +41,26 @@ namespace Economiq.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Budgets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MaxAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UserNav = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Budgets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Budgets_Users_UserNav",
+                        column: x => x.UserNav,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -91,6 +112,8 @@ namespace Economiq.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Zipcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserNavId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -116,11 +139,17 @@ namespace Economiq.Server.Migrations
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserNavId = table.Column<int>(type: "int", nullable: false),
                     CategoryNavId = table.Column<int>(type: "int", nullable: true),
-                    RecipientNavId = table.Column<int>(type: "int", nullable: true)
+                    RecipientNavId = table.Column<int>(type: "int", nullable: true),
+                    BudgetNav = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expenses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Expenses_Budgets_BudgetNav",
+                        column: x => x.BudgetNav,
+                        principalTable: "Budgets",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Expenses_ExpensesCategory_CategoryNavId",
                         column: x => x.CategoryNavId,
@@ -144,11 +173,11 @@ namespace Economiq.Server.Migrations
                 columns: new[] { "Id", "CategoryName", "CreationDate" },
                 values: new object[,]
                 {
-                    { 1, "Rent", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4678) },
-                    { 2, "Food", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4682) },
-                    { 3, "Transport", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4684) },
-                    { 4, "Clothing", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4687) },
-                    { 5, "Entertainment", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4689) }
+                    { 1, "Rent", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3266) },
+                    { 2, "Food", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3270) },
+                    { 3, "Transport", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3273) },
+                    { 4, "Clothing", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3276) },
+                    { 5, "Entertainment", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3279) }
                 });
 
             migrationBuilder.InsertData(
@@ -156,14 +185,14 @@ namespace Economiq.Server.Migrations
                 columns: new[] { "Id", "City", "CreationDate", "Fname", "Gender", "IsLoggedIn", "Lname", "Password", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4433), "Julia", "Female", false, "Hook", "Testing123", "JuliaH" },
-                    { 2, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4467), "Alexander", "Male", false, "Volonen", "Testing234", "AlexV" },
-                    { 3, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4470), "Stefan", "Male", false, "Krakowsky", "Testing345", "Peppo" },
-                    { 4, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4472), "Winnie", "Female", false, "Huynh", "Testing456", "WinnieH" },
-                    { 5, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4474), "Eric", "Male", false, "Flodin", "Testing567", "Ericx" },
-                    { 6, "Fjugesta", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4477), "Anders", "Male", false, "Bergstrom", "Testing678", "AndersB" },
-                    { 7, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4480), "Peter", "Male", false, "Hafid", "Testing789", "PeterH" },
-                    { 8, "Orebro", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4482), "admin", "Male", false, "admin", "admin", "admin" }
+                    { 1, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2451), "Julia", "Female", false, "Hook", "Testing123", "JuliaH" },
+                    { 2, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2653), "Alexander", "Male", false, "Volonen", "Testing234", "AlexV" },
+                    { 3, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2657), "Stefan", "Male", false, "Krakowsky", "Testing345", "Peppo" },
+                    { 4, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2734), "Winnie", "Female", false, "Huynh", "Testing456", "WinnieH" },
+                    { 5, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2871), "Eric", "Male", false, "Flodin", "Testing567", "Ericx" },
+                    { 6, "Fjugesta", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2874), "Anders", "Male", false, "Bergstrom", "Testing678", "AndersB" },
+                    { 7, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2877), "Peter", "Male", false, "Hafid", "Testing789", "PeterH" },
+                    { 8, "Orebro", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2880), "admin", "Male", false, "admin", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -229,26 +258,36 @@ namespace Economiq.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Expenses",
-                columns: new[] { "Id", "Amount", "CategoryNavId", "Comment", "CreationDate", "ExpenseDate", "RecipientNavId", "UserNavId" },
-                values: new object[] { 1, 25m, 2, "Glass", new DateTime(2022, 6, 16, 11, 44, 5, 745, DateTimeKind.Local).AddTicks(4857), new DateTime(2022, 6, 16, 0, 0, 0, 0, DateTimeKind.Local), null, 1 });
+                columns: new[] { "Id", "Amount", "BudgetNav", "CategoryNavId", "Comment", "CreationDate", "ExpenseDate", "RecipientNavId", "UserNavId" },
+                values: new object[] { 1, 25m, null, 2, "Glass", new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3328), new DateTime(2022, 9, 20, 0, 0, 0, 0, DateTimeKind.Local), null, 1 });
 
             migrationBuilder.InsertData(
                 table: "Recipients",
-                columns: new[] { "Id", "City", "Name", "UserNavId" },
+                columns: new[] { "Id", "City", "Name", "Street", "UserNavId", "Zipcode" },
                 values: new object[,]
                 {
-                    { 1, "Örebro", "ICA", 1 },
-                    { 2, "Stockholm", "H&M", 5 },
-                    { 3, "Göteborg", "Alfred", 3 },
-                    { 4, "Örebro", "Hanna", 4 },
-                    { 5, "Nora", "ICA", 7 },
-                    { 6, "Morgongåva", "Coop", 7 }
+                    { 1, "Örebro", "ICA", "", 1, "" },
+                    { 2, "Stockholm", "H&M", "", 5, "" },
+                    { 3, "Göteborg", "Alfred", "", 3, "" },
+                    { 4, "Örebro", "Hanna", "", 4, "" },
+                    { 5, "Nora", "ICA", "", 7, "" },
+                    { 6, "Morgongåva", "Coop", "", 7, "" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Budgets_UserNav",
+                table: "Budgets",
+                column: "UserNav");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExpenseCategoryUser_UserNavId",
                 table: "ExpenseCategoryUser",
                 column: "UserNavId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expenses_BudgetNav",
+                table: "Expenses",
+                column: "BudgetNav");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Expenses_CategoryNavId",
@@ -281,6 +320,9 @@ namespace Economiq.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expenses");
+
+            migrationBuilder.DropTable(
+                name: "Budgets");
 
             migrationBuilder.DropTable(
                 name: "ExpensesCategory");
