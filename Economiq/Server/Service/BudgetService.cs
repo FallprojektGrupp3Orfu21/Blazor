@@ -11,27 +11,27 @@ namespace Economiq.Server.Service
             _context = context;
         }
 
-        public async Task CreateBudget(CreateBudgetDTO createBudgetDTO)
+        public async Task CreateBudget(CreateBudgetDTO createBudgetDTO, string username)
         {
 
         }
 
-        public async Task<List<ListBudgetDTO>> GetAllBudgets()
-        {
-            return new();
-        }
-
-        public async Task<List<ListBudgetDTO>> GetBudgetById(Guid id)
+        public async Task<List<ListBudgetDTO>> GetAllBudgets(string username)
         {
             return new();
         }
 
-        public async Task<ListBudgetDTO> GetLatestBudget()
+        public async Task<List<ListBudgetDTO>> GetBudgetById(Guid id, string username)
         {
             return new();
         }
 
-        public async Task<ListBudgetDTO> GetBudgetByDate()
+        public async Task<ListBudgetDTO> GetLatestBudget(string username)
+        {
+            return new();
+        }
+
+        public async Task<ListBudgetDTO> GetBudgetByDate(string username)
         {
             return new();
         }
