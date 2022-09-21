@@ -21,8 +21,8 @@ namespace Economiq.Server.Controllers
         }
 
 
-        [HttpGet("ListBudgets")]
-        public async Task<IActionResult> GetAllBudgets(UserService userService)
+        [HttpGet("listBudgets")]
+        public async Task<IActionResult> GetAllBudgets()
         {
 
             if (!_userService.DoesUserExist(TempUser.Username))
@@ -36,7 +36,6 @@ namespace Economiq.Server.Controllers
                     List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(TempUser.Username);
                     return StatusCode(200, allBudgets);
                 }
-
                 catch (Exception err)
                 {
                     return StatusCode(500, "Could not fetch budgets");
@@ -50,27 +49,25 @@ namespace Economiq.Server.Controllers
         }
 
 
-        [HttpGet("GetBudgetById")]
-        public async Task<IActionResult> GetBudgetById(ListBudgetDTO listBudgetDTO, UserService userService)
+        [HttpGet("getBudgetById/{id}")]
+        public async Task<IActionResult> GetBudgetById(Guid id)
         {
             if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
                 try
                 {
-                    var budgetById = await _budgetService.GetBudgetById(listBudgetDTO.Id, TempUser.Username);
+                    ListBudgetDTO budgetById = await _budgetService.GetBudgetById(id, TempUser.Username);
                     return StatusCode(200, budgetById);
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode(500, "Failed to fetch budget");
+                    return StatusCode(500, ex.Message);
                 }
             }
             else
             {
                 return BadRequest("User not logged in");
             }
-
-
         }
     }
 }
