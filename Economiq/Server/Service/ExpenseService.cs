@@ -56,10 +56,6 @@ namespace Economiq.Server.Service
             {
                 user.UserExpensesNav = new List<Expense>();
             }
-            //else
-            //{
-            //    user.UserExpensesNav.Add(newExpense);
-            //}
             CreateBudgetDTO newBudget = new()
             {
                 ExpenseDate = expense.ExpenseDate

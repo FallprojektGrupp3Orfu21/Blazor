@@ -109,7 +109,7 @@ namespace Economiq.Server.Service
 
         public async Task CreateBudget(CreateBudgetDTO createBudgetDTO, int userId)
         {
-            User? user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            //User? user = await _context.Users.Where(u => u.Id == userId).Include(u=>u.Budgets).FirstOrDefaultAsync();
             
             if (DateTime.TryParse(createBudgetDTO.ExpenseDate, out DateTime date))
             {
@@ -122,9 +122,9 @@ namespace Economiq.Server.Service
                     EndDate = lastDayOfMonth,
                     MaxAmount = createBudgetDTO.MaxAmount,
                     Expenses = new List<Expense>(),
-                    UserNav = user.Id
+                    UserNav = userId
                 };
-                user.Budgets.Add(newBudget);
+                _context.Budgets.Add(newBudget);
                 
                 await _context.SaveChangesAsync();
             }
