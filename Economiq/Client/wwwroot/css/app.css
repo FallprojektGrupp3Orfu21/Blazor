@@ -1,9 +1,12 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
 
+h2,h3 {
+    font-family: 'Comfortaa'
+}
 h1:focus {
     outline: none;
 }
@@ -66,4 +69,8 @@ a, .btn-link {
 hr.separator {
     height: 10px;
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%)
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #570674 !important;
 }
