@@ -33,7 +33,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(TempUser.Username);
+                    List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(TempUser.Id);
                     return StatusCode(200, allBudgets);
                 }
                 catch (Exception err)
@@ -56,7 +56,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    ListBudgetDTO budgetById = await _budgetService.GetBudgetById(id, TempUser.Username);
+                    ListBudgetDTO budgetById = await _budgetService.GetBudgetById(id);
                     return StatusCode(200, budgetById);
                 }
                 catch (Exception ex)

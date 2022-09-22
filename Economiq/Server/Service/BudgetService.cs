@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +14,12 @@ namespace Economiq.Server.Service
             _context = context;
         }
 
-        public async Task<List<ListBudgetDTO>> GetAllBudgets(string username)
+        public async Task<List<ListBudgetDTO>> GetAllBudgets(int userId)
         {
-            User user = await GetUserByUsername(username);
-            if (user.Budgets.Any())
+            List<Budget> budgets = await _context.Budgets.Where(b => b.UserNav == userId).OrderByDescending(b => b.EndDate).ToListAsync();
+            
+            if (budgets.Any())
             {
-                List<Budget> budgets = user.Budgets.OrderByDescending(b => b.EndDate).ToList();
                 List<ListBudgetDTO> budgetsDTO = new List<ListBudgetDTO>();
 
                 foreach(Budget budget in budgets)
@@ -27,7 +28,7 @@ namespace Economiq.Server.Service
                     {
                         Id = budget.Id,
                         MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy")
+                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy").FirstCharToUpper()
                     });
                 }
                 return budgetsDTO;
@@ -38,30 +39,44 @@ namespace Economiq.Server.Service
             }
         }
 
-        public async Task<ListBudgetDTO> GetBudgetById(Guid id, string username)
+        public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
-            User user = await GetUserByUsername(username);
-            Budget? budget = user.Budgets.Where(b => b.Id == id).FirstOrDefault();
+            Budget? budget = await _context.Budgets.Where(b => b.Id == id).FirstOrDefaultAsync();
+            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetNav == id).Include(e=>e.CategoryNav).Include(e=>e.RecipientNav).ToListAsync();
+
             if(budget == null)
             {
                 throw new Exception("Budget does not exist");
             }
             else
             {
+                List<GetExpenseDTO> expenseDTOs = new List<GetExpenseDTO>();
+                foreach(var expense in expenses)
+                {
+                    expenseDTOs.Add(new()
+                    {
+                        Amount = expense.Amount,
+                        categoryName = expense.CategoryNav.CategoryName,
+                        ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"),
+                        RecipientName = expense.RecipientNav.Name,
+                        Title = expense.Comment
+                    });
+                }
+
                 ListBudgetDTO budgetDTO = new()
                 {
                     Id = budget.Id,
                     MaxAmount = budget.MaxAmount,
-                    YearAndMonth = budget.StartDate.ToString("MMMM yyyy")
+                    YearAndMonth = budget.StartDate.ToString("MMMM yyyy").FirstCharToUpper(),
+                    Expenses = expenseDTOs
                 };
                 return budgetDTO;
             }
         }
 
-        public async Task<decimal> GetLatestMaxAmount(string username)
+        public async Task<decimal> GetLatestMaxAmount(int userId)
         {
-            User user = await GetUserByUsername(username);
-            Budget? latestBudget = user.Budgets.OrderByDescending(b => b.EndDate).FirstOrDefault();
+            Budget? latestBudget = await _context.Budgets.Where(b => b.UserNav == userId).OrderByDescending(b => b.EndDate).FirstOrDefaultAsync();
             if (latestBudget == null)
             {
                 return 0;
@@ -72,30 +87,30 @@ namespace Economiq.Server.Service
             }
         }
 
-        public async Task<ListBudgetDTO> GetBudgetByDate(CreateBudgetDTO budgetDTO, string username)
+        public async Task<ListBudgetDTO> GetBudgetByDate(CreateBudgetDTO budgetDTO, int userId)
         {
-            User user = await GetUserByUsername(username);
             if (DateTime.TryParse(budgetDTO.ExpenseDate, out DateTime date))
             {
-                Budget? budget = user.Budgets.Where(b => b.StartDate <= date && date <= b.EndDate).FirstOrDefault();
-                if(budget != null)
+                Budget? budget = await _context.Budgets.Where(b => b.UserNav == userId && b.StartDate <= date && date <= b.EndDate).FirstOrDefaultAsync();
+                
+                if (budget != null)
                 {
                     ListBudgetDTO newBudgetDTO = new()
                     {
                         Id = budget.Id,
                         MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy")
+                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy").FirstCharToUpper()
                     };
                     return newBudgetDTO;
                 }
             }
-                return null;
+            return null;
         }
 
-        public async Task CreateBudget(CreateBudgetDTO createBudgetDTO, string username)
+        public async Task CreateBudget(CreateBudgetDTO createBudgetDTO, int userId)
         {
-            User user = await GetUserByUsername(username);
-
+            User? user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            
             if (DateTime.TryParse(createBudgetDTO.ExpenseDate, out DateTime date))
             {
                 DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
@@ -110,32 +125,12 @@ namespace Economiq.Server.Service
                     UserNav = user.Id
                 };
                 user.Budgets.Add(newBudget);
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    //How Do i properly rethrow exception with perserved stack trace?
-                    throw ex;
-                }
+                
+                await _context.SaveChangesAsync();
             }
             else
             {
                 throw new Exception("Could not parse expense date");
-            }
-        }
-
-        private async Task<User> GetUserByUsername(string username)
-        {
-            User? user = await _context.Users.Where(u => u.UserName == username).Include(u => u.Budgets).FirstOrDefaultAsync();
-            if(user != null)
-            {
-                return user;
-            }
-            else
-            {
-                throw new Exception("User not found");
             }
         }
     }
