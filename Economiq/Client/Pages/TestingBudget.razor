@@ -1,0 +1,32 @@
+﻿@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@page "/testingBudget"
+@inject BudgetService _budgetService
+@inject AppState _appState
+@implements IDisposable
+
+<h3>TestingBudget</h3>
+@*@foreach(var item in AllBudgets)
+{
+    <h2>@item.YearAndMonth</h2>
+    <p>Max Amount: @item.MaxAmount</p>
+    <p>Budget Id: @item.Id</p>
+}*@
+
+@code {
+    List<ListBudgetDTO> AllBudgets = new();
+    ListBudgetDTO BudgetById = new();
+    bool temp = false;
+    Guid tempid = Guid.Parse("b287816c-291a-4fb8-a3fc-9a12efb6d0cf");
+
+    protected override async Task OnInitializedAsync()
+    {
+        BudgetById = await _budgetService.GetBudgetById(tempid);
+        //AllBudgets = await _budgetService.GetAllBudgets();
+        temp = true;
+    }
+    public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
+    }
+}

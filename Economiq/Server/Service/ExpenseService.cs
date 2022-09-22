@@ -96,17 +96,20 @@ namespace Economiq.Server.Service
                 .ThenInclude(e => e.CategoryNav)
                 .Include(e => e.RecipientNav)
                 .FirstOrDefaultAsync(x => x.UserName == username);
-
-            List<Expense> expenses = user.UserExpensesNav
+            List<Expense>? expenses = user.UserExpensesNav
                 .OrderByDescending(x => x.CreationDate)
                 .Take(5)
                 .ToList();
 
-            foreach (var expense in expenses)
-            {
-                recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
+            if(user.RecipientNav.Count != 0){ 
+                foreach (var expense in expenses)
+                {
+                    recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
+                }
+                return recentExpenses;
             }
-            return recentExpenses;
+            return new();
+            
         }
     }
 }
