@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpPost("createExpense")]
-        public IActionResult CreateExpense([FromBody] ExpenseDTO expenseDTO)
+        public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO expenseDTO)
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -31,7 +31,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    _expenseService.AddExpense(expenseDTO, TempUser.Username);
+                    await _expenseService.AddExpense(expenseDTO, TempUser.Username);
                     return StatusCode(200, "Expense Successfully Created");
                 }
 

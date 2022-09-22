@@ -22,7 +22,7 @@ namespace Economiq.Server.Service
         {
 
             //Gets the user by username
-            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).FirstOrDefault();
+            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).Include(u=>u.UserExpensesNav).FirstOrDefault();
             var recipient = user.RecipientNav.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
             if (user == null)
             {
@@ -54,11 +54,7 @@ namespace Economiq.Server.Service
 
             if (user.UserExpensesNav == null)
             {
-                user.UserExpensesNav = new List<Expense> { newExpense };
-            }
-            if(user.Budgets == null)
-            {
-                user.Budgets = new List<Budget>();  
+                user.UserExpensesNav = new List<Expense>();
             }
             //else
             //{
@@ -85,7 +81,7 @@ namespace Economiq.Server.Service
             try
               {
                 user.UserExpensesNav.Add(newExpense);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                     return true;
               }
                 catch
