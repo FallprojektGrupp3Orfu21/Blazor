@@ -1,5 +1,7 @@
 ﻿using Economiq.Server.Data;
+using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Economiq.Server.Service
 {
@@ -11,6 +13,26 @@ namespace Economiq.Server.Service
         {
             _context = context;
         }
+
+
+        public List<ExpenseCategoryDTO> GetAllCategorysByUsername(string Username)
+        {
+            List<ExpenseCategoryDTO> listToReturn = new List<ExpenseCategoryDTO>();
+
+            var user = _context.Users.Include(e => e.ExpensesCategoryNav).ThenInclude(e => e.CategoryName).FirstOrDefault(x => x.UserName == Username);
+            var categoryname = user.ExpensesCategoryNav.ToList();
+
+
+            foreach (var categoryName in categoryname)
+            {
+                listToReturn.Add(new ExpenseCategoryDTO { CategoryName = categoryName.CategoryName });
+
+            }
+            return listToReturn;
+
+        }
+
+
         public bool CreateExpenseCategory(string userName, string categoryName)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
