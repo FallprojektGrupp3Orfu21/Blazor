@@ -1,4 +1,5 @@
-﻿using Economiq.Server.Service;
+﻿using Economiq.Client.Components.Expense;
+using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,12 @@ namespace Economiq.Server.Controllers
             _categoryService = categoryService;
         }
 
+        [HttpPost("listCategories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = _categoryService.GetexpensesByUserName("admin"); 
+            return StatusCode(200, categories);
+        }
 
         [HttpPost("create")]
         public IActionResult CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)

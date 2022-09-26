@@ -3,8 +3,7 @@
 @using Economiq.Shared.Models
 @inject ExpenseService _expenseService
 @inject RecipientService _recipientService
-@inject ExpenseCategoryService _categoryService 
-
+@inject ExpenseCategoryService _categoryService; 
 <p>@Confirmation</p>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
@@ -20,23 +19,6 @@
         <label for="amount">Amount:</label>
         <ValidationMessage For="@(() => @NewExpense.Amount)" />
     </div>
-
-
-    <div class="mb-2 form-group form-floating">
-        <InputSelect @bind-Value="@NewExpense.CategoryName" id="CategoryName" class="form-control">
-            <option selected disabled="">Choose a category</option>
-    @foreach (ExpenseCategoryDTO categoryName in _categoryList )
-            {
-                <option Value=@categoryName.CategoryName>@categoryName.CategoryName</option>
-            }
-        </InputSelect>
-        <label for="category">Category:</label>
-        <ValidationMessage For="@(() => @NewExpense.CategoryName)" />
-    </div>
-
-
-
-
 
     <div class="mb-2 form-group form-floating">
         <InputDate  class="form-control" id="date" @bind-Value="@CreationDate"></InputDate>
@@ -69,8 +51,8 @@
     protected override async Task OnInitializedAsync()
     {
         _recipients = await _recipientService.GetRecipients();
+//        _categoryList = await _categoryService.GetCategoryList();
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
-        _categoryList = await _categoryService.GetCategoryList();
         if (_recipients.Count > 0)
         {
             NewExpense.RecipientName = _recipients[0].Name;

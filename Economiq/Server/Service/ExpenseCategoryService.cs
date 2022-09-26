@@ -1,6 +1,7 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Economiq.Server.Service
@@ -14,22 +15,21 @@ namespace Economiq.Server.Service
             _context = context;
         }
 
-
-        public List<ExpenseCategoryDTO> GetAllCategorysByUsername(string Username)
+        
+        public async Task<List<ExpenseCategoryDTO>> GetexpensesByUserName(string UserName)
         {
-            List<ExpenseCategoryDTO> listToReturn = new List<ExpenseCategoryDTO>();
-
-            var user = _context.Users.Include(e => e.ExpensesCategoryNav).ThenInclude(e => e.CategoryName).FirstOrDefault(x => x.UserName == Username);
-            var categoryname = user.ExpensesCategoryNav.ToList();
-
-
-            foreach (var categoryName in categoryname)
+            var user = await _context.Users.Include(e => e.ExpensesCategoryNav)
+                .ThenInclude(e => e.ExpensesNav).FirstOrDefaultAsync(x => x.UserName == UserName);
+            var categories = user.ExpensesCategoryNav.ToList();
+            var categoriesToReturn = new List<ExpenseCategoryDTO>();
+            foreach(var category in categories)
             {
-                listToReturn.Add(new ExpenseCategoryDTO { CategoryName = categoryName.CategoryName });
-
+                categoriesToReturn.Add(new ExpenseCategoryDTO()
+                {
+                    CategoryName = category.CategoryName
+                });
             }
-            return listToReturn;
-
+            return categoriesToReturn;
         }
 
 
