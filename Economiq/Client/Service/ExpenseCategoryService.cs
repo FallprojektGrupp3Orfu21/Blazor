@@ -23,10 +23,8 @@ namespace Economiq.Client.Service
 
         public async Task<List<ExpenseCategoryDTO>> GetCategoryList()
         {
-            
             var tmp = await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<ExpenseCategoryDTO>>("listCategories");
             return tmp; 
-            //return await _apiService.GetExpenseCategoryClient().PostAsJsonAsync("listCategories", "");
         }
     }
 }

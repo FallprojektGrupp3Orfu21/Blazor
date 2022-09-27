@@ -36,7 +36,8 @@
             }
 
         </InputSelect>
-        <label for="category">Category:</label>
+        @*<Button id="NewCategory" onclick="">+</Button>*@
+        <label for="category" >Category:</label>
         <ValidationMessage For="@(() => @NewExpense.CategoryName)" />
     </div>
 
@@ -63,7 +64,7 @@
     public ExpenseDTO NewExpense { get; set; } = new();
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-    public List<ExpenseCategoryDTO> _categoryList { get; set; }
+    public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
