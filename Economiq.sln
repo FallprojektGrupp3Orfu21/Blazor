@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Economiq.Client", "Economiq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Economiq.Shared", "Economiq\Shared\Economiq.Shared.csproj", "{1BDD5F47-E744-4100-ADDF-77CE9223FA26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Economiq.ServerTests", "Economiq\Economiq.ServerTests\Economiq.ServerTests.csproj", "{A4CD162A-8CE7-49D1-B776-E588466F8146}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Economiq.ServerTests", "Economiq\Economiq.ServerTests\Economiq.ServerTests.csproj", "{A4CD162A-8CE7-49D1-B776-E588466F8146}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
