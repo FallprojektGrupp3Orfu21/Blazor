@@ -18,10 +18,10 @@ namespace Economiq.Server.Service
         
         public async Task<List<ExpenseCategoryDTO>> GetexpensesByUserName(string UserName)
         {
+            var categoriesToReturn = new List<ExpenseCategoryDTO>();
             var user = await _context.Users.Include(e => e.ExpensesCategoryNav)
                 .ThenInclude(e => e.ExpensesNav).FirstOrDefaultAsync(x => x.UserName == UserName);
             var categories = user.ExpensesCategoryNav.ToList();
-            var categoriesToReturn = new List<ExpenseCategoryDTO>();
             foreach(var category in categories)
             {
                 categoriesToReturn.Add(new ExpenseCategoryDTO()

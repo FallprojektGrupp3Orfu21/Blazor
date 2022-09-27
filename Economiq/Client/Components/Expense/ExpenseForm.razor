@@ -5,6 +5,7 @@
 @inject RecipientService _recipientService
 @inject ExpenseCategoryService _categoryService; 
 <p>@Confirmation</p>
+<h1>Categories</h1>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -51,7 +52,7 @@
     protected override async Task OnInitializedAsync()
     {
         _recipients = await _recipientService.GetRecipients();
-//        _categoryList = await _categoryService.GetCategoryList();
+        _categoryList = await _categoryService.GetCategoryList();
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
         if (_recipients.Count > 0)
         {

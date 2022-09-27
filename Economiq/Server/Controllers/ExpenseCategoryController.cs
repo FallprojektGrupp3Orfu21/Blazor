@@ -17,10 +17,10 @@ namespace Economiq.Server.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpPost("listCategories")]
+        [HttpGet("listCategories")]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = _categoryService.GetexpensesByUserName("admin"); 
+            var categories = await _categoryService.GetexpensesByUserName("admin"); 
             return StatusCode(200, categories);
         }
 
