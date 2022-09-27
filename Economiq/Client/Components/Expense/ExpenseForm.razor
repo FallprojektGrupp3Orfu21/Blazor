@@ -3,9 +3,28 @@
 @using Economiq.Shared.Models
 @inject ExpenseService _expenseService
 @inject RecipientService _recipientService
-@inject ExpenseCategoryService _categoryService; 
+@inject ExpenseCategoryService _categoryService;
+<style> 
+    #NewCategory {
+    position: absolute;
+    top: 0;
+    border-radius: 5px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    top: 2px;
+    height: 30px;
+    cursor: pointer;
+    color: black;
+    background-color: white;
+    transform: translate(-10px, 50%);
+}
+    .modal {
+        position: absolute; 
+        z-index: 9999;
+    }
+</style>
 <p>@Confirmation</p>
-<h1>Categories</h1>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -36,7 +55,7 @@
             }
 
         </InputSelect>
-        @*<Button id="NewCategory" onclick="">+</Button>*@
+        <button id="NewCategory" type="button" @onclick="()=> {ChangeShowModal();}">+</button>
         <label for="category" >Category:</label>
         <ValidationMessage For="@(() => @NewExpense.CategoryName)" />
     </div>
@@ -56,6 +75,14 @@
 
     <button class="mx-auto w-25 btn btn-success" type="submit">Create Expense</button>
 </EditForm>
+@NewExpenseCategory
+@if(ShowModal){
+    <Economiq.Client.Components.AddCategory.AddCategoryModal 
+    CloseModalFunction="@ChangeShowModal"
+    SaveNewCategoryFunction="@SaveNewCategory"           
+    ExpenseCategoryString="@NewExpenseCategory"
+    CategoryChanged ="@CategoryChanged"/>
+}
 @code {
     [Parameter]
     public EventCallback UpdateList { get; set; }
@@ -63,9 +90,12 @@
     private List<RecipientDTO> _recipients = new();
     public ExpenseDTO NewExpense { get; set; } = new();
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-
+    private String NewExpenseCategory { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
-
+    public bool ShowModal = false; 
+    public void CategoryChanged(string newValue){
+        NewExpenseCategory = newValue;
+    }
     protected override async Task OnInitializedAsync()
     {
         _recipients = await _recipientService.GetRecipients();
@@ -77,7 +107,19 @@
         }
         StateHasChanged();
     }
-
+    public void ChangeShowModal() {
+        NewExpenseCategory = String.Empty;
+        this.ShowModal = !this.ShowModal;
+        StateHasChanged();
+    }
+    public async void SaveNewCategory() {
+        ExpenseCategoryDTO expenseCategory = new()
+            {
+                CategoryName = NewExpenseCategory
+            };
+        await _categoryService.CreateExpenseCategory(expenseCategory);
+        StateHasChanged();
+    }
     public async Task HandleSubmit()
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");

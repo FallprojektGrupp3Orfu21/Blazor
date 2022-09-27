@@ -29,5 +29,6 @@ namespace Economiq.Client.Service
         {
             return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("getRecent");
         }
+
     }
 }
