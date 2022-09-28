@@ -56,7 +56,7 @@ namespace Economiq.Server.Service
             {
                 user.UserExpensesNav = new List<Expense>();
             }
-            CreateBudgetDTO newBudget = new()
+            CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
             {
                 ExpenseDate = expense.ExpenseDate
             };
