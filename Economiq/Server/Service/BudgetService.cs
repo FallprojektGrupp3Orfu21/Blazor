@@ -3,15 +3,18 @@ using Economiq.Shared.DTO;
 using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Economiq.Server.Service
 {
     public class BudgetService
     {
         private readonly EconomiqContext _context;
+        private readonly CultureInfo _culture;
         public BudgetService(EconomiqContext context)
         {
             _context = context;
+            _culture = new CultureInfo("en-GB");
         }
 
         public async Task<List<ListBudgetDTO>> GetAllBudgets(int userId)
@@ -28,7 +31,7 @@ namespace Economiq.Server.Service
                     {
                         Id = budget.Id,
                         MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy").FirstCharToUpper()
+                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy", new CultureInfo("en-GB")).FirstCharToUpper()
                     });
                 }
                 return budgetsDTO;
@@ -57,7 +60,7 @@ namespace Economiq.Server.Service
                     {
                         Amount = expense.Amount,
                         categoryName = expense.CategoryNav.CategoryName,
-                        ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"),
+                        ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy", _culture),
                         RecipientName = expense.RecipientNav.Name,
                         Title = expense.Comment
                     });
@@ -67,7 +70,7 @@ namespace Economiq.Server.Service
                 {
                     Id = budget.Id,
                     MaxAmount = budget.MaxAmount,
-                    YearAndMonth = budget.StartDate.ToString("MMMM yyyy").FirstCharToUpper(),
+                    YearAndMonth = budget.StartDate.ToString("MMMM yyyy", _culture).FirstCharToUpper(),
                     Expenses = expenseDTOs
                 };
                 return budgetDTO;
@@ -99,7 +102,7 @@ namespace Economiq.Server.Service
                     {
                         Id = budget.Id,
                         MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy").FirstCharToUpper()
+                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy", _culture).FirstCharToUpper()
                     };
                     return newBudgetDTO;
                 }
