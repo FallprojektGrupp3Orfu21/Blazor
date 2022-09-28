@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Economiq.Client", "Economiq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Economiq.Shared", "Economiq\Shared\Economiq.Shared.csproj", "{1BDD5F47-E744-4100-ADDF-77CE9223FA26}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Economiq.ServerTests", "Economiq\Economiq.ServerTests\Economiq.ServerTests.csproj", "{A4CD162A-8CE7-49D1-B776-E588466F8146}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1BDD5F47-E744-4100-ADDF-77CE9223FA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BDD5F47-E744-4100-ADDF-77CE9223FA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BDD5F47-E744-4100-ADDF-77CE9223FA26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4CD162A-8CE7-49D1-B776-E588466F8146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4CD162A-8CE7-49D1-B776-E588466F8146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4CD162A-8CE7-49D1-B776-E588466F8146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4CD162A-8CE7-49D1-B776-E588466F8146}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
