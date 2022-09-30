@@ -21,16 +21,13 @@ namespace Economiq.Client.Service
 
         public async Task<List<GetExpenseDTO>> GetExpenses()
         {
-#pragma warning disable CS8603 // Possible null reference return.
             return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("listExpense");
-#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public async Task<List<GetExpenseDTO>> GetRecentExpenses()
         {
-#pragma warning disable CS8603 // Possible null reference return.
             return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("getRecent");
-#pragma warning restore CS8603 // Possible null reference return.
         }
+
     }
 }

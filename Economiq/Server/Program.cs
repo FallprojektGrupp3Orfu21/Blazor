@@ -8,9 +8,9 @@ builder.Services.AddDbContext<EconomiqContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("EconomiqContext")));
 builder.Services.AddTransient<ExpenseCategoryService>();
 builder.Services.AddTransient<ExpenseService>();
-builder.Services.AddTransient<BudgetService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<RecipientService>();
+builder.Services.AddTransient<BudgetService>();
 
 // Add services to the container.
 
@@ -37,6 +37,7 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 app.MapRazorPages();
 app.MapControllers();

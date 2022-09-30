@@ -28,5 +28,12 @@
         {
             return _httpClient.CreateClient("user");
         }
+
+        public HttpClient GetBudgetClient()
+        {
+            return _httpClient.CreateClient("budget");
+        }
+
+
     }
 }

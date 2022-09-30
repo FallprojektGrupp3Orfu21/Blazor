@@ -153,8 +153,8 @@ namespace Economiq.Server.Migrations
                             Amount = 25m,
                             CategoryNavId = 2,
                             Comment = "Glass",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3328),
-                            ExpenseDate = new DateTime(2022, 9, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6232),
+                            ExpenseDate = new DateTime(2022, 9, 19, 0, 0, 0, 0, DateTimeKind.Local),
                             UserNavId = 1
                         });
                 });
@@ -183,31 +183,31 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 1,
                             CategoryName = "Rent",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3266)
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6195)
                         },
                         new
                         {
                             Id = 2,
                             CategoryName = "Food",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3270)
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6198)
                         },
                         new
                         {
                             Id = 3,
                             CategoryName = "Transport",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3273)
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6200)
                         },
                         new
                         {
                             Id = 4,
                             CategoryName = "Clothing",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3276)
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6201)
                         },
                         new
                         {
                             Id = 5,
                             CategoryName = "Entertainment",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(3279)
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6203)
                         });
                 });
 
@@ -348,7 +348,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 1,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2451),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6022),
                             Fname = "Julia",
                             Gender = "Female",
                             IsLoggedIn = false,
@@ -360,7 +360,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 2,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2653),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6055),
                             Fname = "Alexander",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -372,7 +372,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 3,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2657),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6058),
                             Fname = "Stefan",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -384,7 +384,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 4,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2734),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6061),
                             Fname = "Winnie",
                             Gender = "Female",
                             IsLoggedIn = false,
@@ -396,7 +396,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 5,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2871),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6063),
                             Fname = "Eric",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -408,7 +408,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 6,
                             City = "Fjugesta",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2874),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6065),
                             Fname = "Anders",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -420,7 +420,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 7,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2877),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6067),
                             Fname = "Peter",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -432,7 +432,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 8,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 20, 18, 11, 15, 918, DateTimeKind.Local).AddTicks(2880),
+                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6069),
                             Fname = "admin",
                             Gender = "Male",
                             IsLoggedIn = false,

@@ -18,12 +18,10 @@ namespace Economiq.Server.Service
         }
 
         private int _minimumPasswordLength = 8;
-
         private bool IsPasswordOk(string password)
         {
             return password.Length >= _minimumPasswordLength;
         }
-
         public void RegisterUser(UserDTO newUser)
         {
             if (!IsPasswordOk(newUser.password))
@@ -67,7 +65,6 @@ namespace Economiq.Server.Service
             _categoryService.CreateExpenseCategory(newUser.Username, "Clothing");
             _categoryService.CreateExpenseCategory(newUser.Username, "Entertainment");
         }
-
         public bool LoginUser(string userName, string password)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
@@ -87,6 +84,7 @@ namespace Economiq.Server.Service
                 {
                     throw ex;
                 }
+
             }
             else
             {
@@ -95,14 +93,12 @@ namespace Economiq.Server.Service
 
             return true;
         }
-
         public bool DoesPasswordMatch(string username, string password)
         {
             var user = _context.Users.Where(user => user.UserName == username).FirstOrDefault();
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             return (user.Password == password);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
+
 
         public bool LogoutUser(string userName, string password)
         {
@@ -122,7 +118,6 @@ namespace Economiq.Server.Service
             }
             return true;
         }
-
         public bool IsUserLoggedIn(string userName, string password)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
@@ -138,8 +133,8 @@ namespace Economiq.Server.Service
             {
                 return false;
             }
-        }
 
+        }
         public bool DoesUserExist(string userName)
         {
             return (_context.Users.Where(user => user.UserName == userName) != null);

@@ -1,5 +1,4 @@
-﻿
-using Economiq.Shared.Extensions;
+﻿using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,14 +23,7 @@ namespace Economiq.Server.Data
         {
 
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(
-               "Server=localhost\\SQLEXPRESS;Database=FallprojektGrupp3New;Integrated Security=True;Trusted_Connection=True;");
-            }
-        }
+
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             //Primary Keys

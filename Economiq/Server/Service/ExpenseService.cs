@@ -9,22 +9,21 @@ namespace Economiq.Server.Service
     {
         private ExpenseCategoryService _expenseCategoryService;
         private readonly EconomiqContext _context;
-
-        public ExpenseService(EconomiqContext context, ExpenseCategoryService expenseCategoryService)
+        private readonly BudgetService _budgetService;
+        public ExpenseService(EconomiqContext context, ExpenseCategoryService expenseCategoryService, BudgetService budgetService)
         {
             _expenseCategoryService = expenseCategoryService;
             _context = context;
+            _budgetService = budgetService;
         }
 
-        public bool AddExpense(ExpenseDTO expense, string userName)
+
+        public async Task<bool> AddExpense(ExpenseDTO expense, string userName)
         {
-            //Gest the user by username
-            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).FirstOrDefault();
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8604 // Possible null reference argument for parameter 'source' in 'IEnumerable<Recipient> Enumerable.Where<Recipient>(IEnumerable<Recipient> source, Func<Recipient, bool> predicate)'.
+
+            //Gets the user by username
+            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).Include(u => u.UserExpensesNav).FirstOrDefault();
             var recipient = user.RecipientNav.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
-#pragma warning restore CS8604 // Possible null reference argument for parameter 'source' in 'IEnumerable<Recipient> Enumerable.Where<Recipient>(IEnumerable<Recipient> source, Func<Recipient, bool> predicate)'.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (user == null)
             {
                 throw new Exception("No User with this Username.");
@@ -51,85 +50,84 @@ namespace Economiq.Server.Service
             //Creates the expense and adds it to the user (creates list ifs the first expense on the user)
             DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
             DateTime creationDate = DateTime.Now;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var newExpense = new Expense { Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserNavId = user.Id, CategoryNavId = category.Id, RecipientNavId = recipient.Id };
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             if (user.UserExpensesNav == null)
             {
-                user.UserExpensesNav = new List<Expense> { newExpense };
+                user.UserExpensesNav = new List<Expense>();
             }
-            else
+            CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
             {
-                user.UserExpensesNav.Add(newExpense);
+                ExpenseDate = expense.ExpenseDate
+            };
+            ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(newBudget, TempUser.Id);
+            if (relevantBudget == null) //Unhappy Scenario, no budget for time period exists
+            {
+                var newBudgetMaxAmount = await _budgetService.GetLatestMaxAmount(Economiq.Server.TempUser.Id);
+                CreateBudgetDTO createBudgetDTO = new()
+                {
+                    MaxAmount = newBudgetMaxAmount,
+                    ExpenseDate = expense.ExpenseDate
+                };
+                await _budgetService.CreateBudget(createBudgetDTO, Economiq.Server.TempUser.Id);
             }
+            relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);
+            newExpense.BudgetNav = relevantBudget.Id;
+
             try
             {
-                _context.SaveChanges();
+                user.UserExpensesNav.Add(newExpense);
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch
             {
                 throw new Exception("Something went wrong");
             }
+
         }
 
         public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
         {
             List<GetExpenseDTO> listToReturn = new List<GetExpenseDTO>();
 
-#pragma warning disable CS8620 // Argument of type 'IIncludableQueryable<User, List<Expense>?>' cannot be used for parameter 'source' of type 'IIncludableQueryable<User, IEnumerable<Expense>>' in 'IIncludableQueryable<User, ExpenseCategory?> EntityFrameworkQueryableExtensions.ThenInclude<User, Expense, ExpenseCategory?>(IIncludableQueryable<User, IEnumerable<Expense>> source, Expression<Func<Expense, ExpenseCategory?>> navigationPropertyPath)' due to differences in the nullability of reference types.
             var user = _context.Users.Include(e => e.UserExpensesNav).ThenInclude(e => e.CategoryNav).Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
-#pragma warning restore CS8620 // Argument of type 'IIncludableQueryable<User, List<Expense>?>' cannot be used for parameter 'source' of type 'IIncludableQueryable<User, IEnumerable<Expense>>' in 'IIncludableQueryable<User, ExpenseCategory?> EntityFrameworkQueryableExtensions.ThenInclude<User, Expense, ExpenseCategory?>(IIncludableQueryable<User, IEnumerable<Expense>> source, Expression<Func<Expense, ExpenseCategory?>> navigationPropertyPath)' due to differences in the nullability of reference types.
-#pragma warning disable CS8604 // Possible null reference argument for parameter 'source' in 'List<Expense> Enumerable.ToList<Expense>(IEnumerable<Expense> source)'.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var expenses = user.UserExpensesNav.ToList();
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8604 // Possible null reference argument for parameter 'source' in 'List<Expense> Enumerable.ToList<Expense>(IEnumerable<Expense> source)'.
+
 
             foreach (var expense in expenses)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
             }
             return listToReturn;
+
         }
 
         public async Task<List<GetExpenseDTO>> GetRecentExpenses(string username)
         {
             List<GetExpenseDTO> recentExpenses = new();
 
-#pragma warning disable CS8620 // Argument of type 'IIncludableQueryable<User, List<Expense>?>' cannot be used for parameter 'source' of type 'IIncludableQueryable<User, IEnumerable<Expense>>' in 'IIncludableQueryable<User, ExpenseCategory?> EntityFrameworkQueryableExtensions.ThenInclude<User, Expense, ExpenseCategory?>(IIncludableQueryable<User, IEnumerable<Expense>> source, Expression<Func<Expense, ExpenseCategory?>> navigationPropertyPath)' due to differences in the nullability of reference types.
             User? user = await _context.Users
                 .Include(e => e.UserExpensesNav)
                 .ThenInclude(e => e.CategoryNav)
                 .Include(e => e.RecipientNav)
                 .FirstOrDefaultAsync(x => x.UserName == username);
-#pragma warning restore CS8620 // Argument of type 'IIncludableQueryable<User, List<Expense>?>' cannot be used for parameter 'source' of type 'IIncludableQueryable<User, IEnumerable<Expense>>' in 'IIncludableQueryable<User, ExpenseCategory?> EntityFrameworkQueryableExtensions.ThenInclude<User, Expense, ExpenseCategory?>(IIncludableQueryable<User, IEnumerable<Expense>> source, Expression<Func<Expense, ExpenseCategory?>> navigationPropertyPath)' due to differences in the nullability of reference types.
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8604 // Possible null reference argument for parameter 'source' in 'IOrderedEnumerable<Expense> Enumerable.OrderByDescending<Expense, DateTime>(IEnumerable<Expense> source, Func<Expense, DateTime> keySelector)'.
-            List<Expense> expenses = user.UserExpensesNav
+            List<Expense>? expenses = user.UserExpensesNav
                 .OrderByDescending(x => x.CreationDate)
                 .Take(5)
                 .ToList();
-#pragma warning restore CS8604 // Possible null reference argument for parameter 'source' in 'IOrderedEnumerable<Expense> Enumerable.OrderByDescending<Expense, DateTime>(IEnumerable<Expense> source, Func<Expense, DateTime> keySelector)'.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-            foreach (var expense in expenses)
+            if (user.RecipientNav.Count != 0)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                foreach (var expense in expenses)
+                {
+                    recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
+                }
+                return recentExpenses;
             }
-            return recentExpenses;
+            return new();
+
         }
     }
 }

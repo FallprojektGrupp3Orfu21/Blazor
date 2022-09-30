@@ -10,11 +10,17 @@ namespace Economiq.Server.Controllers
     {
         private UserService _userService;
         private ExpenseCategoryService _categoryService;
-
         public ExpenseCategoryController(UserService userService, ExpenseCategoryService categoryService)
         {
             _userService = userService;
             _categoryService = categoryService;
+        }
+
+        [HttpGet("listCategories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await _categoryService.GetexpensesByUserName("admin");
+            return StatusCode(200, categories);
         }
 
         [HttpPost("create")]
@@ -26,22 +32,24 @@ namespace Economiq.Server.Controllers
             }
             else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
-#pragma warning disable CS0168 // The variable 'err' is declared but never used
                 try
                 {
                     _categoryService.CreateExpenseCategory(TempUser.Username, expenseCategoryDTO.CategoryName);
                     return StatusCode(200, "Category Successfully Created");
                 }
+
                 catch (Exception err)
                 {
                     return StatusCode(500, "Failed to create Category");
                 }
-#pragma warning restore CS0168 // The variable 'err' is declared but never used
             }
             else
             {
                 return BadRequest("User not logged in");
             }
+
+
         }
+
     }
 }

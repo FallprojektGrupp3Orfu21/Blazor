@@ -7,6 +7,7 @@ namespace Economiq.Shared.Extensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
+
             var u1 = new User() { Id = 1, UserName = "JuliaH", Fname = "Julia", Lname = "Hook", Password = "Testing123", Gender = "Female", City = "Orebro", CreationDate = DateTime.Now };
             var u2 = new User() { Id = 2, UserName = "AlexV", Fname = "Alexander", Lname = "Volonen", Password = "Testing234", Gender = "Male", City = "Orebro", CreationDate = DateTime.Now };
             var u3 = new User() { Id = 3, UserName = "Peppo", Fname = "Stefan", Lname = "Krakowsky", Password = "Testing345", Gender = "Male", City = "Orebro", CreationDate = DateTime.Now };
@@ -41,6 +42,7 @@ namespace Economiq.Shared.Extensions
             var r5 = new Recipient() { Id = 5, Name = "ICA", City = "Nora", UserNavId = 7 };
             var r6 = new Recipient() { Id = 6, Name = "Coop", City = "Morgongåva", UserNavId = 7 };
             modelBuilder.Entity<Recipient>().HasData(r1, r2, r3, r4, r5, r6);
+
 
             var e1 = new Expense() { Id = 1, Amount = 25, Comment = "Glass", CategoryNavId = 2, CreationDate = DateTime.Now, ExpenseDate = DateTime.Now.Date, UserNavId = 1 };
             modelBuilder.Entity<Expense>().HasData(e1);

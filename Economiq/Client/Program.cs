@@ -15,11 +15,7 @@ builder.Services.AddHttpClient("expense", client =>
 });
 builder.Services.AddHttpClient("expenseCategory", client =>
 {
-    client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/expenseCategory");
-});
-builder.Services.AddHttpClient("budget", client =>
-{
-    client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/budget");
+    client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/expenseCategory/");
 });
 builder.Services.AddHttpClient("user", client =>
 {
@@ -29,10 +25,17 @@ builder.Services.AddHttpClient("recipient", client =>
 {
     client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/recipient");
 });
+builder.Services.AddHttpClient("budget", client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["ApiAdress"]}api/budget/");
+});
+
+
 builder.Services.AddTransient<RecipientService>();
 builder.Services.AddSingleton<ApiService>();
 builder.Services.AddSingleton<AppState>();
-builder.Services.AddTransient<BudgetService>();
 builder.Services.AddTransient<ExpenseService>();
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<BudgetService>();
+builder.Services.AddTransient<ExpenseCategoryService>();
 await builder.Build().RunAsync();

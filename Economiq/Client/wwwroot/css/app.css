@@ -47,7 +47,7 @@
     .landingpage .navbar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-around;
         padding: 20px 0;
         width: 100%;
     }
