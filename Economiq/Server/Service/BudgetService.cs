@@ -19,7 +19,7 @@ namespace Economiq.Server.Service
 
         public async Task<List<ListBudgetDTO>> GetAllBudgets(int userId)
         {
-            List<Budget> budgets = await _context.Budgets.Where(b => b.UserNav == userId).OrderByDescending(b => b.EndDate).ToListAsync();
+            List<Budget> budgets = await _context.Budgets.Where(b => b.UserId == userId).OrderByDescending(b => b.EndDate).ToListAsync();
             
             if (budgets.Any())
             {
@@ -45,7 +45,7 @@ namespace Economiq.Server.Service
         public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
             Budget? budget = await _context.Budgets.Where(b => b.Id == id).FirstOrDefaultAsync();
-            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetNav == id).Include(e=>e.CategoryNav).Include(e=>e.RecipientNav).ToListAsync();
+            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e=>e.Category).Include(e=>e.Recipient).ToListAsync();
 
             if(budget == null)
             {
@@ -59,9 +59,9 @@ namespace Economiq.Server.Service
                     expenseDTOs.Add(new()
                     {
                         Amount = expense.Amount,
-                        categoryName = expense.CategoryNav.CategoryName,
+                        categoryName = expense.Category.CategoryName,
                         ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy", _culture),
-                        RecipientName = expense.RecipientNav.Name,
+                        RecipientName = expense.Recipient.Name,
                         Title = expense.Comment
                     });
                 }
@@ -79,7 +79,7 @@ namespace Economiq.Server.Service
 
         public async Task<decimal> GetLatestMaxAmount(int userId)
         {
-            Budget? latestBudget = await _context.Budgets.Where(b => b.UserNav == userId).OrderByDescending(b => b.EndDate).FirstOrDefaultAsync();
+            Budget? latestBudget = await _context.Budgets.Where(b => b.UserId == userId).OrderByDescending(b => b.EndDate).FirstOrDefaultAsync();
             if (latestBudget == null)
             {
                 return 0;
@@ -94,7 +94,7 @@ namespace Economiq.Server.Service
         {
             if (DateTime.TryParse(budgetDTO.ExpenseDate, out DateTime date))
             {
-                Budget? budget = await _context.Budgets.Where(b => b.UserNav == userId && b.StartDate <= date && date <= b.EndDate).FirstOrDefaultAsync();
+                Budget? budget = await _context.Budgets.Where(b => b.UserId == userId && b.StartDate <= date && date <= b.EndDate).FirstOrDefaultAsync();
                 
                 if (budget != null)
                 {
@@ -123,7 +123,7 @@ namespace Economiq.Server.Service
                     EndDate = lastDayOfMonth,
                     MaxAmount = createBudgetDTO.MaxAmount,
                     Expenses = new List<Expense>(),
-                    UserNav = userId
+                    UserId = userId
                 };
                 _context.Budgets.Add(newBudget);
                 
