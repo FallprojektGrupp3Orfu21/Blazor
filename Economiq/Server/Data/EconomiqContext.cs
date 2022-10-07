@@ -36,46 +36,46 @@ namespace Economiq.Server.Data
             modelbuilder.Entity<Recipient>()
                 .HasKey(r => r.Id);
             modelbuilder.Entity<Email>()
-                .HasKey(c => new { c.UserNavId, c.Mail });
+                .HasKey(c => new { c.UserId, c.Mail });
             modelbuilder.Entity<Budget>()
                 .HasKey(b => b.Id);
             //Relations
             modelbuilder.Entity<Expense>()
-                .HasOne(u => u.UserNav)
-                .WithMany(e => e.UserExpensesNav)
-                .HasForeignKey(e => e.UserNavId)
+                .HasOne(u => u.User)
+                .WithMany(e => e.Expenses)
+                .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<Budget>()
                 .HasOne(u => u.User)
                 .WithMany(b => b.Budgets)
-                .HasForeignKey(b => b.UserNav)
+                .HasForeignKey(b => b.User)
                 .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<Expense>()
                 .HasOne(b => b.Budget)
                 .WithMany(e => e.Expenses)
-                .HasForeignKey(b => b.BudgetNav)
+                .HasForeignKey(b => b.BudgetId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<User>()
-                .HasMany(e => e.UserExpensesNav)
-                .WithOne(u => u.UserNav)
+                .HasMany(e => e.Expenses)
+                .WithOne(u => u.User)
                 .OnDelete(DeleteBehavior.Cascade);
             modelbuilder.Entity<Expense>()
-                .HasOne(e => e.CategoryNav)
-                .WithMany(e => e.ExpensesNav)
-                .HasForeignKey(e => e.CategoryNavId)
+                .HasOne(e => e.Category)
+                .WithMany(e => e.Expenses)
+                .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<ExpenseCategory>()
-                .HasMany(ec => ec.UserNav)
-                .WithMany(u => u.ExpensesCategoryNav);
+                .HasMany(ec => ec.Users)
+                .WithMany(u => u.Categories);
             modelbuilder.Entity<Recipient>()
-                .HasOne(ur => ur.UserNav)
-                .WithMany(re => re.RecipientNav)
-                .HasForeignKey(e => e.UserNavId)
+                .HasOne(ur => ur.User)
+                .WithMany(re => re.Recipients)
+                .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<Expense>()
-                .HasOne(re => re.RecipientNav)
+                .HasOne(re => re.Recipient)
                 .WithMany(ex => ex.ExpenseNav)
-                .HasForeignKey(e => e.RecipientNavId)
+                .HasForeignKey(e => e.RecipientId)
                 .OnDelete(DeleteBehavior.NoAction);
 
 
