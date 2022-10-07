@@ -20,12 +20,12 @@ namespace Economiq.Server.Service
         public async Task<List<ListBudgetDTO>> GetAllBudgets(int userId)
         {
             List<Budget> budgets = await _context.Budgets.Where(b => b.UserId == userId).OrderByDescending(b => b.EndDate).ToListAsync();
-            
+
             if (budgets.Any())
             {
                 List<ListBudgetDTO> budgetsDTO = new List<ListBudgetDTO>();
 
-                foreach(Budget budget in budgets)
+                foreach (Budget budget in budgets)
                 {
                     budgetsDTO.Add(new()
                     {
@@ -45,16 +45,16 @@ namespace Economiq.Server.Service
         public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
             Budget? budget = await _context.Budgets.Where(b => b.Id == id).FirstOrDefaultAsync();
-            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e=>e.CategoryId).Include(e=>e.RecipientId).ToListAsync();
+            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e => e.CategoryId).Include(e => e.RecipientId).ToListAsync();
 
-            if(budget == null)
+            if (budget == null)
             {
                 throw new Exception("Budget does not exist");
             }
             else
             {
                 List<GetExpenseDTO> expenseDTOs = new List<GetExpenseDTO>();
-                foreach(var expense in expenses)
+                foreach (var expense in expenses)
                 {
                     expenseDTOs.Add(new()
                     {
@@ -95,7 +95,7 @@ namespace Economiq.Server.Service
             if (DateTime.TryParse(budgetDTO.ExpenseDate, out DateTime date))
             {
                 Budget? budget = await _context.Budgets.Where(b => b.UserId == userId && b.StartDate <= date && date <= b.EndDate).FirstOrDefaultAsync();
-                
+
                 if (budget != null)
                 {
                     ListBudgetDTO newBudgetDTO = new()
@@ -126,7 +126,7 @@ namespace Economiq.Server.Service
                     UserId = userId
                 };
                 _context.Budgets.Add(newBudget);
-                
+
                 await _context.SaveChangesAsync();
             }
             else

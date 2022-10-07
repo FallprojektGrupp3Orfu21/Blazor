@@ -12,7 +12,7 @@ namespace Economiq.Server.Service
         {
             _context = context;
         }
-        public bool CreateRecipient(string userName, string recipientName, string recipientCity, string recipientStreet, string recipientZipcode)
+        public bool CreateRecipient(string userName, RecipientDTO dto)
         {
             var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
             if (user == null)
@@ -21,18 +21,16 @@ namespace Economiq.Server.Service
             }
             var newRecipient = new Recipient
             {
-                Name = recipientName,
-                City = recipientCity,
-                Street = recipientStreet,
-                Zipcode = recipientZipcode
+                Name = dto.Name,
+                ExtraInfo = dto.ExtraInfo
             };
 
-            if (user.RecipientNav == null)
+            if (user.Recipients == null)
             {
-                user.RecipientNav = new List<Recipient> { newRecipient };
+                user.Recipients = new List<Recipient> { newRecipient };
             }
 
-            user.RecipientNav.Add(newRecipient);
+            user.Recipients.Add(newRecipient);
 
             try
             {
@@ -48,18 +46,18 @@ namespace Economiq.Server.Service
         {
             List<RecipientDTO> listToReturn = new List<RecipientDTO>();
 
-            var user = _context.Users.Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
-            var recipients = user.RecipientNav.ToList();
+            var user = _context.Users.Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
+            var recipients = user.Recipients.ToList();
 
             foreach (var recipient in recipients)
             {
                 if (SearchString == null)
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street=recipient.Street, Zipcode=recipient.Zipcode });
+                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, ExtraInfo = recipient.ExtraInfo });
                 }
                 else if (recipient.Name.ToLower().StartsWith(SearchString.ToLower()))
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, City = recipient.City, Street=recipient.Street, Zipcode=recipient.Zipcode });
+                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, ExtraInfo = recipient.ExtraInfo });
                 }
             }
             return listToReturn;

@@ -17,19 +17,9 @@
             <ValidationMessage For="@(() => NewRecipient.Name)" />
         </div>
         <div class="mb-2 form-group form-floating">
-            <InputText class="form-control" id="city" placeholder="city" @bind-Value="@NewRecipient.City" />
-            <label for="city">City:</label>
-            <ValidationMessage For="@(()=> NewRecipient.City)" />
-        </div>
-        <div class="mb-2 form-group form-floating">
-            <InputText class="form-control" id="street" placeholder="street" @bind-Value="@NewRecipient.Street" />
-            <label for="street">Street:</label>
-            <ValidationMessage For="@(()=> NewRecipient.Street)" />
-        </div>
-        <div class="mb-2 form-group form-floating">
-            <InputText class="form-control" id="zipcode" placeholder="zipcode" @bind-Value="@NewRecipient.Zipcode" />
-            <label for="zipcode">Zipcode:</label>
-            <ValidationMessage For="@(()=> NewRecipient.Zipcode)" />
+            <InputText class="form-control" id="ExtraInfo" placeholder="ExtraInfo" @bind-Value="@NewRecipient.ExtraInfo" />
+            <label for="ExtraInfo">ExtraInfo:</label>
+            <ValidationMessage For="@(()=> NewRecipient.ExtraInfo)" />
         </div>
         <div class="mb-2">
       <button class="mx-auto w-25 btn btn-success">Add Recipient</button>
@@ -42,18 +32,14 @@
     <thead>
     <tr>
         <th>Name</th>
-        <th>Street</th>
-        <th>Zipcode</th>
-        <th>City</th>
+        <th>ExtraInfo</th>
     </tr>
     </thead>
     <tbody>
 @foreach(RecipientDTO recipient in recipients){
     <tr>    
      <td>@recipient.Name</td>
-    <td>@recipient.Street</td>
-    <td>@recipient.Zipcode</td>
-    <td>@recipient.City</td>
+    <td>@recipient.ExtraInfo</td>
   </tr>
 }
 </tbody>
@@ -68,9 +54,7 @@
         recipients = await _recipientService.GetRecipients();
         recipients.Reverse();
         NewRecipient.Name = String.Empty;
-        NewRecipient.City = String.Empty;
-        NewRecipient.Street = String.Empty;
-        NewRecipient.Zipcode = String.Empty;
+        NewRecipient.ExtraInfo = String.Empty;
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()

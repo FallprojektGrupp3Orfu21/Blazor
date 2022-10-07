@@ -22,7 +22,7 @@ namespace Economiq.Server.Service
         {
 
             //Gets the user by username
-            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.Recipients).Include(u=>u.Expenses).FirstOrDefault();
+            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.Recipients).Include(u => u.Expenses).FirstOrDefault();
             var recipient = user.Recipients.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
             if (user == null)
             {
@@ -58,33 +58,33 @@ namespace Economiq.Server.Service
             }
 
             try
-              {
+            {
                 user.Expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
-                    return true;
-              }
-                catch
-                {
-                    throw new Exception("Something went wrong");
-                }
-            
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Something went wrong");
+            }
+
         }
 
         public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
         {
             List<GetExpenseDTO> listToReturn = new List<GetExpenseDTO>();
 
-                var user = _context.Users.Include(e => e.Expenses).ThenInclude(e=>e.Category).Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
-                var expenses = user.Expenses.ToList();
+            var user = _context.Users.Include(e => e.Expenses).ThenInclude(e => e.Category).Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
+            var expenses = user.Expenses.ToList();
 
 
-                foreach (var expense in expenses)
-                {
-                    listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name }) ;
+            foreach (var expense in expenses)
+            {
+                listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
 
-                }
-                return listToReturn;
-            
+            }
+            return listToReturn;
+
         }
 
         public async Task<List<GetExpenseDTO>> GetRecentExpenses(string username)
@@ -101,7 +101,8 @@ namespace Economiq.Server.Service
                 .Take(5)
                 .ToList();
 
-            if(user.Recipients.Count != 0){ 
+            if (user.Recipients.Count != 0)
+            {
                 foreach (var expense in expenses)
                 {
                     recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
@@ -109,7 +110,7 @@ namespace Economiq.Server.Service
                 return recentExpenses;
             }
             return new();
-            
+
         }
     }
 }

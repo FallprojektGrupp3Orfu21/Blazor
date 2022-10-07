@@ -77,7 +77,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-    
+
                     ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(asAS, TempUser.Id);
                     return StatusCode(200, relevantBudget);
                 }

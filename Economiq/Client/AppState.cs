@@ -4,7 +4,7 @@
     {
         public bool IsLoggedIn { get; private set; }
         public string PageTitle { get; private set; }
-        
+
         public event Action OnStateChange;
 
         public void SetPageTitle(string title)

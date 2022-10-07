@@ -4,6 +4,7 @@ using Economiq.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Economiq.Server.Migrations
 {
     [DbContext(typeof(EconomiqContext))]
-    partial class EconomiqContextModelSnapshot : ModelSnapshot
+    [Migration("20221007100508_e")]
+    partial class e
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,7 +379,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 5,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1943),
+                            CreationDate = new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(29),
                             Fname = "Eric",
                             Gender = "Male",
                             IsLoggedIn = false,
