@@ -22,8 +22,8 @@ namespace Economiq.Server.Service
         {
 
             //Gets the user by username
-            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.RecipientNav).Include(u=>u.UserExpensesNav).FirstOrDefault();
-            var recipient = user.RecipientNav.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
+            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.Recipients).Include(u=>u.Expenses).FirstOrDefault();
+            var recipient = user.Recipients.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
             if (user == null)
             {
                 throw new Exception("No User with this Username.");
@@ -50,33 +50,33 @@ namespace Economiq.Server.Service
             //Creates the expense and adds it to the user (creates list ifs the first expense on the user)
             DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
             DateTime creationDate = DateTime.Now;
-            var newExpense = new Expense { Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserNavId = user.Id, CategoryNavId = category.Id, RecipientNavId = recipient.Id };
+            var newExpense = new Expense { Id = expense.BudgetId, Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserId = user.Id, CategoryId = category.Id, RecipientId = recipient.Id };
 
-            if (user.UserExpensesNav == null)
+            if (user.Expenses == null)
             {
-                user.UserExpensesNav = new List<Expense>();
+                user.Expenses = new List<Expense>();
             }
-            CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
-            {
-                ExpenseDate = expense.ExpenseDate
-            };
-            ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(newBudget, TempUser.Id);
-            if (relevantBudget == null) //Unhappy Scenario, no budget for time period exists
-            {
-                var newBudgetMaxAmount = await _budgetService.GetLatestMaxAmount(Economiq.Server.TempUser.Id);
-                CreateBudgetDTO createBudgetDTO = new()
-                {
-                    MaxAmount = newBudgetMaxAmount,
-                    ExpenseDate = expense.ExpenseDate
-                };
-                await _budgetService.CreateBudget(createBudgetDTO, Economiq.Server.TempUser.Id);
-            }
-            relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);     
-            newExpense.BudgetNav = relevantBudget.Id;
+            //CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
+            //{
+            //    ExpenseDate = expense.ExpenseDate
+            //};
+            //ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(newBudget, TempUser.Id);
+            //if (relevantBudget == null) //Unhappy Scenario, no budget for time period exists
+            //{
+            //    var newBudgetMaxAmount = await _budgetService.GetLatestMaxAmount(Economiq.Server.TempUser.Id);
+            //    CreateBudgetDTO createBudgetDTO = new()
+            //    {
+            //        MaxAmount = newBudgetMaxAmount,
+            //        ExpenseDate = expense.ExpenseDate
+            //    };
+            //    await _budgetService.CreateBudget(createBudgetDTO, Economiq.Server.TempUser.Id);
+            //}
+            //relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);     
+            //newExpense.BudgetId = relevantBudget.Id;
             
             try
               {
-                user.UserExpensesNav.Add(newExpense);
+                user.Expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
                     return true;
               }
@@ -91,13 +91,13 @@ namespace Economiq.Server.Service
         {
             List<GetExpenseDTO> listToReturn = new List<GetExpenseDTO>();
 
-                var user = _context.Users.Include(e => e.UserExpensesNav).ThenInclude(e=>e.CategoryNav).Include(e => e.RecipientNav).FirstOrDefault(x => x.UserName == Username);
-                var expenses = user.UserExpensesNav.ToList();
+                var user = _context.Users.Include(e => e.Expenses).ThenInclude(e=>e.Category).Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
+                var expenses = user.Expenses.ToList();
 
 
                 foreach (var expense in expenses)
                 {
-                    listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name }) ;
+                    listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name }) ;
 
                 }
                 return listToReturn;
@@ -109,19 +109,19 @@ namespace Economiq.Server.Service
             List<GetExpenseDTO> recentExpenses = new();
 
             User? user = await _context.Users
-                .Include(e => e.UserExpensesNav)
-                .ThenInclude(e => e.CategoryNav)
-                .Include(e => e.RecipientNav)
+                .Include(e => e.Expenses)
+                .ThenInclude(e => e.Category)
+                .Include(e => e.Recipients)
                 .FirstOrDefaultAsync(x => x.UserName == username);
-            List<Expense>? expenses = user.UserExpensesNav
+            List<Expense>? expenses = user.Expenses
                 .OrderByDescending(x => x.CreationDate)
                 .Take(5)
                 .ToList();
 
-            if(user.RecipientNav.Count != 0){ 
+            if(user.Recipients.Count != 0){ 
                 foreach (var expense in expenses)
                 {
-                    recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.CategoryNav.CategoryName, RecipientName = expense.RecipientNav.Name });
+                    recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
                 }
                 return recentExpenses;
             }

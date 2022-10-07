@@ -1,5 +1,4 @@
 ﻿using Economiq.Shared.DTO;
-using Newtonsoft.Json;
 using System.Net.Http.Json;
 
 namespace Economiq.Client.Service
@@ -22,10 +21,31 @@ namespace Economiq.Client.Service
 
         public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
-            //string json = await client.GetStringAsync($"getBudgetById/{id}");
-            //ListBudgetDTO budget = JsonConvert.DeserializeObject<ListBudgetDTO>(json);
+
             ListBudgetDTO budget = await client.GetFromJsonAsync<ListBudgetDTO>($"getBudgetById/{id}");
             return budget;
         }
+
+        public async Task<string> CreateBudget(CreateBudgetDTO createBudgetDTO)
+        {
+            HttpResponseMessage response = await _apiService.GetBudgetClient().PostAsJsonAsync("createBudget", createBudgetDTO);
+            string responseString = await response.Content.ReadAsStringAsync();
+            return responseString;
+        }
+        public async Task<ListBudgetDTO> GetBudgetByDate(int yearAndMonth)
+        {
+            ListBudgetDTO budgetDate = await client.GetFromJsonAsync<ListBudgetDTO>($"{yearAndMonth}");
+            return budgetDate;
+        }
+        public async Task<ListBudgetDTO> GetBudgetByMaxAmount(decimal maxAmount)
+        {
+
+            ListBudgetDTO budgetMaxAmount = await client.GetFromJsonAsync<ListBudgetDTO>($"{maxAmount}");
+            return budgetMaxAmount;
+        }
+
+
+
+
     }
 }
