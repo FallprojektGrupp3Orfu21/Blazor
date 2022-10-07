@@ -6,7 +6,7 @@ namespace Economiq.Shared.Models
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; } //Is this really needed if using jwt authentication? 
+        public string Password { get; set; } 
         public string Fname { get; set; }
         public string Lname { get; set; }
         public string Gender { get; set; }
@@ -14,18 +14,11 @@ namespace Economiq.Shared.Models
 
         [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
-
-        //Navigational Properties
-        //For Expense
-        public List<Expense>? UserExpensesNav { get; set; }
-        //For ExpenseCategory
-        public List<ExpenseCategory>? ExpensesCategoryNav { get; set; }
-        //Email
+        public List<Expense>? Expenses { get; set; }
+        public List<ExpenseCategory>? Categories { get; set; }
         public List<Email> Emails { get; set; }
         public bool IsLoggedIn { get; set; }
-        //For recipients
-        public List<Recipient>? RecipientNav { get; set; }
-
+        public List<Recipient>? Recipients { get; set; }
         public List<Budget> Budgets { get; set; }
     }
 }

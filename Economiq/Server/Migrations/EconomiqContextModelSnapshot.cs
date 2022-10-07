@@ -37,67 +37,68 @@ namespace Economiq.Server.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserNav")
+                    b.Property<int?>("UserId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserNav");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Budgets");
                 });
 
             modelBuilder.Entity("Economiq.Shared.Models.Email", b =>
                 {
-                    b.Property<int>("UserNavId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Mail")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserNavId", "Mail");
+                    b.HasKey("UserId", "Mail");
 
                     b.ToTable("Email");
 
                     b.HasData(
                         new
                         {
-                            UserNavId = 1,
+                            UserId = 1,
                             Mail = "JuliaH@test.com"
                         },
                         new
                         {
-                            UserNavId = 2,
+                            UserId = 2,
                             Mail = "AlexV@test.com"
                         },
                         new
                         {
-                            UserNavId = 3,
+                            UserId = 3,
                             Mail = "Peppo@test.com"
                         },
                         new
                         {
-                            UserNavId = 4,
+                            UserId = 4,
                             Mail = "WinnieH@test.com"
                         },
                         new
                         {
-                            UserNavId = 5,
+                            UserId = 5,
                             Mail = "Ericx@test.com"
                         },
                         new
                         {
-                            UserNavId = 6,
+                            UserId = 6,
                             Mail = "AndersB@test.com"
                         },
                         new
                         {
-                            UserNavId = 7,
+                            UserId = 7,
                             Mail = "PeterH@test.com"
                         },
                         new
                         {
-                            UserNavId = 8,
+                            UserId = 8,
                             Mail = "admin@admin.com"
                         });
                 });
@@ -113,10 +114,10 @@ namespace Economiq.Server.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("BudgetNav")
+                    b.Property<Guid?>("BudgetId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("CategoryNavId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -128,21 +129,21 @@ namespace Economiq.Server.Migrations
                     b.Property<DateTime>("ExpenseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("RecipientNavId")
+                    b.Property<int?>("RecipientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserNavId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BudgetNav");
+                    b.HasIndex("BudgetId");
 
-                    b.HasIndex("CategoryNavId");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("RecipientNavId");
+                    b.HasIndex("RecipientId");
 
-                    b.HasIndex("UserNavId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Expenses");
 
@@ -151,11 +152,11 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 1,
                             Amount = 25m,
-                            CategoryNavId = 2,
+                            CategoryId = 2,
                             Comment = "Glass",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6232),
-                            ExpenseDate = new DateTime(2022, 9, 19, 0, 0, 0, 0, DateTimeKind.Local),
-                            UserNavId = 1
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(2529),
+                            ExpenseDate = new DateTime(2022, 10, 6, 0, 0, 0, 0, DateTimeKind.Local),
+                            UserId = 1
                         });
                 });
 
@@ -183,31 +184,31 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 1,
                             CategoryName = "Rent",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6195)
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(2346)
                         },
                         new
                         {
                             Id = 2,
                             CategoryName = "Food",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6198)
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(2356)
                         },
                         new
                         {
                             Id = 3,
                             CategoryName = "Transport",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6200)
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(2372)
                         },
                         new
                         {
                             Id = 4,
                             CategoryName = "Clothing",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6201)
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(2394)
                         },
                         new
                         {
                             Id = 5,
                             CategoryName = "Entertainment",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6203)
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(2399)
                         });
                 });
 
@@ -219,7 +220,7 @@ namespace Economiq.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("City")
+                    b.Property<string>("ExtraInfo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -227,20 +228,12 @@ namespace Economiq.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserNavId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Zipcode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserNavId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Recipients");
 
@@ -248,56 +241,44 @@ namespace Economiq.Server.Migrations
                         new
                         {
                             Id = 1,
-                            City = "Örebro",
+                            ExtraInfo = "",
                             Name = "ICA",
-                            Street = "",
-                            UserNavId = 1,
-                            Zipcode = ""
+                            UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            City = "Stockholm",
+                            ExtraInfo = "",
                             Name = "H&M",
-                            Street = "",
-                            UserNavId = 5,
-                            Zipcode = ""
+                            UserId = 5
                         },
                         new
                         {
                             Id = 3,
-                            City = "Göteborg",
+                            ExtraInfo = "",
                             Name = "Alfred",
-                            Street = "",
-                            UserNavId = 3,
-                            Zipcode = ""
+                            UserId = 3
                         },
                         new
                         {
                             Id = 4,
-                            City = "Örebro",
+                            ExtraInfo = "",
                             Name = "Hanna",
-                            Street = "",
-                            UserNavId = 4,
-                            Zipcode = ""
+                            UserId = 4
                         },
                         new
                         {
                             Id = 5,
-                            City = "Nora",
+                            ExtraInfo = "",
                             Name = "ICA",
-                            Street = "",
-                            UserNavId = 7,
-                            Zipcode = ""
+                            UserId = 7
                         },
                         new
                         {
                             Id = 6,
-                            City = "Morgongåva",
+                            ExtraInfo = "",
                             Name = "Coop",
-                            Street = "",
-                            UserNavId = 7,
-                            Zipcode = ""
+                            UserId = 7
                         });
                 });
 
@@ -348,7 +329,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 1,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6022),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1867),
                             Fname = "Julia",
                             Gender = "Female",
                             IsLoggedIn = false,
@@ -360,7 +341,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 2,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6055),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1928),
                             Fname = "Alexander",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -372,7 +353,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 3,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6058),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1933),
                             Fname = "Stefan",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -384,7 +365,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 4,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6061),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1938),
                             Fname = "Winnie",
                             Gender = "Female",
                             IsLoggedIn = false,
@@ -396,7 +377,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 5,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6063),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1943),
                             Fname = "Eric",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -408,7 +389,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 6,
                             City = "Fjugesta",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6065),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1949),
                             Fname = "Anders",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -420,7 +401,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 7,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6067),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1954),
                             Fname = "Peter",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -432,7 +413,7 @@ namespace Economiq.Server.Migrations
                         {
                             Id = 8,
                             City = "Orebro",
-                            CreationDate = new DateTime(2022, 9, 19, 11, 20, 16, 149, DateTimeKind.Local).AddTicks(6069),
+                            CreationDate = new DateTime(2022, 10, 6, 12, 31, 18, 255, DateTimeKind.Local).AddTicks(1959),
                             Fname = "admin",
                             Gender = "Male",
                             IsLoggedIn = false,
@@ -444,193 +425,193 @@ namespace Economiq.Server.Migrations
 
             modelBuilder.Entity("ExpenseCategoryUser", b =>
                 {
-                    b.Property<int>("ExpensesCategoryNavId")
+                    b.Property<int>("CategoriesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserNavId")
+                    b.Property<int>("UsersId")
                         .HasColumnType("int");
 
-                    b.HasKey("ExpensesCategoryNavId", "UserNavId");
+                    b.HasKey("CategoriesId", "UsersId");
 
-                    b.HasIndex("UserNavId");
+                    b.HasIndex("UsersId");
 
                     b.ToTable("ExpenseCategoryUser");
 
                     b.HasData(
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 1
+                            CategoriesId = 1,
+                            UsersId = 1
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 2
+                            CategoriesId = 1,
+                            UsersId = 2
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 3
+                            CategoriesId = 1,
+                            UsersId = 3
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 4
+                            CategoriesId = 1,
+                            UsersId = 4
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 5
+                            CategoriesId = 1,
+                            UsersId = 5
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 6
+                            CategoriesId = 1,
+                            UsersId = 6
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 1,
-                            UserNavId = 7
+                            CategoriesId = 1,
+                            UsersId = 7
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 1
+                            CategoriesId = 2,
+                            UsersId = 1
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 2
+                            CategoriesId = 2,
+                            UsersId = 2
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 3
+                            CategoriesId = 2,
+                            UsersId = 3
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 4
+                            CategoriesId = 2,
+                            UsersId = 4
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 5
+                            CategoriesId = 2,
+                            UsersId = 5
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 6
+                            CategoriesId = 2,
+                            UsersId = 6
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 2,
-                            UserNavId = 7
+                            CategoriesId = 2,
+                            UsersId = 7
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 1
+                            CategoriesId = 3,
+                            UsersId = 1
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 2
+                            CategoriesId = 3,
+                            UsersId = 2
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 3
+                            CategoriesId = 3,
+                            UsersId = 3
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 4
+                            CategoriesId = 3,
+                            UsersId = 4
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 5
+                            CategoriesId = 3,
+                            UsersId = 5
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 6
+                            CategoriesId = 3,
+                            UsersId = 6
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 3,
-                            UserNavId = 7
+                            CategoriesId = 3,
+                            UsersId = 7
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 1
+                            CategoriesId = 4,
+                            UsersId = 1
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 2
+                            CategoriesId = 4,
+                            UsersId = 2
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 3
+                            CategoriesId = 4,
+                            UsersId = 3
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 4
+                            CategoriesId = 4,
+                            UsersId = 4
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 5
+                            CategoriesId = 4,
+                            UsersId = 5
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 6
+                            CategoriesId = 4,
+                            UsersId = 6
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 4,
-                            UserNavId = 7
+                            CategoriesId = 4,
+                            UsersId = 7
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 1
+                            CategoriesId = 5,
+                            UsersId = 1
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 2
+                            CategoriesId = 5,
+                            UsersId = 2
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 3
+                            CategoriesId = 5,
+                            UsersId = 3
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 4
+                            CategoriesId = 5,
+                            UsersId = 4
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 5
+                            CategoriesId = 5,
+                            UsersId = 5
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 6
+                            CategoriesId = 5,
+                            UsersId = 6
                         },
                         new
                         {
-                            ExpensesCategoryNavId = 5,
-                            UserNavId = 7
+                            CategoriesId = 5,
+                            UsersId = 7
                         });
                 });
 
@@ -638,77 +619,78 @@ namespace Economiq.Server.Migrations
                 {
                     b.HasOne("Economiq.Shared.Models.User", "User")
                         .WithMany("Budgets")
-                        .HasForeignKey("UserNav")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Economiq.Shared.Models.Email", b =>
                 {
-                    b.HasOne("Economiq.Shared.Models.User", "UserNav")
+                    b.HasOne("Economiq.Shared.Models.User", "User")
                         .WithMany("Emails")
-                        .HasForeignKey("UserNavId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserNav");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Economiq.Shared.Models.Expense", b =>
                 {
                     b.HasOne("Economiq.Shared.Models.Budget", "Budget")
                         .WithMany("Expenses")
-                        .HasForeignKey("BudgetNav")
+                        .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Economiq.Shared.Models.ExpenseCategory", "CategoryNav")
-                        .WithMany("ExpensesNav")
-                        .HasForeignKey("CategoryNavId")
+                    b.HasOne("Economiq.Shared.Models.ExpenseCategory", "Category")
+                        .WithMany("Expenses")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Economiq.Shared.Models.Recipient", "RecipientNav")
+                    b.HasOne("Economiq.Shared.Models.Recipient", "Recipient")
                         .WithMany("ExpenseNav")
-                        .HasForeignKey("RecipientNavId")
+                        .HasForeignKey("RecipientId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Economiq.Shared.Models.User", "UserNav")
-                        .WithMany("UserExpensesNav")
-                        .HasForeignKey("UserNavId")
+                    b.HasOne("Economiq.Shared.Models.User", "User")
+                        .WithMany("Expenses")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Budget");
 
-                    b.Navigation("CategoryNav");
+                    b.Navigation("Category");
 
-                    b.Navigation("RecipientNav");
+                    b.Navigation("Recipient");
 
-                    b.Navigation("UserNav");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Economiq.Shared.Models.Recipient", b =>
                 {
-                    b.HasOne("Economiq.Shared.Models.User", "UserNav")
-                        .WithMany("RecipientNav")
-                        .HasForeignKey("UserNavId")
+                    b.HasOne("Economiq.Shared.Models.User", "User")
+                        .WithMany("Recipients")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("UserNav");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ExpenseCategoryUser", b =>
                 {
                     b.HasOne("Economiq.Shared.Models.ExpenseCategory", null)
                         .WithMany()
-                        .HasForeignKey("ExpensesCategoryNavId")
+                        .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Economiq.Shared.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserNavId")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -720,7 +702,7 @@ namespace Economiq.Server.Migrations
 
             modelBuilder.Entity("Economiq.Shared.Models.ExpenseCategory", b =>
                 {
-                    b.Navigation("ExpensesNav");
+                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("Economiq.Shared.Models.Recipient", b =>
@@ -734,9 +716,9 @@ namespace Economiq.Server.Migrations
 
                     b.Navigation("Emails");
 
-                    b.Navigation("RecipientNav");
+                    b.Navigation("Expenses");
 
-                    b.Navigation("UserExpensesNav");
+                    b.Navigation("Recipients");
                 });
 #pragma warning restore 612, 618
         }

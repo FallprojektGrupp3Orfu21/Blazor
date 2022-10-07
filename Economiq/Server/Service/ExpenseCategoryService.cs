@@ -19,9 +19,9 @@ namespace Economiq.Server.Service
         public async Task<List<ExpenseCategoryDTO>> GetexpensesByUserName(string UserName)
         {
             var categoriesToReturn = new List<ExpenseCategoryDTO>();
-            var user = await _context.Users.Include(e => e.ExpensesCategoryNav)
-                .ThenInclude(e => e.ExpensesNav).FirstOrDefaultAsync(x => x.UserName == UserName);
-            var categories = user.ExpensesCategoryNav.ToList();
+            var user = await _context.Users.Include(e => e.Categories)
+                .ThenInclude(e => e.Expenses).FirstOrDefaultAsync(x => x.UserName == UserName);
+            var categories = user.Categories.ToList();
             foreach(var category in categories)
             {
                 categoriesToReturn.Add(new ExpenseCategoryDTO()
@@ -46,14 +46,14 @@ namespace Economiq.Server.Service
             {
                 var expenseCategory = new ExpenseCategory { CategoryName = categoryName, CreationDate = DateTime.Now };
 
-                if (user.ExpensesCategoryNav == null)
+                if (user.Categories == null)
                 {
                     var expenseCategoryList = new List<ExpenseCategory> { expenseCategory };
-                    user.ExpensesCategoryNav = expenseCategoryList;
+                    user.Categories = expenseCategoryList;
                 }
                 else
                 {
-                    user.ExpensesCategoryNav.Add(expenseCategory);
+                    user.Categories.Add(expenseCategory);
 
                 }
                 try
@@ -69,14 +69,14 @@ namespace Economiq.Server.Service
             //Goes in here and adds Category to the User, if there already exists a category with the same name.
             else
             {
-                if (user.ExpensesCategoryNav == null)
+                if (user.Categories == null)
                 {
                     var expenseCategoryList = new List<ExpenseCategory> { category };
-                    user.ExpensesCategoryNav = expenseCategoryList;
+                    user.Categories = expenseCategoryList;
                 }
                 else
                 {
-                    user.ExpensesCategoryNav.Add(category);
+                    user.Categories.Add(category);
                 }
                 try
                 {

@@ -8,9 +8,6 @@ namespace Economiq.Shared.DTO
         [Required(ErrorMessage = "Recipient Name Required")]
         public string Name { get; set; }
         [Required(ErrorMessage ="Recipient City Required")]
-        public string City { get; set; }
-
-        public string Street { get; set; }
-        public string Zipcode { get; set; }
+        public string ExtraInfo { get; set; }
     }
 }
