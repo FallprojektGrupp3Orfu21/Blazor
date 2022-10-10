@@ -1,5 +1,7 @@
-﻿using Economiq.Shared.DTO;
+﻿using Economiq.Client.Pages;
+using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using BudgetService = Economiq.Server.Service.BudgetService;
 using UserService = Economiq.Server.Service.UserService;
 
@@ -69,7 +71,6 @@ namespace Economiq.Server.Controllers
             }
         }
 
-
         [HttpGet("getBudgetByDate")]
         public async Task<IActionResult> GetBudgetByDate(CreateBudgetDTO asAS)
         {
@@ -77,8 +78,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-
-                    ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(asAS, TempUser.Id);
+                    var relevantBudget = await _budgetService.GetBudgetByDate(asAS, TempUser.Id);
                     return StatusCode(200, relevantBudget);
                 }
                 catch (Exception ex)
@@ -93,14 +93,15 @@ namespace Economiq.Server.Controllers
         }
 
         [HttpGet("getBudgetByMaxAmount")]
-        public async Task<IActionResult> GetBudgetByMaxAmount(int userId)
+        public async Task<IActionResult> GetBudgetByMaxAmount()
         {
             if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
                 try
                 {
-                    ListBudgetDTO budgetByDate = await _budgetService.GetLatestMaxAmount(userId);
-                    return StatusCode(200, budgetByDate);
+                    var carts = await _budgetService.GetLatestMaxAmount(TempUser.Id );
+           
+                    return StatusCode(200, carts);
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +125,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    await _budgetService.CreateBudget(createBudgetDTO, TempUser.Username);
+                    await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
                     return StatusCode(200, "Budget Successfully Created");
                 }
 
