@@ -60,8 +60,6 @@
         <ValidationMessage For="@(() => @NewExpense.CategoryName)" />
     </div>
 
-
-
     <div class="mb-2 form-group form-floating">
         <InputSelect  class="form-control" id="recipient" @bind-Value=NewExpense.RecipientName>
             @foreach (RecipientDTO recipient in _recipients)
@@ -72,8 +70,11 @@
         <label for="recipient">Recipient:</label>
     </div>
 
+    <button id="NewSubmit" type="button" @onclick="()=> {ChangeShowModal();}">Add Expense</button>
+    <label for="submit">Submit.</label>
+   <ValidationMessage For="@(() => @NewExpense.BudgetId)" />
 
-    <button class="mx-auto w-25 btn btn-success" type="submit">Add Expense</button>
+
 </EditForm>
 @if(ShowModal){
     <Economiq.Client.Components.AddCategory.AddCategoryModal 

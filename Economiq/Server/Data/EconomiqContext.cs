@@ -48,7 +48,7 @@ namespace Economiq.Server.Data
             modelbuilder.Entity<Budget>()
                 .HasOne(u => u.User)
                 .WithMany(b => b.Budgets)
-                .HasForeignKey(b => b.User)
+                .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelbuilder.Entity<Expense>()
                 .HasOne(b => b.Budget)

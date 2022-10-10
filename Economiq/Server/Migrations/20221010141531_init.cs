@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Economiq.Server.Migrations
 {
-    public partial class e : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -170,11 +171,11 @@ namespace Economiq.Server.Migrations
                 columns: new[] { "Id", "CategoryName", "CreationDate" },
                 values: new object[,]
                 {
-                    { 1, "Rent", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(280) },
-                    { 2, "Food", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(284) },
-                    { 3, "Transport", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(287) },
-                    { 4, "Clothing", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(290) },
-                    { 5, "Entertainment", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(292) }
+                    { 1, "Rent", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5330) },
+                    { 2, "Food", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5334) },
+                    { 3, "Transport", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5336) },
+                    { 4, "Clothing", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5339) },
+                    { 5, "Entertainment", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5341) }
                 });
 
             migrationBuilder.InsertData(
@@ -182,14 +183,14 @@ namespace Economiq.Server.Migrations
                 columns: new[] { "Id", "City", "CreationDate", "Fname", "Gender", "IsLoggedIn", "Lname", "Password", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 87, DateTimeKind.Local).AddTicks(9977), "Julia", "Female", false, "Hook", "Testing123", "JuliaH" },
-                    { 2, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(20), "Alexander", "Male", false, "Volonen", "Testing234", "AlexV" },
-                    { 3, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(23), "Stefan", "Male", false, "Krakowsky", "Testing345", "Peppo" },
-                    { 4, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(26), "Winnie", "Female", false, "Huynh", "Testing456", "WinnieH" },
-                    { 5, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(29), "Eric", "Male", false, "Flodin", "Testing567", "Ericx" },
-                    { 6, "Fjugesta", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(33), "Anders", "Male", false, "Bergstrom", "Testing678", "AndersB" },
-                    { 7, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(36), "Peter", "Male", false, "Hafid", "Testing789", "PeterH" },
-                    { 8, "Orebro", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(39), "admin", "Male", false, "admin", "admin", "admin" }
+                    { 1, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5030), "Julia", "Female", false, "Hook", "Testing123", "JuliaH" },
+                    { 2, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5077), "Alexander", "Male", false, "Volonen", "Testing234", "AlexV" },
+                    { 3, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5080), "Stefan", "Male", false, "Krakowsky", "Testing345", "Peppo" },
+                    { 4, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5083), "Winnie", "Female", false, "Huynh", "Testing456", "WinnieH" },
+                    { 5, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5085), "Eric", "Male", false, "Flodin", "Testing567", "Ericx" },
+                    { 6, "Fjugesta", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5088), "Anders", "Male", false, "Bergstrom", "Testing678", "AndersB" },
+                    { 7, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5091), "Peter", "Male", false, "Hafid", "Testing789", "PeterH" },
+                    { 8, "Orebro", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5094), "admin", "Male", false, "admin", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -256,7 +257,7 @@ namespace Economiq.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Expenses",
                 columns: new[] { "Id", "Amount", "BudgetId", "CategoryId", "Comment", "CreationDate", "ExpenseDate", "RecipientId", "UserId" },
-                values: new object[] { 1, 25m, null, 2, "Glass", new DateTime(2022, 10, 7, 12, 5, 8, 88, DateTimeKind.Local).AddTicks(331), new DateTime(2022, 10, 7, 0, 0, 0, 0, DateTimeKind.Local), null, 1 });
+                values: new object[] { 1, 25m, null, 2, "Glass", new DateTime(2022, 10, 10, 16, 15, 31, 80, DateTimeKind.Local).AddTicks(5458), new DateTime(2022, 10, 10, 0, 0, 0, 0, DateTimeKind.Local), null, 1 });
 
             migrationBuilder.InsertData(
                 table: "Recipients",
