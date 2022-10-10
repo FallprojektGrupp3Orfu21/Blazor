@@ -1,6 +1,9 @@
-﻿@using Economiq.Client.Service
+﻿@page "/budget/{IdAsString}"
+@using Economiq.Client.Components.Expense
+@using Economiq.Client.Service
 @using Economiq.Shared.DTO
-@page "/budget/{IdAsString}"
+@inject AppState _appState
+@implements IDisposable
 @inject BudgetService _budgetService;
 
 @if(_budget != null){
@@ -30,5 +33,9 @@
     {
         Id = Guid.Parse(IdAsString);
         _budget = await _budgetService.GetBudgetById(Id);
+    }
+    public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
     }
 }

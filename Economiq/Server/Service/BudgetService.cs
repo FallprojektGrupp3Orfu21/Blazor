@@ -4,6 +4,9 @@ using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 
 namespace Economiq.Server.Service
 {
@@ -45,7 +48,7 @@ namespace Economiq.Server.Service
         public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
             Budget? budget = await _context.Budgets.Where(b => b.Id == id).FirstOrDefaultAsync();
-            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e => e.CategoryId).Include(e => e.RecipientId).ToListAsync();
+            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e => e.Category).Include(e => e.Recipient).ToListAsync();
 
             if (budget == null)
             {
@@ -134,5 +137,8 @@ namespace Economiq.Server.Service
                 throw new Exception("Could not parse expense date");
             }
         }
+     
     }
 }
+
+

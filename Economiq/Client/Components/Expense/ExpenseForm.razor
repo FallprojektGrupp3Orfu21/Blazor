@@ -3,27 +3,9 @@
 @using Economiq.Shared.Models
 @inject ExpenseService _expenseService
 @inject RecipientService _recipientService
+@inject BudgetService _budgetService
 @inject ExpenseCategoryService _categoryService;
-<style> 
-    #NewCategory {
-    position: absolute;
-    top: 0;
-    border-radius: 5px;
-    right: 0px;
-    z-index: 2;
-    border: none;
-    top: 2px;
-    height: 30px;
-    cursor: pointer;
-    color: black;
-    background-color: white;
-    transform: translate(-10px, 50%);
-}
-    .modal {
-        position: absolute; 
-        z-index: 9999;
-    }
-</style>
+
 <p>@Confirmation</p>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
@@ -70,12 +52,51 @@
         <label for="recipient">Recipient:</label>
     </div>
 
-    <button id="NewSubmit" type="button" @onclick="()=> {ChangeShowModal();}">Add Expense</button>
-    <label for="submit">Submit.</label>
-   <ValidationMessage For="@(() => @NewExpense.BudgetId)" />
 
-
+    <div class="accordion-button">
+        <InputSelect class="form-control" id="budgetId" placeholder="BudgetId" @bind-Value="@NewExpense.BudgetId">
+                
+        </InputSelect>
+        <button id="NewBudgetId" type="button" @onclick="()=> {ChangeShowModal2();}">Add Expense</button>
+        <label for="Submit"></label>
+        <ValidationMessage For="@(() => @NewExpense.BudgetId)" />
+    </div>
 </EditForm>
+<style>
+    #NewBudget {
+        position: absolute;
+        top: 0;
+        border-radius: 5px;
+        right: 0px;
+        z-index: 2;
+        border: none;
+        top: 2px;
+        height: 30px;
+        cursor: pointer;
+        color: black;
+        background-color: white;
+        transform: translate(-10px, 50%);
+    }
+
+    .modal {
+        position: absolute;
+        z-index: 9999;
+    }
+</style>
+
+@if (ShowModal)
+{
+    <Economiq.Client.Components.AddNewBudget.AddBudgetModal 
+    CloseModalFunction="@ChangeShowModal2"
+                                                       
+    SaveNewCategoryFunction="@SaveNewBudge"
+                                                       
+    ExpenseCategoryString="@NewBudgetAmount"
+      CategoryChanged="@BudgetChange" />
+}
+
+
+
 @if(ShowModal){
     <Economiq.Client.Components.AddCategory.AddCategoryModal 
     CloseModalFunction="@ChangeShowModal"
@@ -83,6 +104,7 @@
     ExpenseCategoryString="@NewExpenseCategory"
     CategoryChanged ="@CategoryChanged"/>
 }
+
 @code {
     [Parameter]
     public EventCallback UpdateList { get; set; }
@@ -91,15 +113,24 @@
     public ExpenseDTO NewExpense { get; set; } = new();
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     private String NewExpenseCategory { get; set; } = String.Empty;
+    private String NewBudgetId { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
+    public List<ListBudgetDTO> _budgetList { get; set; } = new();
     public bool ShowModal = false; 
     public void CategoryChanged(string newValue){
         NewExpenseCategory = newValue;
     }
+    public void BudgetIdChanged(string newValue)
+    {
+        NewBudgetId = newValue;
+    }
+
+
     protected override async Task OnInitializedAsync()
     {
         _recipients = await _recipientService.GetRecipients();
         _categoryList = await _categoryService.GetCategoryList();
+        _budgetList = await _budgetService.GetBudgetByMaxAmount();
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
         if (_recipients.Count > 0)
         {
@@ -112,6 +143,26 @@
         this.ShowModal = !this.ShowModal;
         StateHasChanged();
     }
+    public void ChangeShowModal2()
+    {
+        NewBudgetId = String.Empty;
+        this.ShowModal = !this.ShowModal;
+        StateHasChanged();
+    }
+
+    public async void SaveNewBudget()
+    {
+        CreateBudgetDTO budgetDTO = new()
+            {
+                MaxAmount = NewBudgetAmount
+            };
+        await _budgetService.GetBudgetByMaxAmount();
+        StateHasChanged();
+    }
+
+
+
+
     public async void SaveNewCategory() {
         ExpenseCategoryDTO expenseCategory = new()
             {
@@ -120,6 +171,9 @@
         await _categoryService.CreateExpenseCategory(expenseCategory);
         StateHasChanged();
     }
+
+
+
     public async Task HandleSubmit()
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
@@ -129,7 +183,9 @@
         NewExpense = new ExpenseDTO()
             {
                 ExpenseDate = CreationDate.ToString("yyyy-MM-dd"),
-                RecipientName = _recipients[0].Name
+                RecipientName = _recipients[0].Name,
+                BudgetId = await _budgetService.GetBudgetByDate(yearAndMonth)
+
             };
         await UpdateList.InvokeAsync();
     }
