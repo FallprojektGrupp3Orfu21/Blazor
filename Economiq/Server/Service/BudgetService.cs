@@ -4,6 +4,9 @@ using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 
 namespace Economiq.Server.Service
 {
@@ -25,7 +28,7 @@ namespace Economiq.Server.Service
             {
                 List<ListBudgetDTO> budgetsDTO = new List<ListBudgetDTO>();
 
-                foreach(Budget budget in budgets)
+                foreach (Budget budget in budgets)
                 {
                     budgetsDTO.Add(new()
                     {
@@ -47,14 +50,14 @@ namespace Economiq.Server.Service
             Budget? budget = await _context.Budgets.Where(b => b.Id == id).FirstOrDefaultAsync();
             List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e=>e.Category).Include(e=>e.Recipient).ToListAsync();
 
-            if(budget == null)
+            if (budget == null)
             {
                 throw new Exception("Budget does not exist");
             }
             else
             {
                 List<GetExpenseDTO> expenseDTOs = new List<GetExpenseDTO>();
-                foreach(var expense in expenses)
+                foreach (var expense in expenses)
                 {
                     expenseDTOs.Add(new()
                     {
@@ -126,7 +129,7 @@ namespace Economiq.Server.Service
                     UserId = userId
                 };
                 _context.Budgets.Add(newBudget);
-                
+
                 await _context.SaveChangesAsync();
             }
             else
@@ -134,5 +137,8 @@ namespace Economiq.Server.Service
                 throw new Exception("Could not parse expense date");
             }
         }
+     
     }
 }
+
+

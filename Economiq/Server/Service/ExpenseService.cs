@@ -21,12 +21,13 @@ namespace Economiq.Server.Service
         public async Task<bool> AddExpense(ExpenseDTO expense, int userId)
         {
 
-            var addExpense = _context.Expenses.Where(addExpense => addExpense.UserId == userId).Include(r => r.RecipientId).FirstOrDefault();
-            var recipient = _context.Recipients.Where(rec => rec.Id == expense.RecipientId).FirstOrDefault();
-            
-            
-                
-            
+            //Gets the user by username
+            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.Recipients).Include(u => u.Expenses).FirstOrDefault();
+            var recipient = user.Recipients.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
+            if (user == null)
+            {
+                throw new Exception("No User with this Username.");
+            }
             //Gets the category the expense belongs to, or creates one if it doesnt exist.
             var category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
             if (category == null)
@@ -55,35 +56,18 @@ namespace Economiq.Server.Service
             {
                 user.Expenses = new List<Expense>();
             }
-            CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
-            {
-                ExpenseDate = expense.ExpenseDate
-            };
-            ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(newBudget, TempUser.Id);
-            if (relevantBudget == null) //Unhappy Scenario, no budget for time period exists
-            {
-                var newBudgetMaxAmount = await _budgetService.GetLatestMaxAmount(Economiq.Server.TempUser.Id);
-                CreateBudgetDTO createBudgetDTO = new()
-                {
-                    MaxAmount = newBudgetMaxAmount,
-                    ExpenseDate = expense.ExpenseDate
-                };
-                await _budgetService.CreateBudget(createBudgetDTO, Economiq.Server.TempUser.Id);
-            }
-            relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);     
-            newExpense.BudgetId = relevantBudget.Id;
-            
+
             try
-              {
+            {
                 user.Expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
-                    return true;
-              }
-                catch
-                {
-                    throw new Exception("Something went wrong");
-                }
-            
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Something went wrong");
+            }
+
         }
 
         public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
@@ -117,7 +101,8 @@ namespace Economiq.Server.Service
                 .Take(5)
                 .ToList();
 
-            if(user.Recipients.Count != 0){ 
+            if (user.Recipients.Count != 0)
+            {
                 foreach (var expense in expenses)
                 {
                     recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
@@ -125,7 +110,7 @@ namespace Economiq.Server.Service
                 return recentExpenses;
             }
             return new();
-            
+
         }
     }
 }
