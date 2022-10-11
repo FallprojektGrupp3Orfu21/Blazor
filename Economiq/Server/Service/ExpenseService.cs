@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,7 +52,7 @@ namespace Economiq.Server.Service
             DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
             DateTime creationDate = DateTime.Now;
             var newExpense = new Expense { Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserId = user.Id, CategoryId = category.Id, RecipientId = recipient.Id };
-
+            
             if (user.Expenses == null)
             {
                 user.Expenses = new List<Expense>();

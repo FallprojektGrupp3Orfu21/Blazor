@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,11 +20,7 @@ namespace Economiq.Server.Service
             {
                 throw new Exception("No user with this username.");
             }
-            var newRecipient = new Recipient
-            {
-                Name = dto.Name,
-                ExtraInfo = dto.ExtraInfo
-            };
+            var newRecipient = dto.ToRecipient();
 
             if (user.Recipients == null)
             {
@@ -53,11 +50,11 @@ namespace Economiq.Server.Service
             {
                 if (SearchString == null)
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, ExtraInfo = recipient.ExtraInfo });
+                    listToReturn.Add(recipient.ToRecipientDTO());
                 }
                 else if (recipient.Name.ToLower().StartsWith(SearchString.ToLower()))
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, ExtraInfo = recipient.ExtraInfo });
+                    listToReturn.Add(recipient.ToRecipientDTO());
                 }
             }
             return listToReturn;
