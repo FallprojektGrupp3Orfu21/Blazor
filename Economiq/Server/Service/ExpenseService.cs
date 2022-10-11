@@ -59,13 +59,13 @@ namespace Economiq.Server.Service
               {
                 _context.Expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
-                    return true;
-              }
-                catch
-                {
-                    throw new Exception("Something went wrong");
-                }
-            
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Something went wrong");
+            }
+
         }
 
         public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
@@ -99,7 +99,8 @@ namespace Economiq.Server.Service
                 .Take(5)
                 .ToList();
 
-            if(user.Recipients.Count != 0){ 
+            if (user.Recipients.Count != 0)
+            {
                 foreach (var expense in expenses)
                 {
                     recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
@@ -107,7 +108,7 @@ namespace Economiq.Server.Service
                 return recentExpenses;
             }
             return new();
-            
+
         }
     }
 }

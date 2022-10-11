@@ -1,8 +1,10 @@
-﻿using Economiq.Server;
+﻿using Economiq.Client.Pages;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
+//Economiq.Server.Service.UserService;
 
 namespace Economiq.Server.Controllers
 {
@@ -69,5 +71,77 @@ namespace Economiq.Server.Controllers
                 return BadRequest("User not logged in");
             }
         }
+
+        [HttpGet("getBudgetByDate")]
+        public async Task<IActionResult> GetBudgetByDate(CreateBudgetDTO asAS)
+        {
+            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+            {
+                try
+                {
+                    var relevantBudget = await _budgetService.GetBudgetByDate(asAS, TempUser.Id);
+                    return StatusCode(200, relevantBudget);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest("User not logged in");
+            }
+        }
+
+        [HttpGet("getBudgetByMaxAmount")]
+        public async Task<IActionResult> GetBudgetByMaxAmount()
+        {
+            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+            {
+                try
+                {
+                    var carts = await _budgetService.GetLatestMaxAmount(TempUser.Id );
+           
+                    return StatusCode(200, carts);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest("User not logged in");
+            }
+        }
+
+        [HttpPost("createBudget")]
+        public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetDTO createBudgetDTO)
+        {
+            if (!_userService.DoesUserExist(TempUser.Username))
+            {
+                return BadRequest("Invalid Username");
+            }
+            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+            {
+                try
+                {
+                    await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
+                    return StatusCode(200, "Budget Successfully Created");
+                }
+
+                catch (Exception err)
+                {
+                    return StatusCode(500, "Failed to create Budget");
+                }
+            }
+            else
+            {
+                return BadRequest("User not logged in");
+            }
+
+        }
+      
     }
+
 }

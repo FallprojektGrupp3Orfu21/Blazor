@@ -4,23 +4,24 @@
 @inject ExpenseService _expenseService
 @inject RecipientService _recipientService
 @inject ExpenseCategoryService _categoryService;
-<style> 
+<style>
     #NewCategory {
-    position: absolute;
-    top: 0;
-    border-radius: 5px;
-    right: 0px;
-    z-index: 2;
-    border: none;
-    top: 2px;
-    height: 30px;
-    cursor: pointer;
-    color: black;
-    background-color: white;
-    transform: translate(-10px, 50%);
-}
+        position: absolute;
+        top: 0;
+        border-radius: 5px;
+        right: 0px;
+        z-index: 2;
+        border: none;
+        top: 2px;
+        height: 30px;
+        cursor: pointer;
+        color: black;
+        background-color: white;
+        transform: translate(-10px, 50%);
+    }
+
     .modal {
-        position: absolute; 
+        position: absolute;
         z-index: 9999;
     }
 </style>
@@ -35,13 +36,13 @@
         <ValidationMessage For="@(() => @NewExpense.Title)" />
     </div>
     <div class="mb-2 form-group form-floating">
-        <InputNumber  class="form-control" id="amount" @bind-Value="@NewExpense.Amount"></InputNumber>
+        <InputNumber class="form-control" id="amount" @bind-Value="@NewExpense.Amount"></InputNumber>
         <label for="amount">Amount:</label>
         <ValidationMessage For="@(() => @NewExpense.Amount)" />
     </div>
 
     <div class="mb-2 form-group form-floating">
-        <InputDate  class="form-control" id="date" @bind-Value="@CreationDate"></InputDate>
+        <InputDate class="form-control" id="date" @bind-Value="@CreationDate"></InputDate>
         <label for="date">Date:</label>
         <ValidationMessage For="@(() => @NewExpense.ExpenseDate)" />
     </div>
@@ -75,12 +76,12 @@
 
     <button class="mx-auto w-25 btn btn-success" type="submit">Add Expense</button>
 </EditForm>
-@if(ShowModal){
-    <Economiq.Client.Components.AddCategory.AddCategoryModal 
-    CloseModalFunction="@ChangeShowModal"
-    SaveNewCategoryFunction="@SaveNewCategory"           
-    ExpenseCategoryString="@NewExpenseCategory"
-    CategoryChanged ="@CategoryChanged"/>
+@if (ShowModal)
+{
+    <Economiq.Client.Components.AddCategory.AddCategoryModal CloseModalFunction="@ChangeShowModal"
+                                                         SaveNewCategoryFunction="@SaveNewCategory"
+                                                         ExpenseCategoryString="@NewExpenseCategory"
+                                                         CategoryChanged="@CategoryChanged" />
 }
 @code {
     [Parameter]
@@ -91,8 +92,9 @@
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     private String NewExpenseCategory { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
-    public bool ShowModal = false; 
-    public void CategoryChanged(string newValue){
+    public bool ShowModal = false;
+    public void CategoryChanged(string newValue)
+    {
         NewExpenseCategory = newValue;
     }
     protected override async Task OnInitializedAsync()
@@ -106,12 +108,14 @@
         }
         StateHasChanged();
     }
-    public void ChangeShowModal() {
+    public void ChangeShowModal()
+    {
         NewExpenseCategory = String.Empty;
         this.ShowModal = !this.ShowModal;
         StateHasChanged();
     }
-    public async void SaveNewCategory() {
+    public async void SaveNewCategory()
+    {
         ExpenseCategoryDTO expenseCategory = new()
             {
                 CategoryName = NewExpenseCategory
@@ -133,3 +137,5 @@
         await UpdateList.InvokeAsync();
     }
 }
+message.txt
+5 KB
