@@ -32,11 +32,8 @@ namespace Economiq.Server.Service
             {
                 throw new Exception("Title Too Long (Needs to be less than 50 characters)");
             }
-            //Creates the expense and adds it to the user (creates list ifs the first expense on the user)
-            DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
-            DateTime creationDate = DateTime.Now;
-            var newExpense = new Expense { Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserId = userId, CategoryId = expense.CategoryId, RecipientId = expense.RecipientId };
-
+            
+            var newExpense = expense.ToExpense(userId);
 
             CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
             {
