@@ -20,22 +20,11 @@ namespace Economiq.Server.Service
 
         public async Task<bool> AddExpense(ExpenseDTO expense, int userId)
         {
-            var expenses = _context.Expenses.Where(e => e.UserId == userId).Include(r => r.RecipientId);
-            var recipient = _context.Recipients.Where(rec => rec.Id == expense.RecipientId).FirstOrDefault();
-               
-            //Gets the category the expense belongs to, or creates one if it doesnt exist.
-            var category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
-            if (category == null)
+            List<Expense> expenses = await _context.Expenses.Where(e => e.UserId == userId).Include(r => r.RecipientId).ToListAsync();
+            
+            if (expenses == null)
             {
-                try
-                {
-                    _expenseCategoryService.CreateExpenseCategory(userId, expense.CategoryName);
-                    category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
-                }
-                catch
-                {
-                    throw new Exception("Could not create missing Category");
-                }
+                expenses = new List<Expense>();
             }
             //Length Check for title/comment
             if (expense.Title.Length > 50)
@@ -45,7 +34,8 @@ namespace Economiq.Server.Service
             //Creates the expense and adds it to the user (creates list ifs the first expense on the user)
             DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
             DateTime creationDate = DateTime.Now;
-            var newExpense = new Expense { Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserId = user.id, CategoryId = category.Id, RecipientId = recipient.Id };
+            var newExpense = new Expense { Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserId = userId, CategoryId = expense.CategoryId, RecipientId = expense.RecipientId };
+
 
             CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
             {
@@ -67,7 +57,7 @@ namespace Economiq.Server.Service
             
             try
               {
-                user.Expenses.Add(newExpense);
+                _context.Expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
                     return true;
               }
