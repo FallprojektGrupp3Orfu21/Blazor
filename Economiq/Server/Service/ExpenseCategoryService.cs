@@ -26,7 +26,8 @@ namespace Economiq.Server.Service
             {
                 categoriesToReturn.Add(new ExpenseCategoryDTO()
                 {
-                    CategoryName = category.CategoryName
+                    CategoryName = category.CategoryName,
+                    CategoryId = category.Id
                 });
             }
             return categoriesToReturn;
