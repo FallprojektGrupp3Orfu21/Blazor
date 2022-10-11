@@ -33,9 +33,9 @@ namespace Economiq.Server.Service
         }
 
 
-        public bool CreateExpenseCategory(string userName, string categoryName)
+        public bool CreateExpenseCategory(int userId, string categoryName)
         {
-            var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
+            var user = _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefault();
             if (user == null)
             {
                 throw new Exception("No User with this Username.");
