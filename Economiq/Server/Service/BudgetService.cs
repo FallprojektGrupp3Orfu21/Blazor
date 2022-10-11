@@ -22,7 +22,7 @@ namespace Economiq.Server.Service
 
         public async Task<List<ListBudgetDTO>> GetAllBudgets(int userId)
         {
-            List<Budget> budgets = await _context.Budgets.Where(b => b.UserNav == userId).OrderByDescending(b => b.EndDate).ToListAsync();
+            List<Budget> budgets = await _context.Budgets.Where(b => b.UserId == userId).OrderByDescending(b => b.EndDate).ToListAsync();
             
             if (budgets.Any())
             {

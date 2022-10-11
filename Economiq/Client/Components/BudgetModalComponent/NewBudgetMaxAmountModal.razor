@@ -49,7 +49,7 @@
         CloseModalFunction?.Invoke(); 
     }
     private void RunSaveNewBudgetAmount(){
-        SaveNewBudgetAmount?.Invoke();
+        SaveNewBudgetFunction?.Invoke();
         RunCloseModalFunction();
     }
     protected override void OnInitialized()
@@ -61,7 +61,7 @@
     private Task OnValueChanged(ChangeEventArgs e)  
        {  
            currentBudgetString = e.Value.ToString();  
-           return CategoryChanged.InvokeAsync(currentBudgetString);  
+           return BudgetChanged.InvokeAsync(currentBudgetString);  
        }  
    }  
 

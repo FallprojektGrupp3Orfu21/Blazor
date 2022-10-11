@@ -86,13 +86,13 @@
 
 @if (ShowModal)
 {
-    <Economiq.Client.Components.AddNewBudget.AddBudgetModal 
+@*    <Economiq.Client.Components.AddNewBudget.AddBudgetModal 
     CloseModalFunction="@ChangeShowModal2"
                                                        
     SaveNewCategoryFunction="@SaveNewBudge"
                                                        
     ExpenseCategoryString="@NewBudgetAmount"
-      CategoryChanged="@BudgetChange" />
+      CategoryChanged="@BudgetChange" />*@
 }
 
 
@@ -130,7 +130,7 @@
     {
         _recipients = await _recipientService.GetRecipients();
         _categoryList = await _categoryService.GetCategoryList();
-        _budgetList = await _budgetService.GetBudgetByMaxAmount();
+        //_budgetList = await _budgetService.GetBudgetByMaxAmount();
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
         if (_recipients.Count > 0)
         {
@@ -152,11 +152,11 @@
 
     public async void SaveNewBudget()
     {
-        CreateBudgetDTO budgetDTO = new()
-            {
-                MaxAmount = NewBudgetAmount
-            };
-        await _budgetService.GetBudgetByMaxAmount();
+        //CreateBudgetDTO budgetDTO = new()
+        //    {
+        //        MaxAmount = NewBudgetAmount
+        //    };
+        //await _budgetService.GetBudgetByMaxAmount();
         StateHasChanged();
     }
 
@@ -184,7 +184,7 @@
             {
                 ExpenseDate = CreationDate.ToString("yyyy-MM-dd"),
                 RecipientName = _recipients[0].Name,
-                BudgetId = await _budgetService.GetBudgetByDate(yearAndMonth)
+                //BudgetId = await _budgetService.GetBudgetByDate()
 
             };
         await UpdateList.InvokeAsync();
