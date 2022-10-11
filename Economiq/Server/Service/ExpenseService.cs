@@ -18,23 +18,22 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<bool> AddExpense(ExpenseDTO expense, string userName)
+        public async Task<bool> AddExpense(ExpenseDTO expense, int userId)
         {
 
-            //Gets the user by username
-            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.Recipients).Include(u=>u.Expenses).FirstOrDefault();
-            var recipient = user.Recipients.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
-            if (user == null)
-            {
-                throw new Exception("No User with this Username.");
-            }
+            var addExpense = _context.Expenses.Where(addExpense => addExpense.UserId == userId).Include(r => r.RecipientId).FirstOrDefault();
+            var recipient = _context.Recipients.Where(rec => rec.Id == expense.RecipientId).FirstOrDefault();
+            
+            
+                
+            
             //Gets the category the expense belongs to, or creates one if it doesnt exist.
             var category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
             if (category == null)
             {
                 try
                 {
-                    _expenseCategoryService.CreateExpenseCategory(userName, expense.CategoryName);
+                    _expenseCategoryService.CreateExpenseCategory(user, expense.CategoryName);
                     category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
                 }
                 catch

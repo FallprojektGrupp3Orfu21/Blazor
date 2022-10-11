@@ -12,6 +12,6 @@ namespace Economiq.Shared.DTO
         public decimal Amount { get; set; }
         [Required(ErrorMessage = "Category name required")]
         public string CategoryName { get; set; }
-        public string RecipientName { get; set; }
+        public int RecipientId { get; set; }
     }
 }
