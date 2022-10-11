@@ -34,14 +34,14 @@ namespace Economiq.Server.Service
         }
 
 
-        public bool CreateExpenseCategory(int userId, string categoryName)
+        public async Task <bool> CreateExpenseCategory(int userId, string categoryName)
         {
-            var user = _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefault();
+            var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new Exception("No User with this Username.");
             }
-            var category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == categoryName.ToLower()).FirstOrDefault();
+            var category = await _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == categoryName.ToLower()).FirstOrDefaultAsync();
             //Goes in here to create the category and add it to the User if the category does not already exist.
             if (category == null)
             {
@@ -59,7 +59,7 @@ namespace Economiq.Server.Service
                 }
                 try
                 {
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return true;
                 }
                 catch
@@ -81,7 +81,7 @@ namespace Economiq.Server.Service
                 }
                 try
                 {
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return true;
                 }
                 catch

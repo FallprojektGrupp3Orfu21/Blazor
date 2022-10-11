@@ -21,8 +21,8 @@ namespace Economiq.Server.Service
 
         public async Task<bool> AddExpense(ExpenseDTO expense, int userId)
         {
-            List<Expense> expenses = await _context.Expenses.Where(e => e.UserId == userId).Include(r => r.RecipientId).ToListAsync();
-            
+            List<Expense> expenses = await _context.Expenses.Where(e => e.UserId == userId).Include(r => r.Recipient).ToListAsync();
+
             if (expenses == null)
             {
                 expenses = new List<Expense>();
@@ -32,7 +32,7 @@ namespace Economiq.Server.Service
             {
                 throw new Exception("Title Too Long (Needs to be less than 50 characters)");
             }
-            
+
             var newExpense = expense.ToExpense(userId);
 
             CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
@@ -50,12 +50,12 @@ namespace Economiq.Server.Service
                 };
                 await _budgetService.CreateBudget(createBudgetDTO, Economiq.Server.TempUser.Id);
             }
-            relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);     
+            relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);
             newExpense.BudgetId = relevantBudget.Id;
-            
+
             try
-              {
-                _context.Expenses.Add(newExpense);
+            {
+                expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -66,46 +66,36 @@ namespace Economiq.Server.Service
 
         }
 
-        public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
+        public async Task<List<GetExpenseDTO>> GetAllExpensesByUserId(int userId)
         {
             List<GetExpenseDTO> listToReturn = new List<GetExpenseDTO>();
+            var expenses = await _context.Expenses.Where(e => e.UserId == userId).Include(e => e.Category).Include(e => e.Recipient).ToListAsync();
 
-                var user = _context.Users.Include(e => e.Expenses).ThenInclude(e=>e.Category).Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
-                var expenses = user.Expenses.ToList();
+            foreach (var expense in expenses)
+            {
+                listToReturn.Add(expense.ToGetExpenseDTO());
 
+            }
+            return listToReturn;
 
-                foreach (var expense in expenses)
-                {
-                    listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name }) ;
-
-                }
-                return listToReturn;
-            
         }
 
-        public async Task<List<GetExpenseDTO>> GetRecentExpenses(string username)
+        public async Task<List<GetExpenseDTO>> GetRecentExpenses(int userId)
         {
             List<GetExpenseDTO> recentExpenses = new();
 
-            User? user = await _context.Users
-                .Include(e => e.Expenses)
-                .ThenInclude(e => e.Category)
-                .Include(e => e.Recipients)
-                .FirstOrDefaultAsync(x => x.UserName == username);
-            List<Expense>? expenses = user.Expenses
+            var expenses = await _context.Expenses.Where(ex => ex.UserId == userId)
+                .Include(ex => ex.Category)
+                .Include(r => r.Recipient)
                 .OrderByDescending(x => x.CreationDate)
                 .Take(5)
-                .ToList();
+                .ToListAsync();
 
-            if (user.Recipients.Count != 0)
+            foreach (var expense in expenses)
             {
-                foreach (var expense in expenses)
-                {
-                    recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
-                }
-                return recentExpenses;
+              recentExpenses.Add(expense.ToGetExpenseDTO());
             }
-            return new();
+            return recentExpenses;
 
         }
     }

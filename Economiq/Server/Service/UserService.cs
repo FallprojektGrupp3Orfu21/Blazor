@@ -59,11 +59,6 @@ namespace Economiq.Server.Service
                 throw ex;
             }
 
-            _categoryService.CreateExpenseCategory(newUser.Username, "Rent");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Food");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Transport");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Clothing");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Entertainment");
         }
         public bool LoginUser(string userName, string password)
         {

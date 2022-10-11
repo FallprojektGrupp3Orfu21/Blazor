@@ -13,5 +13,7 @@ namespace Economiq.Shared.DTO
         [Required(ErrorMessage = "Category name required")]
         public int CategoryId { get; set; }
         public int RecipientId { get; set; }
+
+        public Guid BudgetId { get; set; }
     }
 }

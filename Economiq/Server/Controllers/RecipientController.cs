@@ -19,7 +19,7 @@ namespace API.Controllers
             _recipientService = recipientService;
         }
         [HttpPost("createRecipient")]
-        public IActionResult CreateRecipient([FromBody] RecipientDTO recipientDTO)
+        public async Task<IActionResult> CreateRecipient([FromBody] RecipientDTO recipientDTO)
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -29,7 +29,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    _recipientService.CreateRecipient(TempUser.Username, recipientDTO);
+                    await _recipientService.CreateRecipient(TempUser.Id, recipientDTO);
                     return Ok("Recipient Created");
                 }
 
@@ -45,7 +45,7 @@ namespace API.Controllers
 
         }
         [HttpPost("listRecipients")]
-        public IActionResult GetRecipients(string? searchString=null)
+        public async Task<IActionResult> GetRecipients(string? searchString=null)
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -55,7 +55,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var listToReturn = _recipientService.GetRecipients(TempUser.Username, searchString);
+                    var listToReturn = await _recipientService.GetRecipients(TempUser.Id, searchString);
 
                     return StatusCode(200,listToReturn);
                 }

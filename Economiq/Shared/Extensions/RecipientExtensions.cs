@@ -20,12 +20,13 @@ namespace Economiq.Shared.Extensions
             };
         }
 
-        public static Recipient ToRecipient(this RecipientDTO dto)
+        public static Recipient ToRecipient(this RecipientDTO dto, int userId)
         {
             return new Recipient
             {
                 Name = dto.Name,
-                ExtraInfo = dto.ExtraInfo
+                ExtraInfo = dto.ExtraInfo,
+                UserId = userId
             };
         }
     }

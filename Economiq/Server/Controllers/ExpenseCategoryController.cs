@@ -20,12 +20,12 @@ namespace Economiq.Server.Controllers
         [HttpGet("listCategories")]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _categoryService.GetCatergoryById("admin"); 
+            var categories = await _categoryService.GetCatergoryById(TempUser.Id); 
             return StatusCode(200, categories);
         }
 
         [HttpPost("create")]
-        public IActionResult CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
+        public async Task<IActionResult> CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -35,7 +35,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    _categoryService.CreateExpenseCategory(TempUser.Username, expenseCategoryDTO.CategoryName);
+                    await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
                     return StatusCode(200, "Category Successfully Created");
                 }
 
