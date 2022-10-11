@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
