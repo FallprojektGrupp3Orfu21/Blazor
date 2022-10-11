@@ -49,16 +49,6 @@ namespace Economiq.Client.Service
                   ListBudgetDTO budgetMaxAmount = await client.GetFromJsonAsync<ListBudgetDTO>($"{maxAmount}");
             return budgetMaxAmount;
         }
-        //public async Task<Budget> AddExpenseBudget(Budget budget)
-        //{
-        //    //var employeeJson = new StringContent(JsonSerializer.Serialize(budget), Encoding.UTF8, "application/json");
-        //    //var response = await _apiService.GetBudgetClient($"api/listBudget", employeeJson);
-        //    //if (response.IsSuccessStatusCode)
-        //    //{
-        //    //    return await JsonSerializer.DeserializeAsync<Budget>(await response.Content.ReadAsStreamAsync());
-        //    //}
-        //    //return null;
-        //}
 
 
 
