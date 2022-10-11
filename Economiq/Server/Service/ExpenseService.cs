@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,50 +17,24 @@ namespace Economiq.Server.Service
             _context = context;
             _budgetService = budgetService;
         }
-
-
-        public async Task<bool> AddExpense(ExpenseDTO expense, string userName)
+        public async Task<bool> AddExpense(ExpenseDTO expense, int userId)
         {
+            List<Expense> expenses = await _context.Expenses.Where(e => e.UserId == userId).Include(r => r.Recipient).ToListAsync();
 
-            //Gets the user by username
-            var user = _context.Users.Where(user => user.UserName == userName).Include(r => r.Recipients).Include(u => u.Expenses).FirstOrDefault();
-            var recipient = user.Recipients.Where(rec => rec.Name == expense.RecipientName).FirstOrDefault();
-            if (user == null)
+            if (expenses == null)
             {
-                throw new Exception("No User with this Username.");
-            }
-            //Gets the category the expense belongs to, or creates one if it doesnt exist.
-            var category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
-            if (category == null)
-            {
-                try
-                {
-                    _expenseCategoryService.CreateExpenseCategory(userName, expense.CategoryName);
-                    category = _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == expense.CategoryName.ToLower()).FirstOrDefault();
-                }
-                catch
-                {
-                    throw new Exception("Could not create missing Category");
-                }
+                expenses = new List<Expense>();
             }
             //Length Check for title/comment
             if (expense.Title.Length > 50)
             {
                 throw new Exception("Title Too Long (Needs to be less than 50 characters)");
             }
-            //Creates the expense and adds it to the user (creates list ifs the first expense on the user)
-            DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
-            DateTime creationDate = DateTime.Now;
-            var newExpense = new Expense { Id = expense.BudgetId, Amount = expense.Amount, CreationDate = creationDate, ExpenseDate = expenseDate, Comment = expense.Title, UserId = user.Id, CategoryId = category.Id, RecipientId = recipient.Id };
 
-            if (user.Expenses == null)
-            {
-                user.Expenses = new List<Expense>();
-            }
-
+            var newExpense = expense.ToExpense(userId);
             try
             {
-                user.Expenses.Add(newExpense);
+                expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -70,46 +45,36 @@ namespace Economiq.Server.Service
 
         }
 
-        public List<GetExpenseDTO> GetAllExpensesByUsername(string Username)
+        public async Task<List<GetExpenseDTO>> GetAllExpensesByUserId(int userId)
         {
             List<GetExpenseDTO> listToReturn = new List<GetExpenseDTO>();
-
-            var user = _context.Users.Include(e => e.Expenses).ThenInclude(e => e.Category).Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
-            var expenses = user.Expenses.ToList();
-
+            var expenses = await _context.Expenses.Where(e => e.UserId == userId).Include(e => e.Category).Include(e => e.Recipient).ToListAsync();
 
             foreach (var expense in expenses)
             {
-                listToReturn.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
+                listToReturn.Add(expense.ToGetExpenseDTO());
 
             }
             return listToReturn;
 
         }
 
-        public async Task<List<GetExpenseDTO>> GetRecentExpenses(string username)
+        public async Task<List<GetExpenseDTO>> GetRecentExpenses(int userId)
         {
             List<GetExpenseDTO> recentExpenses = new();
 
-            User? user = await _context.Users
-                .Include(e => e.Expenses)
-                .ThenInclude(e => e.Category)
-                .Include(e => e.Recipients)
-                .FirstOrDefaultAsync(x => x.UserName == username);
-            List<Expense>? expenses = user.Expenses
+            var expenses = await _context.Expenses.Where(ex => ex.UserId == userId)
+                .Include(ex => ex.Category)
+                .Include(r => r.Recipient)
                 .OrderByDescending(x => x.CreationDate)
                 .Take(5)
-                .ToList();
+                .ToListAsync();
 
-            if (user.Recipients.Count != 0)
+            foreach (var expense in expenses)
             {
-                foreach (var expense in expenses)
-                {
-                    recentExpenses.Add(new GetExpenseDTO { Amount = expense.Amount, Title = expense.Comment, ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy"), categoryName = expense.Category.CategoryName, RecipientName = expense.Recipient.Name });
-                }
-                return recentExpenses;
+                recentExpenses.Add(expense.ToGetExpenseDTO());
             }
-            return new();
+            return recentExpenses;
 
         }
     }
