@@ -61,8 +61,8 @@ namespace API.Controllers
             }
             return Ok("User logged out");
         }
-        
-        
+
+
     }
 }
 

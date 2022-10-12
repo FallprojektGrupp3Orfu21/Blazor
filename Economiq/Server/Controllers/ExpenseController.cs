@@ -11,12 +11,12 @@ namespace API.Controllers
     {
         private UserService _userService;
         private ExpenseService _expenseService;
-       
+
         public ExpenseController(ExpenseService expenseService, UserService userService)
         {
             _expenseService = expenseService;
             _userService = userService;
-            
+
         }
 
         [HttpPost("createExpense")]
@@ -31,7 +31,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    await _expenseService.AddExpense(expenseDTO, TempUser.Username);
+                    await _expenseService.AddExpense(expenseDTO, TempUser.Id);
                     return StatusCode(200, "Expense Successfully Created");
                 }
 
@@ -48,7 +48,7 @@ namespace API.Controllers
         }
 
         [HttpGet("listExpense")]
-        public IActionResult GetExpenses()
+        public async Task<IActionResult> GetExpenses()
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -58,7 +58,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    List<GetExpenseDTO> listToReturn = _expenseService.GetAllExpensesByUsername(TempUser.Username);
+                    List<GetExpenseDTO> listToReturn = await _expenseService.GetAllExpensesByUserId(TempUser.Id);
                     return StatusCode(200, listToReturn);
                 }
 
@@ -80,7 +80,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Username);
+                    List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Id);
                     return StatusCode(200, recentExpenses);
                 }
                 catch (Exception ex)

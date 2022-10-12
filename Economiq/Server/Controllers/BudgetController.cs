@@ -1,8 +1,6 @@
-﻿using Economiq.Client.Pages;
-using Economiq.Server.Service;
+﻿using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 //Economiq.Server.Service.UserService;
 
@@ -100,8 +98,8 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    var carts = await _budgetService.GetLatestMaxAmount(TempUser.Id );
-           
+                    var carts = await _budgetService.GetLatestMaxAmount(TempUser.Id);
+
                     return StatusCode(200, carts);
                 }
                 catch (Exception ex)
@@ -141,7 +139,7 @@ namespace Economiq.Server.Controllers
             }
 
         }
-      
+
     }
 
 }

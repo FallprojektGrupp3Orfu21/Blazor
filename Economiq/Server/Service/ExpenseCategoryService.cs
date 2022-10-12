@@ -1,7 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Economiq.Server.Service
@@ -15,27 +14,28 @@ namespace Economiq.Server.Service
             _context = context;
         }
 
-        
-        public async Task<List<ExpenseCategoryDTO>> GetexpensesByUserName(string UserName)
+
+        public async Task<List<ExpenseCategoryDTO>> GetCatergoryById(int UserId)
         {
             var categoriesToReturn = new List<ExpenseCategoryDTO>();
             var user = await _context.Users.Include(e => e.Categories)
-                .ThenInclude(e => e.Expenses).FirstOrDefaultAsync(x => x.UserName == UserName);
+                .ThenInclude(e => e.Expenses).FirstOrDefaultAsync(x => x.Id == UserId);
             var categories = user.Categories.ToList();
-            foreach(var category in categories)
+            foreach (var category in categories)
             {
                 categoriesToReturn.Add(new ExpenseCategoryDTO()
                 {
-                    CategoryName = category.CategoryName
+                    CategoryName = category.CategoryName,
+                    CategoryId = category.Id
                 });
             }
             return categoriesToReturn;
         }
 
 
-        public bool CreateExpenseCategory(string userName, string categoryName)
+        public bool CreateExpenseCategory(int userId, string categoryName)
         {
-            var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
+            var user = _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefault();
             if (user == null)
             {
                 throw new Exception("No User with this Username.");

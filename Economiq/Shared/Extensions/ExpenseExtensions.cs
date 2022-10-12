@@ -1,11 +1,6 @@
 ﻿using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Economiq.Shared.Extensions
 {
@@ -28,10 +23,10 @@ namespace Economiq.Shared.Extensions
             DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
             return new Expense()
             {
-                Amount = expense.Amount, 
+                Amount = expense.Amount,
                 CreationDate = DateTime.Now,
                 ExpenseDate = expenseDate,
-                Comment = expense.Title, 
+                Comment = expense.Title,
                 UserId = userId,
                 CategoryId = expense.CategoryId,
                 RecipientId = expense.RecipientId

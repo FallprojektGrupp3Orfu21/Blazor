@@ -1,7 +1,5 @@
 ﻿using Economiq.Shared.DTO;
-using Newtonsoft.Json;
 using System.Net.Http.Json;
-using Economiq.Shared;
 namespace Economiq.Client.Service
 {
     public class ExpenseCategoryService
@@ -24,7 +22,7 @@ namespace Economiq.Client.Service
         public async Task<List<ExpenseCategoryDTO>> GetCategoryList()
         {
             var tmp = await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<ExpenseCategoryDTO>>("listCategories");
-            return tmp; 
+            return tmp;
         }
     }
 }

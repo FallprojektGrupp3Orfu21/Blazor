@@ -1,5 +1,4 @@
-﻿using Economiq.Client.Components.Expense;
-using Economiq.Server.Service;
+﻿using Economiq.Server.Service;
 using Economiq.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +19,12 @@ namespace Economiq.Server.Controllers
         [HttpGet("listCategories")]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _categoryService.GetexpensesByUserName("admin"); 
+            var categories = await _categoryService.GetCatergoryById(TempUser.Id);
             return StatusCode(200, categories);
         }
 
         [HttpPost("create")]
-        public IActionResult CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
+        public async Task<IActionResult> CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -35,7 +34,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    _categoryService.CreateExpenseCategory(TempUser.Username, expenseCategoryDTO.CategoryName);
+                    _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
                     return StatusCode(200, "Category Successfully Created");
                 }
 

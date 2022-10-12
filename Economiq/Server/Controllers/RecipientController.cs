@@ -1,7 +1,6 @@
 ﻿using Economiq.Server;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -45,7 +44,7 @@ namespace API.Controllers
 
         }
         [HttpPost("listRecipients")]
-        public IActionResult GetRecipients(string? searchString=null)
+        public IActionResult GetRecipients(string? searchString = null)
         {
             if (!_userService.DoesUserExist(TempUser.Username))
             {
@@ -57,7 +56,7 @@ namespace API.Controllers
                 {
                     var listToReturn = _recipientService.GetRecipients(TempUser.Username, searchString);
 
-                    return StatusCode(200,listToReturn);
+                    return StatusCode(200, listToReturn);
                 }
 
                 catch (Exception err)
