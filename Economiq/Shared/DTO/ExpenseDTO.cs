@@ -11,8 +11,7 @@ namespace Economiq.Shared.DTO
         [Range(1, double.MaxValue, ErrorMessage = "Amount has to be above 0")]
         public decimal Amount { get; set; }
         [Required(ErrorMessage = "Category name required")]
-        public string CategoryName { get; set; }
-        public string RecipientName { get; set; }
-        public int BudgetId { get; set; }
+        public int CategoryId { get; set; }
+        public int RecipientId { get; set; }
     }
 }

@@ -30,12 +30,7 @@ namespace Economiq.Server.Service
 
                 foreach (Budget budget in budgets)
                 {
-                    budgetsDTO.Add(new()
-                    {
-                        Id = budget.Id,
-                        MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy", new CultureInfo("en-GB")).FirstCharToUpper()
-                    });
+                    budgetsDTO.Add(budget.ToListBudgetDTO());
                 }
                 return budgetsDTO;
             }
@@ -59,23 +54,11 @@ namespace Economiq.Server.Service
                 List<GetExpenseDTO> expenseDTOs = new List<GetExpenseDTO>();
                 foreach (var expense in expenses)
                 {
-                    expenseDTOs.Add(new()
-                    {
-                        Amount = expense.Amount,
-                        categoryName = expense.Category.CategoryName,
-                        ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy", _culture),
-                        RecipientName = expense.Recipient.Name,
-                        Title = expense.Comment
-                    });
+                    expenseDTOs.Add(expense.ToGetExpenseDTO());
                 }
 
-                ListBudgetDTO budgetDTO = new()
-                {
-                    Id = budget.Id,
-                    MaxAmount = budget.MaxAmount,
-                    YearAndMonth = budget.StartDate.ToString("MMMM yyyy", _culture).FirstCharToUpper(),
-                    Expenses = expenseDTOs
-                };
+                ListBudgetDTO budgetDTO = budget.ToListBudgetDTO();
+                budgetDTO.Expenses = expenseDTOs;
                 return budgetDTO;
             }
         }
@@ -101,12 +84,7 @@ namespace Economiq.Server.Service
                 
                 if (budget != null)
                 {
-                    ListBudgetDTO newBudgetDTO = new()
-                    {
-                        Id = budget.Id,
-                        MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy", _culture).FirstCharToUpper()
-                    };
+                    ListBudgetDTO newBudgetDTO = budget.ToListBudgetDTO();
                     return newBudgetDTO;
                 }
             }
