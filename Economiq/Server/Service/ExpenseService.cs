@@ -33,25 +33,7 @@ namespace Economiq.Server.Service
                 throw new Exception("Title Too Long (Needs to be less than 50 characters)");
             }
 
-            var newExpense = expense.ToExpense(userId);
-
-            CreateBudgetDTO newBudget = new() //Needed to get relevant budget from budget service 
-            {
-                ExpenseDate = expense.ExpenseDate
-            };
-            ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(newBudget, TempUser.Id);
-            if (relevantBudget == null) //Unhappy Scenario, no budget for time period exists
-            {
-                var newBudgetMaxAmount = await _budgetService.GetLatestMaxAmount(Economiq.Server.TempUser.Id);
-                CreateBudgetDTO createBudgetDTO = new()
-                {
-                    MaxAmount = newBudgetMaxAmount,
-                    ExpenseDate = expense.ExpenseDate
-                };
-                await _budgetService.CreateBudget(createBudgetDTO, Economiq.Server.TempUser.Id);
-            }
-            relevantBudget = await _budgetService.GetBudgetByDate(newBudget, Economiq.Server.TempUser.Id);
-            newExpense.BudgetId = relevantBudget.Id;
+            Expense newExpense = expense.ToExpense(userId);
 
             try
             {
