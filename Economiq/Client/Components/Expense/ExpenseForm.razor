@@ -119,7 +119,10 @@
             {
                 CategoryName = NewExpenseCategory
             };
-        await _categoryService.CreateExpenseCategory(expenseCategory);
+        var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
+        if(tmp.Item1==System.Net.HttpStatusCode.OK){
+            _categoryList.Add(expenseCategory);
+        }
         StateHasChanged();
     }
     public async Task HandleSubmit()
