@@ -31,7 +31,8 @@ namespace Economiq.Server.Service
                 throw new Exception("Title Too Long (Needs to be less than 50 characters)");
             }
 
-            var newExpense = expense.ToExpense(userId);
+            Expense newExpense = expense.ToExpense(userId);
+
             try
             {
                 expenses.Add(newExpense);

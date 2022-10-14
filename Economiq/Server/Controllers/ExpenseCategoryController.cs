@@ -34,7 +34,7 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
+                    await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
                     return StatusCode(200, "Category Successfully Created");
                 }
 

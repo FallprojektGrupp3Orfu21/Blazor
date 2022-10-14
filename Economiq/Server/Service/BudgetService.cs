@@ -88,15 +88,16 @@ namespace Economiq.Server.Service
             return null;
         }
 
-        public async Task CreateBudget(CreateBudgetDTO createBudgetDTO, int userId)
+        public async Task<Guid> CreateBudget(CreateBudgetDTO createBudgetDTO, int userId)
         {
             if (DateTime.TryParse(createBudgetDTO.ExpenseDate, out DateTime date))
             {
                 DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
                 DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                Guid newId = Guid.NewGuid();
                 Budget newBudget = new()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = newId,
                     StartDate = firstDayOfMonth,
                     EndDate = lastDayOfMonth,
                     MaxAmount = createBudgetDTO.MaxAmount,
@@ -106,6 +107,7 @@ namespace Economiq.Server.Service
                 _context.Budgets.Add(newBudget);
 
                 await _context.SaveChangesAsync();
+                return newId;
             }
             else
             {

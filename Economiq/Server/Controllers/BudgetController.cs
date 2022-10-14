@@ -124,8 +124,8 @@ namespace Economiq.Server.Controllers
             {
                 try
                 {
-                    await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
-                    return StatusCode(200, "Budget Successfully Created");
+                    Guid createdBudgetId = await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
+                    return StatusCode(200, createdBudgetId);
                 }
 
                 catch (Exception err)

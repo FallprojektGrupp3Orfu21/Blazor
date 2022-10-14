@@ -21,7 +21,7 @@ namespace Economiq.Shared.Extensions
         public static Expense ToExpense(this ExpenseDTO expense, int userId)
         {
             DateTime expenseDate = DateTime.Parse(expense.ExpenseDate).Date;
-            return new Expense()
+            var TExpense = new Expense()
             {
                 Amount = expense.Amount,
                 CreationDate = DateTime.Now,
@@ -29,8 +29,10 @@ namespace Economiq.Shared.Extensions
                 Comment = expense.Title,
                 UserId = userId,
                 CategoryId = expense.CategoryId,
-                RecipientId = expense.RecipientId
+                RecipientId = expense.RecipientId,
+                BudgetId = expense.BudgetId
             };
+            return TExpense;
         }
     }
 }

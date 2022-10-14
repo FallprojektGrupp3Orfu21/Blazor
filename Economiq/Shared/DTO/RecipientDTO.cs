@@ -10,8 +10,6 @@ namespace Economiq.Shared.DTO
         [Required(ErrorMessage = "Recipient City Required")]
         public string ExtraInfo { get; set; }
 
-
-
-
+        
     }
 }
