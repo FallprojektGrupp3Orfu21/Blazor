@@ -19,8 +19,8 @@ namespace Economiq.Shared.Extensions
         {
             return new Recipient
             {
-                Name = dto.Name,
-                ExtraInfo = dto.ExtraInfo,
+                Name = dto.Name.ToLower(),
+                ExtraInfo = dto.ExtraInfo.ToLower(),
                 UserId = userId
             };
         }

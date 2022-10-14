@@ -34,7 +34,7 @@ namespace Economiq.Server.Service
             }
             var email = new Email
             {
-                Mail = newUser.email
+                Mail = newUser.email.ToLower()
             };
             var Emails = new List<Email>();
             Emails.Add(email);
@@ -47,8 +47,8 @@ namespace Economiq.Server.Service
                 Emails = Emails,
                 IsLoggedIn = false,
                 CreationDate = DateTime.Now,
-                City = newUser.City,
-                Gender = newUser.Gender
+                City = newUser.City.ToLower(),
+                Gender = newUser.Gender.ToLower()
             });
             try
             {
