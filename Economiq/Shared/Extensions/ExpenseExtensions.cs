@@ -26,7 +26,7 @@ namespace Economiq.Shared.Extensions
                 Amount = expense.Amount,
                 CreationDate = DateTime.Now,
                 ExpenseDate = expenseDate,
-                Comment = expense.Title,
+                Comment = expense.Title.ToLower(),
                 UserId = userId,
                 CategoryId = expense.CategoryId,
                 RecipientId = expense.RecipientId
