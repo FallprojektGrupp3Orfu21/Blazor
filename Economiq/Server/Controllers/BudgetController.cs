@@ -70,14 +70,14 @@ namespace Economiq.Server.Controllers
             }
         }
 
-        [HttpGet("getBudgetByDate")]
-        public async Task<IActionResult> GetBudgetByDate(CreateBudgetDTO asAS)
+        [HttpPost("getBudgetByDate")]
+        public async Task<IActionResult> GetBudgetByDate(CreateBudgetDTO dto)
         {
             if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
                 try
                 {
-                    var relevantBudget = await _budgetService.GetBudgetByDate(asAS, TempUser.Id);
+                    var relevantBudget = await _budgetService.GetBudgetByDate(dto, TempUser.Id);
                     return StatusCode(200, relevantBudget);
                 }
                 catch (Exception ex)
@@ -91,16 +91,16 @@ namespace Economiq.Server.Controllers
             }
         }
 
-        [HttpGet("getBudgetByMaxAmount")]
-        public async Task<IActionResult> GetBudgetByMaxAmount()
+        [HttpGet("getLatestMaxAmount")]
+        public async Task<IActionResult> GetLatestMaxAmount()
         {
             if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
             {
                 try
                 {
-                    var carts = await _budgetService.GetLatestMaxAmount(TempUser.Id);
+                    decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount(TempUser.Id);
 
-                    return StatusCode(200, carts);
+                    return StatusCode(200, latestMaxAmount);
                 }
                 catch (Exception ex)
                 {

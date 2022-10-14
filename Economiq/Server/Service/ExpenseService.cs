@@ -35,7 +35,7 @@ namespace Economiq.Server.Service
 
             try
             {
-                expenses.Add(newExpense);
+                _context.Expenses.Add(newExpense);
                 await _context.SaveChangesAsync();
                 return true;
             }

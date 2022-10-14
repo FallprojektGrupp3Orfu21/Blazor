@@ -4,6 +4,7 @@
 @inject ExpenseService _expenseService
 @inject RecipientService _recipientService
 @inject ExpenseCategoryService _categoryService;
+@inject BudgetService _budgetService;
 <style>
     #NewCategory {
         position: absolute;
@@ -124,8 +125,25 @@
     public async Task HandleSubmit()
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
-        Confirmation = await _expenseService.CreateExpense(NewExpense);
+        CreateBudgetDTO createBudgetDTO = new()
+            {
+                ExpenseDate = NewExpense.ExpenseDate,
+                MaxAmount = 0
+            };
+        ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(createBudgetDTO);
 
+        if(relevantBudget == null){
+            decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
+            //If Decimal = 0 show modal.
+            //Else show modal for question about using latest one or create new one.
+            createBudgetDTO.MaxAmount = latestMaxAmount;
+            Guid budgetID = await _budgetService.CreateBudget(createBudgetDTO);
+            NewExpense.BudgetId = budgetID;
+        }
+        else{
+            NewExpense.BudgetId = relevantBudget.Id;
+        }
+        Confirmation = await _expenseService.CreateExpense(NewExpense);
         CreationDate = DateOnly.FromDateTime(DateTime.Now);
         NewExpense = new ExpenseDTO()
             {
