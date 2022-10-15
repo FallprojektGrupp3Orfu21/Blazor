@@ -1,5 +1,4 @@
 ﻿using Economiq.Shared.DTO;
-using Newtonsoft.Json;
 using System.Net.Http.Json;
 using Economiq.Shared;
 using Economiq.Shared.Models;

@@ -20,19 +20,14 @@ namespace Economiq.Server.Service
         public async Task<List<ListBudgetDTO>> GetAllBudgets(int userId)
         {
             List<Budget> budgets = await _context.Budgets.Where(b => b.UserId == userId).OrderByDescending(b => b.EndDate).ToListAsync();
-            
+
             if (budgets.Any())
             {
                 List<ListBudgetDTO> budgetsDTO = new List<ListBudgetDTO>();
 
-                foreach(Budget budget in budgets)
+                foreach (Budget budget in budgets)
                 {
-                    budgetsDTO.Add(new()
-                    {
-                        Id = budget.Id,
-                        MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy", new CultureInfo("en-GB")).FirstCharToUpper()
-                    });
+                    budgetsDTO.Add(budget.ToListBudgetDTO());
                 }
                 return budgetsDTO;
             }
@@ -45,34 +40,22 @@ namespace Economiq.Server.Service
         public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
             Budget? budget = await _context.Budgets.Where(b => b.Id == id).FirstOrDefaultAsync();
-            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e=>e.Category).Include(e=>e.Recipient).ToListAsync();
+            List<Expense> expenses = await _context.Expenses.Where(e => e.BudgetId == id).Include(e => e.Category).Include(e => e.Recipient).ToListAsync();
 
-            if(budget == null)
+            if (budget == null)
             {
                 throw new Exception("Budget does not exist");
             }
             else
             {
                 List<GetExpenseDTO> expenseDTOs = new List<GetExpenseDTO>();
-                foreach(var expense in expenses)
+                foreach (var expense in expenses)
                 {
-                    expenseDTOs.Add(new()
-                    {
-                        Amount = expense.Amount,
-                        categoryName = expense.Category.CategoryName,
-                        ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy", _culture),
-                        RecipientName = expense.Recipient.Name,
-                        Title = expense.Comment
-                    });
+                    expenseDTOs.Add(expense.ToGetExpenseDTO());
                 }
 
-                ListBudgetDTO budgetDTO = new()
-                {
-                    Id = budget.Id,
-                    MaxAmount = budget.MaxAmount,
-                    YearAndMonth = budget.StartDate.ToString("MMMM yyyy", _culture).FirstCharToUpper(),
-                    Expenses = expenseDTOs
-                };
+                ListBudgetDTO budgetDTO = budget.ToListBudgetDTO();
+                budgetDTO.Expenses = expenseDTOs;
                 return budgetDTO;
             }
         }
@@ -95,30 +78,26 @@ namespace Economiq.Server.Service
             if (DateTime.TryParse(budgetDTO.ExpenseDate, out DateTime date))
             {
                 Budget? budget = await _context.Budgets.Where(b => b.UserId == userId && b.StartDate <= date && date <= b.EndDate).FirstOrDefaultAsync();
-                
+
                 if (budget != null)
                 {
-                    ListBudgetDTO newBudgetDTO = new()
-                    {
-                        Id = budget.Id,
-                        MaxAmount = budget.MaxAmount,
-                        YearAndMonth = budget.StartDate.ToString("MMMM yyyy", _culture).FirstCharToUpper()
-                    };
+                    ListBudgetDTO newBudgetDTO = budget.ToListBudgetDTO();
                     return newBudgetDTO;
                 }
             }
             return null;
         }
 
-        public async Task CreateBudget(CreateBudgetDTO createBudgetDTO, int userId)
+        public async Task<Guid> CreateBudget(CreateBudgetDTO createBudgetDTO, int userId)
         {
             if (DateTime.TryParse(createBudgetDTO.ExpenseDate, out DateTime date))
             {
                 DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
                 DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                Guid newId = Guid.NewGuid();
                 Budget newBudget = new()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = newId,
                     StartDate = firstDayOfMonth,
                     EndDate = lastDayOfMonth,
                     MaxAmount = createBudgetDTO.MaxAmount,
@@ -126,13 +105,17 @@ namespace Economiq.Server.Service
                     UserId = userId
                 };
                 _context.Budgets.Add(newBudget);
-                
+
                 await _context.SaveChangesAsync();
+                return newId;
             }
             else
             {
                 throw new Exception("Could not parse expense date");
             }
         }
+
     }
 }
+
+

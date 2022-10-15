@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,52 +13,40 @@ namespace Economiq.Server.Service
         {
             _context = context;
         }
-        public bool CreateRecipient(string userName, RecipientDTO dto)
+
+        public async Task<bool> CreateRecipient(int userId, RecipientDTO dto)
         {
-            var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
-            if (user == null)
-            {
-                throw new Exception("No user with this username.");
-            }
-            var newRecipient = new Recipient
-            {
-                Name = dto.Name,
-                ExtraInfo = dto.ExtraInfo
-            };
 
-            if (user.Recipients == null)
-            {
-                user.Recipients = new List<Recipient> { newRecipient };
-            }
-
-            user.Recipients.Add(newRecipient);
-
+            var newRecipient = dto.ToRecipient(userId);
+            _context.Recipients.Add(newRecipient);
             try
             {
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                return false; 
+                return false;
             }
         }
-        public List<RecipientDTO> GetRecipients(string Username, string? SearchString = null)
+
+
+        public async Task<List<RecipientDTO>> GetRecipients(int userId, string? SearchString = null)
         {
             List<RecipientDTO> listToReturn = new List<RecipientDTO>();
 
-            var user = _context.Users.Include(e => e.Recipients).FirstOrDefault(x => x.UserName == Username);
-            var recipients = user.Recipients.ToList();
+            var recipients = await _context.Recipients.Where(e => e.UserId == userId).ToListAsync();
+
 
             foreach (var recipient in recipients)
             {
                 if (SearchString == null)
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, ExtraInfo = recipient.ExtraInfo });
+                    listToReturn.Add(recipient.ToRecipientDTO());
                 }
                 else if (recipient.Name.ToLower().StartsWith(SearchString.ToLower()))
                 {
-                    listToReturn.Add(new RecipientDTO { Id = recipient.Id, Name = recipient.Name, ExtraInfo = recipient.ExtraInfo });
+                    listToReturn.Add(recipient.ToRecipientDTO());
                 }
             }
             return listToReturn;

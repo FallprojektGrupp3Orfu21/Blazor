@@ -34,7 +34,7 @@ namespace Economiq.Server.Service
             }
             var email = new Email
             {
-                Mail = newUser.email
+                Mail = newUser.email.ToLower()
             };
             var Emails = new List<Email>();
             Emails.Add(email);
@@ -47,8 +47,8 @@ namespace Economiq.Server.Service
                 Emails = Emails,
                 IsLoggedIn = false,
                 CreationDate = DateTime.Now,
-                City = newUser.City,
-                Gender = newUser.Gender
+                City = newUser.City.ToLower(),
+                Gender = newUser.Gender.ToLower()
             });
             try
             {
@@ -59,11 +59,6 @@ namespace Economiq.Server.Service
                 throw ex;
             }
 
-            _categoryService.CreateExpenseCategory(newUser.Username, "Rent");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Food");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Transport");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Clothing");
-            _categoryService.CreateExpenseCategory(newUser.Username, "Entertainment");
         }
         public bool LoginUser(string userName, string password)
         {

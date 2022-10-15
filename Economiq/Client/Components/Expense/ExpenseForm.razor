@@ -4,23 +4,25 @@
 @inject ExpenseService _expenseService
 @inject RecipientService _recipientService
 @inject ExpenseCategoryService _categoryService;
-<style> 
+@inject BudgetService _budgetService;
+<style>
     #NewCategory {
-    position: absolute;
-    top: 0;
-    border-radius: 5px;
-    right: 0px;
-    z-index: 2;
-    border: none;
-    top: 2px;
-    height: 30px;
-    cursor: pointer;
-    color: black;
-    background-color: white;
-    transform: translate(-10px, 50%);
-}
+        position: absolute;
+        top: 0;
+        border-radius: 5px;
+        right: 0px;
+        z-index: 2;
+        border: none;
+        top: 2px;
+        height: 30px;
+        cursor: pointer;
+        color: black;
+        background-color: white;
+        transform: translate(-10px, 50%);
+    }
+
     .modal {
-        position: absolute; 
+        position: absolute;
         z-index: 9999;
     }
 </style>
@@ -35,52 +37,50 @@
         <ValidationMessage For="@(() => @NewExpense.Title)" />
     </div>
     <div class="mb-2 form-group form-floating">
-        <InputNumber  class="form-control" id="amount" @bind-Value="@NewExpense.Amount"></InputNumber>
+        <InputNumber class="form-control" id="amount" @bind-Value="@NewExpense.Amount"></InputNumber>
         <label for="amount">Amount:</label>
         <ValidationMessage For="@(() => @NewExpense.Amount)" />
     </div>
 
     <div class="mb-2 form-group form-floating">
-        <InputDate  class="form-control" id="date" @bind-Value="@CreationDate"></InputDate>
+        <InputDate class="form-control" id="date" @bind-Value="@CreationDate"></InputDate>
         <label for="date">Date:</label>
         <ValidationMessage For="@(() => @NewExpense.ExpenseDate)" />
     </div>
 
     <div class="mb-2 form-group form-floating">
-        <InputSelect class="form-control" id="category" placeholder="Category" @bind-Value="@NewExpense.CategoryName">
+        <InputSelect class="form-control" id="category" placeholder="Category" @bind-Value="@NewExpense.CategoryId">
 
             @foreach (ExpenseCategoryDTO category in _categoryList)
             {
-                <option Value=@category.CategoryName>@category.CategoryName</option>
+                <option Value=@category.CategoryId>@category.CategoryName</option>
             }
 
         </InputSelect>
         <button id="NewCategory" type="button" @onclick="()=> {ChangeShowModal();}">+</button>
-        <label for="category" >Category:</label>
-        <ValidationMessage For="@(() => @NewExpense.CategoryName)" />
+        <label for="category">Category:</label>
+        <ValidationMessage For="@(() => @NewExpense.CategoryId)" />
     </div>
 
 
 
     <div class="mb-2 form-group form-floating">
-        <InputSelect  class="form-control" id="recipient" @bind-Value=NewExpense.RecipientName>
+        <InputSelect class="form-control" id="recipient" @bind-Value=NewExpense.RecipientId>
             @foreach (RecipientDTO recipient in _recipients)
             {
-                <option Value=@recipient.Name>@recipient.Name</option>
+                <option Value=@recipient.Id>@recipient.Name</option>
             }
         </InputSelect>
         <label for="recipient">Recipient:</label>
     </div>
-
-
     <button class="mx-auto w-25 btn btn-success" type="submit">Add Expense</button>
 </EditForm>
-@if(ShowModal){
-    <Economiq.Client.Components.AddCategory.AddCategoryModal 
-    CloseModalFunction="@ChangeShowModal"
-    SaveNewCategoryFunction="@SaveNewCategory"           
-    ExpenseCategoryString="@NewExpenseCategory"
-    CategoryChanged ="@CategoryChanged"/>
+@if (ShowModal)
+{
+    <Economiq.Client.Components.AddCategory.AddCategoryModal CloseModalFunction="@ChangeShowModal"
+                                                         SaveNewCategoryFunction="@SaveNewCategory"
+                                                         ExpenseCategoryString="@NewExpenseCategory"
+                                                         CategoryChanged="@CategoryChanged" />
 }
 @code {
     [Parameter]
@@ -91,8 +91,9 @@
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     private String NewExpenseCategory { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
-    public bool ShowModal = false; 
-    public void CategoryChanged(string newValue){
+    public bool ShowModal = false;
+    public void CategoryChanged(string newValue)
+    {
         NewExpenseCategory = newValue;
     }
     protected override async Task OnInitializedAsync()
@@ -102,16 +103,18 @@
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
         if (_recipients.Count > 0)
         {
-            NewExpense.RecipientName = _recipients[0].Name;
+            NewExpense.RecipientId = _recipients[0].Id;
         }
         StateHasChanged();
     }
-    public void ChangeShowModal() {
+    public void ChangeShowModal()
+    {
         NewExpenseCategory = String.Empty;
         this.ShowModal = !this.ShowModal;
         StateHasChanged();
     }
-    public async void SaveNewCategory() {
+    public async void SaveNewCategory()
+    {
         ExpenseCategoryDTO expenseCategory = new()
             {
                 CategoryName = NewExpenseCategory
@@ -125,13 +128,30 @@
     public async Task HandleSubmit()
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
-        Confirmation = await _expenseService.CreateExpense(NewExpense);
+        CreateBudgetDTO createBudgetDTO = new()
+            {
+                ExpenseDate = NewExpense.ExpenseDate,
+                MaxAmount = 0
+            };
+        ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(createBudgetDTO);
 
+        if(relevantBudget == null){
+            decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
+            //If Decimal = 0 show modal.
+            //Else show modal for question about using latest one or create new one.
+            createBudgetDTO.MaxAmount = latestMaxAmount;
+            Guid budgetID = await _budgetService.CreateBudget(createBudgetDTO);
+            NewExpense.BudgetId = budgetID;
+        }
+        else{
+            NewExpense.BudgetId = relevantBudget.Id;
+        }
+        Confirmation = await _expenseService.CreateExpense(NewExpense);
         CreationDate = DateOnly.FromDateTime(DateTime.Now);
         NewExpense = new ExpenseDTO()
             {
                 ExpenseDate = CreationDate.ToString("yyyy-MM-dd"),
-                RecipientName = _recipients[0].Name
+                RecipientId = _recipients[0].Id
             };
         await UpdateList.InvokeAsync();
     }
