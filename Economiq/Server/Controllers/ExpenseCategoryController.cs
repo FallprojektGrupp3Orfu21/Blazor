@@ -51,12 +51,12 @@ namespace Economiq.Server.Controllers
 
         }
 
-        [HttpGet("getSum/{categoryId}")]
-        public async Task<IActionResult> GetCategorySumById(int categoryId)
+        [HttpGet("getGraphInfo")]
+        public async Task<IActionResult> GetGraphInfo()
         {
             try
             {
-                CategorySumDTO categorySum = await _categoryService.GetCategorySumById(TempUser.Id, categoryId);
+                List<CategorySumDTO> categorySum = await _categoryService.GetGraphInfo(TempUser.Id);
                 return Ok(categorySum);
             }
             catch(ArgumentNullException ex)

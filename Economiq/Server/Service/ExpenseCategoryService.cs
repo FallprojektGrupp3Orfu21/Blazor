@@ -91,7 +91,7 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<CategorySumDTO> GetCategorySumById(int userId, int categoryId)
+        public async Task<List<CategorySumDTO>> GetGraphInfo(int userId)
         {
             User? user = await _context.Users
                 .Where(u => u.Id == userId)
@@ -99,26 +99,30 @@ namespace Economiq.Server.Service
                 .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId))
                 .FirstOrDefaultAsync();
 
-            ExpenseCategory? category = user.Categories.Where(u => u.Id == categoryId).FirstOrDefault();
+            List<ExpenseCategory> categories = user.Categories.ToList();
+            List<CategorySumDTO> sumDTOs = new();
             
-            if(category == null)
+            foreach(ExpenseCategory category in categories)
             {
-                throw new ArgumentNullException("Category does not exist");
+                if (category == null)
+                {
+                    throw new ArgumentNullException("Category does not exist");
+                }
+
+                decimal totalAmount = 0;
+                foreach (Expense expense in category.Expenses)
+                {
+                    totalAmount += expense.Amount;
+                }
+
+                CategorySumDTO categorySumDTO = new()
+                {
+                    CategoryName = category.CategoryName,
+                    TotalSum = totalAmount
+                };
+                sumDTOs.Add(categorySumDTO);
             }
-
-            decimal totalAmount = 0;
-            foreach (Expense expense in category.Expenses)
-            {
-                totalAmount += expense.Amount;
-            }
-
-            CategorySumDTO categorySumDTOs = new()
-            {
-                CategoryName = category.CategoryName,
-                TotalSum = totalAmount
-            };
-
-            return categorySumDTOs;
+            return sumDTOs;
         }
     }
 }
