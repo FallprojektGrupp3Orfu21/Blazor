@@ -78,5 +78,8 @@ namespace Economiq.Server.Service
             return recentExpenses;
 
         }
+
+        public async Task<bool> DeleteExpense(int expenseId)
+
     }
 }

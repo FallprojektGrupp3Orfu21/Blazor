@@ -93,5 +93,11 @@ namespace API.Controllers
                 return BadRequest("User not logged in");
             }
         }
+
+        [HttpDelete("{DeleteExpensId}")]
+        public async Task<IActionResult> DeleteExpenseId(int id)
+        {
+            await _expenseService.DeleteExpenseById(id);
+        }
     }
 }

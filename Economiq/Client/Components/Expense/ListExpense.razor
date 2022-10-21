@@ -1,6 +1,9 @@
 ﻿@using Economiq.Client.Service
 @using Economiq.Shared.DTO
 @inject ExpenseService _expenseService
+<style>.Hoover:focus, .Hoover:hover{font-weight: bold;} .Hoover {cursor:pointer}</style>
+@inject IJSRuntime JsRuntime
+    
 
 @if(loading){
     <div class="spinner-grow" style="width: 3rem; height: 3rem; color: rebeccapurple;" role="status">
@@ -16,6 +19,7 @@ else {
                 <th>Category</th>
                 <th>Date</th>
                 <th>Recipient</th>
+                 <th>Delete expense</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +31,8 @@ else {
                     <td>@expense.categoryName</td>
                     <td>@expense.ExpenseDate</td>
                     <td>@expense.RecipientName</td>
+                    
+                    <td @onclick="PrintToConsole" class="Hoover">X</td>
                 </tr>
             }
         </tbody>
@@ -45,6 +51,12 @@ else {
     {
         _expenses = await _expenseService.GetExpenses();
         StateHasChanged();
+    }
+
+    public async void PrintToConsole()
+    {
+        
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this expense?");
     }
 }
 
