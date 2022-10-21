@@ -51,5 +51,22 @@ namespace Economiq.Server.Controllers
 
         }
 
+        [HttpGet("getSum/{categoryId}")]
+        public async Task<IActionResult> GetCategorySumById(int categoryId)
+        {
+            try
+            {
+                CategorySumDTO categorySum = await _categoryService.GetCategorySumById(TempUser.Id, categoryId);
+                return Ok(categorySum);
+            }
+            catch(ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Failed to fetch categorySum");
+            }
+        }
     }
 }

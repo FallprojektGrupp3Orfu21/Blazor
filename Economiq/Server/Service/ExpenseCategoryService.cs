@@ -93,12 +93,23 @@ namespace Economiq.Server.Service
 
         public async Task<CategorySumDTO> GetCategorySumById(int userId, int categoryId)
         {
-            var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).ThenInclude(u => u.Expenses).FirstOrDefaultAsync();
-            var category = user.Categories.Where(u => u.Id == categoryId).FirstOrDefault();
-            decimal totalAmount = 0;
-            foreach (var item in category.Expenses)
+            User? user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Categories)
+                .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId))
+                .FirstOrDefaultAsync();
+
+            ExpenseCategory? category = user.Categories.Where(u => u.Id == categoryId).FirstOrDefault();
+            
+            if(category == null)
             {
-                totalAmount += item.Amount;
+                throw new ArgumentNullException("Category does not exist");
+            }
+
+            decimal totalAmount = 0;
+            foreach (Expense expense in category.Expenses)
+            {
+                totalAmount += expense.Amount;
             }
 
             CategorySumDTO categorySumDTOs = new()
@@ -108,9 +119,6 @@ namespace Economiq.Server.Service
             };
 
             return categorySumDTOs;
-
-            
-
         }
     }
 }
