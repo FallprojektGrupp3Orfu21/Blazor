@@ -33,7 +33,7 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task <bool> CreateExpenseCategory(int userId, string categoryName)
+        public async Task<bool> CreateExpenseCategory(int userId, string categoryName)
         {
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefaultAsync();
             if (user == null)
@@ -88,6 +88,29 @@ namespace Economiq.Server.Service
                     throw new Exception("Something went wrong");
                 }
             }
+        }
+
+
+        public async Task<CategorySumDTO> GetCategorySumById(int userId, int categoryId)
+        {
+            var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).ThenInclude(u => u.Expenses).FirstOrDefaultAsync();
+            var category = user.Categories.Where(u => u.Id == categoryId).FirstOrDefault();
+            decimal totalAmount = 0;
+            foreach (var item in category.Expenses)
+            {
+                totalAmount += item.Amount;
+            }
+
+            CategorySumDTO categorySumDTOs = new()
+            {
+                CategoryName = category.CategoryName,
+                TotalSum = totalAmount
+            };
+
+            return categorySumDTOs;
+
+            
+
         }
     }
 }
