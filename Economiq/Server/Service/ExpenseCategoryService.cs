@@ -33,7 +33,7 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task <bool> CreateExpenseCategory(int userId, string categoryName)
+        public async Task<bool> CreateExpenseCategory(int userId, string categoryName)
         {
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefaultAsync();
             if (user == null)
@@ -88,6 +88,41 @@ namespace Economiq.Server.Service
                     throw new Exception("Something went wrong");
                 }
             }
+        }
+
+
+        public async Task<List<CategorySumDTO>> GetGraphInfo(int userId)
+        {
+            User? user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Categories)
+                .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId))
+                .FirstOrDefaultAsync();
+
+            List<ExpenseCategory> categories = user.Categories.ToList();
+            List<CategorySumDTO> sumDTOs = new();
+            
+            foreach(ExpenseCategory category in categories)
+            {
+                if (category == null)
+                {
+                    throw new ArgumentNullException("Category does not exist");
+                }
+
+                decimal totalAmount = 0;
+                foreach (Expense expense in category.Expenses)
+                {
+                    totalAmount += expense.Amount;
+                }
+
+                CategorySumDTO categorySumDTO = new()
+                {
+                    CategoryName = category.CategoryName,
+                    TotalSum = totalAmount
+                };
+                sumDTOs.Add(categorySumDTO);
+            }
+            return sumDTOs;
         }
     }
 }

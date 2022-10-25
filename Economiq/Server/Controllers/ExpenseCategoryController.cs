@@ -51,5 +51,22 @@ namespace Economiq.Server.Controllers
 
         }
 
+        [HttpGet("getGraphInfo")]
+        public async Task<IActionResult> GetGraphInfo()
+        {
+            try
+            {
+                List<CategorySumDTO> categorySum = await _categoryService.GetGraphInfo(TempUser.Id);
+                return Ok(categorySum);
+            }
+            catch(ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Failed to fetch categorySum");
+            }
+        }
     }
 }
