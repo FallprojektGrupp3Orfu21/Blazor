@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Economiq.Server.Controllers
@@ -16,6 +17,7 @@ namespace Economiq.Server.Controllers
             _categoryService = categoryService;
         }
 
+        [Authorize]
         [HttpGet("listCategories")]
         public async Task<IActionResult> GetCategories()
         {
@@ -23,34 +25,23 @@ namespace Economiq.Server.Controllers
             return StatusCode(200, categories);
         }
 
+        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
+            try
             {
-                return BadRequest("Invalid Username");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
-                    return StatusCode(200, "Category Successfully Created");
-                }
-
-                catch (Exception err)
-                {
-                    return StatusCode(500, "Failed to create Category");
-                }
-            }
-            else
-            {
-                return BadRequest("User not logged in");
+                await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
+                return StatusCode(200, "Category Successfully Created");
             }
 
-
+            catch (Exception err)
+            {
+                return StatusCode(500, "Failed to create Category");
+            }
         }
 
+        [Authorize]
         [HttpGet("getGraphInfo")]
         public async Task<IActionResult> GetGraphInfo()
         {
@@ -59,7 +50,7 @@ namespace Economiq.Server.Controllers
                 List<CategorySumDTO> categorySum = await _categoryService.GetGraphInfo(TempUser.Id);
                 return Ok(categorySum);
             }
-            catch(ArgumentNullException ex)
+            catch (ArgumentNullException ex)
             {
                 return NotFound(ex.Message);
             }

@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 //Economiq.Server.Service.UserService;
@@ -20,123 +21,89 @@ namespace Economiq.Server.Controllers
             _userService = userService;
         }
 
-
+        [Authorize]
         [HttpGet("listBudgets")]
         public async Task<IActionResult> GetAllBudgets()
         {
 
-            if (!_userService.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid username!");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(TempUser.Id);
-                    return StatusCode(200, allBudgets);
-                }
-                catch (Exception err)
-                {
-                    return StatusCode(500, "Could not fetch budgets");
-                }
-            }
-            else
-            {
-                return BadRequest("User not logged in");
-            }
 
+            try
+            {
+                List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(TempUser.Id);
+                return StatusCode(200, allBudgets);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(500, "Could not fetch budgets");
+            }
         }
 
-
+        [Authorize]
         [HttpGet("getBudgetById/{id}")]
         public async Task<IActionResult> GetBudgetById(Guid id)
         {
-            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+
+            try
             {
-                try
-                {
-                    ListBudgetDTO budgetById = await _budgetService.GetBudgetById(id);
-                    return StatusCode(200, budgetById);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, ex.Message);
-                }
+                ListBudgetDTO budgetById = await _budgetService.GetBudgetById(id);
+                return StatusCode(200, budgetById);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("User not logged in");
+                return StatusCode(500, ex.Message);
             }
+
         }
 
+        [Authorize]
         [HttpPost("getBudgetByDate")]
         public async Task<IActionResult> GetBudgetByDate(CreateBudgetDTO dto)
         {
-            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+
+            try
             {
-                try
-                {
-                    var relevantBudget = await _budgetService.GetBudgetByDate(dto, TempUser.Id);
-                    return StatusCode(200, relevantBudget);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, ex.Message);
-                }
+                var relevantBudget = await _budgetService.GetBudgetByDate(dto, TempUser.Id);
+                return StatusCode(200, relevantBudget);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("User not logged in");
+                return StatusCode(500, ex.Message);
             }
         }
 
+        [Authorize]
         [HttpGet("getLatestMaxAmount")]
         public async Task<IActionResult> GetLatestMaxAmount()
         {
-            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount(TempUser.Id);
 
-                    return StatusCode(200, latestMaxAmount);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, ex.Message);
-                }
-            }
-            else
+            try
             {
-                return BadRequest("User not logged in");
+                decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount(TempUser.Id);
+
+                return StatusCode(200, latestMaxAmount);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
+        [Authorize]
         [HttpPost("createBudget")]
         public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetDTO createBudgetDTO)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid Username");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    Guid createdBudgetId = await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
-                    return StatusCode(200, createdBudgetId);
-                }
 
-                catch (Exception err)
-                {
-                    return StatusCode(500, "Failed to create Budget");
-                }
-            }
-            else
+            try
             {
-                return BadRequest("User not logged in");
+                Guid createdBudgetId = await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
+                return StatusCode(200, createdBudgetId);
             }
+
+            catch (Exception err)
+            {
+                return StatusCode(500, "Failed to create Budget");
+            }
+
 
         }
 

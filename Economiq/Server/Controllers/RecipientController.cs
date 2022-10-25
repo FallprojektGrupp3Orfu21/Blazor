@@ -1,6 +1,7 @@
 ﻿using Economiq.Server;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,60 +18,41 @@ namespace API.Controllers
             _userService = userService;
             _recipientService = recipientService;
         }
+        [Authorize]
         [HttpPost("createRecipient")]
         public async Task<IActionResult> CreateRecipient([FromBody] RecipientDTO recipientDTO)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid Username");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    await _recipientService.CreateRecipient(TempUser.Id, recipientDTO);
-                    return Ok("Recipient Created");
-                }
 
-                catch (Exception ex)
-                {
-                    return StatusCode(500, "Failed To create Recipient");
-                }
-            }
-            else
+            try
             {
-                return BadRequest("User not logged in");
+                await _recipientService.CreateRecipient(TempUser.Id, recipientDTO);
+                return Ok("Recipient Created");
             }
 
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Failed To create Recipient");
+            }
         }
+
+        [Authorize]
         [HttpPost("listRecipients")]
-        public async Task<IActionResult> GetRecipients(string? searchString=null)
+        public async Task<IActionResult> GetRecipients(string? searchString = null)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid Username");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    var listToReturn = await _recipientService.GetRecipients(TempUser.Id, searchString);
 
-                    return StatusCode(200, listToReturn);
-                }
-
-                catch (Exception err)
-                {
-                    return StatusCode(200, "Failed to fetch recipients");
-                }
-            }
-            else
+            try
             {
-                return BadRequest("User not logged in");
+                var listToReturn = await _recipientService.GetRecipients(TempUser.Id, searchString);
+
+                return StatusCode(200, listToReturn);
             }
+
+            catch (Exception err)
+            {
+                return StatusCode(200, "Failed to fetch recipients");
+            }
+
 
         }
-
-
     }
 }

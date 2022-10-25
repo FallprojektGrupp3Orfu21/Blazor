@@ -14,7 +14,7 @@ namespace Economiq.Client.Service
 
         public async Task<string> CreateUser(UserDTO userDTO)
         {
-            HttpResponseMessage response = await _apiService.GetUserClient().PostAsJsonAsync("createUser", userDTO);
+            HttpResponseMessage response = await _apiService.GetUserClient().PostAsJsonAsync("register", userDTO);
             string responseString = await response.Content.ReadAsStringAsync();
             return responseString;
         }

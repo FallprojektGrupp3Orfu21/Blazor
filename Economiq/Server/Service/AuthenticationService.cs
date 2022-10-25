@@ -1,6 +1,7 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,19 +13,18 @@ namespace Economiq.Server.Service
     {
         private readonly IConfiguration _configuration;
         private readonly EconomiqContext _context;
+        
         public AuthenticationService(IConfiguration config, EconomiqContext context)
         {
             _configuration = config;
             _context = context;
         }
 
-        private User? Authenticate(Credentials credentials)
+        public async Task<User?> Authenticate(Credentials credentials)
         {
-            User? currentUser = _context.Users.FirstOrDefault(u => u.UserName.ToLower() == credentials.Username.ToLower() && u.Password == credentials.Password);
+            User? currentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserName.ToLower() == credentials.Username.ToLower() && u.Password == credentials.Password);
             return currentUser;
         }
-
-
 
         public string GenerateToken(User user)
         {
