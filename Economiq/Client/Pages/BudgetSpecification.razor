@@ -5,37 +5,116 @@
 @inject AppState _appState
 @implements IDisposable
 @inject BudgetService _budgetService;
+@inject ExpenseCategoryService _expenseCategoryService;
 
-@if(_budget != null){
+
+
+
+@if (_budget != null)
+{
+
+    <MudPaper Class="pa-4">
+        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@label" Width="300px" Height="300px" />
+    </MudPaper>
+    <MudPaper Class="pa-4 mt-2 d-flex justify-center">
+        <MudButton OnClick="AddDataSize" Variant="Variant.Filled" Color="Color.Primary">Add</MudButton>
+        <MudButton @onclick="RandomizeData" Variant="Variant.Filled" Class="mx-4">Randomize</MudButton>
+        <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Remove</MudButton>
+    </MudPaper>
+    <MudText Typo="Typo.h6">Selected portion of the chart: @Index</MudText>
+
     <h3>@_budget.YearAndMonth</h3>
     <p>@_budget.MaxAmount</p>
-    
-    if(_budget.Expenses !=null){
+
+    if (_budget.Expenses != null)
+    {
         <h4>Expenses:</h4>
         foreach (var expense in _budget.Expenses)
         {
-           <h5>Title: @expense.Title</h5>
-           <p>Amount: @expense.Amount</p>
-           <p>Category: @expense.categoryName</p>
-           <p>Recipient: @expense.RecipientName</p>
-           <p>Date: @expense.ExpenseDate</p>
+            <h5>Title: @expense.Title</h5>
+            <p>Amount: @expense.Amount</p>
+            <p>Category: @expense.categoryName</p>
+            <p>Recipient: @expense.RecipientName</p>
+            <p>Date: @expense.ExpenseDate</p>
         }
     }
-    
+
 }
 @code {
     [Parameter]
     public string IdAsString { get; set; }
     public Guid Id { get; set; }
     private ListBudgetDTO? _budget;
+    private List<CategorySumDTO>? _sum;
+
+
+
 
     protected override async Task OnInitializedAsync()
     {
         Id = Guid.Parse(IdAsString);
+
         _budget = await _budgetService.GetBudgetById(Id);
+
+        _sum = await _expenseCategoryService.GetGraphInfo();
+
+        int num = 0;
+        foreach (var item in _sum)
+        {
+            string[] label = new string[] { };
+
+
+            string[] data = new string[] { };
+            label[num] = item.CategoryName;
+
+            //data[num] = item.TotalSum;
+            //num++;
+
+
+        }
     }
+
+
     public void Dispose()
     {
         _appState.OnStateChange -= StateHasChanged;
+    }
+
+
+    private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
+    int dataSize = 4;
+    //double[] data = { 77, 25, 20, 5 };
+    //string[] labels = { "Uranium", "Plutonium", "Thorium", "Caesium", "Technetium", "Promethium",
+    //                    "Polonium", "Astatine", "Radon", "Francium", "Radium", "Actinium", "Protactinium",
+    //                    "Neptunium", "Americium", "Curium", "Berkelium", "Californium", "Einsteinium", "Mudblaznium" };
+
+
+
+    Random random = new Random();
+
+    void RandomizeData()
+    {
+        var new_data = new double[dataSize];
+        for (int i = 0; i < new_data.Length; i++)
+            new_data[i] = random.NextDouble() * 100;
+        data = new_data;
+        StateHasChanged();
+    }
+
+    void AddDataSize()
+    {
+        if (dataSize < 20)
+        {
+            dataSize = dataSize + 1;
+            RandomizeData();
+        }
+    }
+    void RemoveDataSize()
+    {
+        if (dataSize > 0)
+        {
+            dataSize = dataSize - 1;
+            RandomizeData();
+        }
     }
 }
