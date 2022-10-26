@@ -1,7 +1,9 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Web; 
 
 namespace Economiq.Server.Service
 {
@@ -33,61 +35,69 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<bool> CreateExpenseCategory(int userId, string categoryName)
+        public async Task<ExpenseCategoryDTO> CreateExpenseCategory(int userId, string categoryName)
         {
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                throw new Exception("No User with this Username.");
-            }
+            var expenseCategoryList = user.Categories;
+            var theNewExpense = new ExpenseCategory() { CategoryName = categoryName }; 
+            user.Categories.Add(theNewExpense);
+            await _context.SaveChangesAsync();
+            return new ExpenseCategoryDTO() { CategoryId = theNewExpense.Id, CategoryName = theNewExpense.CategoryName };
+            
+            
+            /*if (user == null)
+            //{
+            //    return new ExpenseCategoryDTO { CategoryId = -1, CategoryName = "User not found" }; 
+            //}
             var category = await _context.ExpensesCategory.Where(c => c.CategoryName.ToLower() == categoryName.ToLower()).FirstOrDefaultAsync();
             //Goes in here to create the category and add it to the User if the category does not already exist.
-            if (category == null)
-            {
-                var expenseCategory = new ExpenseCategory { CategoryName = categoryName, CreationDate = DateTime.Now };
-
-                if (user.Categories == null)
-                {
-                    var expenseCategoryList = new List<ExpenseCategory> { expenseCategory };
-                    user.Categories = expenseCategoryList;
-                }
-                else
-                {
-                    user.Categories.Add(expenseCategory);
-
-                }
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                catch
-                {
-                    throw new Exception("Something went wrong");
-                }
-            }
+            //if (category == null)
+            //{
+             //   var expenseCategory = new ExpenseCategory { CategoryName = categoryName, CreationDate = DateTime.Now };
+             //
+             //   if (user.Categories == null)
+             //   {
+             //       var expenseCategoryList = new List<ExpenseCategory> { expenseCategory };
+             //       user.Categories = expenseCategoryList;
+             //   }
+             //   else
+             //   {
+             //       user.Categories.Add(expenseCategory);
+             //       var NewExpenseCategory = 
+             //       return CreatedAtActionResult("",new ExpenseCategoryDTO() { CategoryName=})
+             //   }
+             //   try
+              //  {
+              //      await _context.SaveChangesAsync();
+              //  }
+              //  catch
+              //  {
+              //      throw new Exception("Something went wrong");
+              //  }
+            //}
             //Goes in here and adds Category to the User, if there already exists a category with the same name.
-            else
-            {
-                if (user.Categories == null)
-                {
-                    var expenseCategoryList = new List<ExpenseCategory> { category };
-                    user.Categories = expenseCategoryList;
-                }
-                else
-                {
-                    user.Categories.Add(category);
-                }
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return true;
+            //else
+            //{
+            //    if (user.Categories == null)
+            //    {
+            //        var expenseCategoryList = new List<ExpenseCategory> { category };
+            //        user.Categories = expenseCategoryList;
+            //    }
+           //     else
+           //     {
+           //         user.Categories.Add(category);
+           //     }
+           //     try
+           //     {
+           //         await _context.SaveChangesAsync();
+           //         var newExpense = user.Categories.Last();
+           //         return new ExpenseCategoryDTO() { CategoryId = newExpense.Id, CategoryName = newExpense.CategoryName };
                 }
                 catch
                 {
                     throw new Exception("Something went wrong");
                 }
-            }
+            }*/
         }
 
 
