@@ -79,7 +79,14 @@ namespace Economiq.Server.Service
 
         }
 
-        public async Task<bool> DeleteExpense(int expenseId)
-
+       
+        public  async Task<bool> DeleteExpenseById(int deleteID,int userID)
+        {
+            var theExpense = await _context.Expenses.FindAsync(deleteID);
+            _context.Expenses.Remove(theExpense);
+            await _context.SaveChangesAsync();
+            return true; 
+                        
+        }   
     }
 }
