@@ -5,6 +5,7 @@
 @inject RecipientService _recipientService
 @inject ExpenseCategoryService _categoryService;
 @inject BudgetService _budgetService;
+@inject IJSRuntime JS
 <style>
     #NewCategory {
         position: absolute;
@@ -138,6 +139,13 @@
         if(relevantBudget == null){
             decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
             //If Decimal = 0 show modal.
+            if(latestMaxAmount == 0){
+                bool useLastMonthMaxAmount = await JS.InvokeAsync<bool>("confirm", "Budget for time period not found, creating new budget. Do you want to enter a new max amount or use last months expense?");
+                if(useLastMonthMaxAmount){
+                    string newMaxAmount = await JS.InvokeAsync<string>("prompt", "Please enter new max amount for budget period?");
+                } 
+            }
+            
             //Else show modal for question about using latest one or create new one.
             createBudgetDTO.MaxAmount = latestMaxAmount;
             Guid budgetID = await _budgetService.CreateBudget(createBudgetDTO);
