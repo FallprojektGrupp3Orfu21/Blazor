@@ -119,9 +119,10 @@
             {
                 CategoryName = NewExpenseCategory
             };
-        var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
-        if(tmp.Item1==System.Net.HttpStatusCode.OK){
-            _categoryList.Add(expenseCategory);
+      var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
+        if(tmp.Item1==System.Net.HttpStatusCode.Created){
+            _categoryList.Add(tmp.Item2);
+            NewExpense.CategoryId = tmp.Item2.CategoryId;
         }
         StateHasChanged();
     }
