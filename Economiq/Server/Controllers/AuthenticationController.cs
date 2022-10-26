@@ -19,7 +19,7 @@ namespace Economiq.Server.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(Credentials credentials)
         {
             User? currentUser = await _service.Authenticate(credentials);
