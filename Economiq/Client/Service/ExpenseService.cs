@@ -29,5 +29,11 @@ namespace Economiq.Client.Service
             return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("getRecent");
         }
 
+        public async Task<HttpResponseMessage> DeleteExpense(int DeleteExpenseId)
+        {
+            HttpResponseMessage _response = await _apiService.GetExpenseClient().DeleteAsync(DeleteExpenseId.ToString());
+            return _response;
+        }
+
     }
 }
