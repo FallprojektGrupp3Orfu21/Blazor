@@ -4,6 +4,8 @@ using Economiq.Shared;
 using Economiq.Shared.Models;
 using System.Diagnostics.Metrics;
 using System.Net;
+using Newtonsoft.Json;
+
 
 namespace Economiq.Client.Service
 {
