@@ -91,12 +91,12 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<List<CategorySumDTO>> GetGraphInfo(int userId)
+        public async Task<List<CategorySumDTO>> GetGraphInfo(int userId, Guid budgetId)
         {
             User? user = await _context.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Categories)
-                .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId))
+                .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId && e.BudgetId == budgetId))
                 .FirstOrDefaultAsync();
 
             List<ExpenseCategory> categories = user.Categories.ToList();

@@ -5,37 +5,134 @@
 @inject AppState _appState
 @implements IDisposable
 @inject BudgetService _budgetService;
+@inject ExpenseCategoryService _expenseCategoryService;
 
-@if(_budget != null){
+
+
+
+@if (_budget != null)
+{
+
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h6">Budget chart</MudText>
+        <MudChart ChartType="ChartType.Donut" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="300px" Height="300px">
+            <CustomGraphics>
+                <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2">Total</text>
+                <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+            </CustomGraphics>
+
+        </MudChart>
+        
+
+    </MudPaper>
+    <MudPaper Class="pa-4 mt-2 d-flex justify-center">
+    
+          @if(Index != -1)
+        {
+            <MudText Typo="Typo.h6">@labels[Index]: @data[Index]</MudText>
+
+        }
+    </MudPaper>
+
+
     <h3>@_budget.YearAndMonth</h3>
     <p>@_budget.MaxAmount</p>
-    
-    if(_budget.Expenses !=null){
-        <h4>Expenses:</h4>
-        foreach (var expense in _budget.Expenses)
-        {
-           <h5>Title: @expense.Title</h5>
-           <p>Amount: @expense.Amount</p>
-           <p>Category: @expense.categoryName</p>
-           <p>Recipient: @expense.RecipientName</p>
-           <p>Date: @expense.ExpenseDate</p>
-        }
+
+    if (_budget.Expenses != null)
+    {
+
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Recipient</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expense in _budget.Expenses)
+            {
+                <tr>
+                    <td>@expense.Title</td>
+                    <td>@expense.Amount</td>
+                    <td>@expense.categoryName</td>
+                    <td>@expense.ExpenseDate</td>
+                    <td>@expense.RecipientName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
     }
-    
+
 }
 @code {
     [Parameter]
     public string IdAsString { get; set; }
     public Guid Id { get; set; }
     private ListBudgetDTO? _budget;
+    private List<CategorySumDTO>? _sum;
+    private string[]? labels;
+    private double[]? data;
 
     protected override async Task OnInitializedAsync()
     {
         Id = Guid.Parse(IdAsString);
+
         _budget = await _budgetService.GetBudgetById(Id);
+
+        _sum = await _expenseCategoryService.GetGraphInfo(Id);
+        List<string> Labels = new();
+        List<double> Data = new();
+
+        foreach (var item in _sum)
+        {
+            Labels.Add(item.CategoryName);
+            Data.Add((double)item.TotalSum);
+
+        }
+        labels = Labels.ToArray();
+        data = Data.ToArray();
     }
+
+
     public void Dispose()
     {
         _appState.OnStateChange -= StateHasChanged;
+    }
+
+
+
+    private int Index = -1; 
+    int dataSize = 4;
+    
+
+    Random random = new Random();
+
+    void RandomizeData()
+    {
+        var new_data = new double[dataSize];
+        for (int i = 0; i < new_data.Length; i++)
+            new_data[i] = random.NextDouble() * 100;
+        data = new_data;
+        StateHasChanged();
+    }
+
+    void AddDataSize()
+    {
+        if (dataSize < 20)
+        {
+            dataSize = dataSize + 1;
+            RandomizeData();
+        }
+    }
+    void RemoveDataSize()
+    {
+        if (dataSize > 0)
+        {
+            dataSize = dataSize - 1;
+            RandomizeData();
+        }
     }
 }
