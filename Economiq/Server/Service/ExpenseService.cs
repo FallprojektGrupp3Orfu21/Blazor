@@ -78,5 +78,24 @@ namespace Economiq.Server.Service
             return recentExpenses;
 
         }
+
+        public async Task<List<GetExpenseDTO>> GetExpensesInBudgetByCategoryId(int userId, BudgetAndCategoryIdDTO dto)
+        {
+            List<Expense>? expenses = await _context.Expenses
+                .Where(e => e.UserId.Equals(userId) && e.CategoryId.Equals(dto.CategoryId) && e.BudgetId.Equals(Guid.Parse(dto.BudgetId)))
+                .Include(e => e.Category)
+                .Include(e=>e.Recipient)
+                .ToListAsync();
+            if(expenses == null)
+            {
+                throw new Exception();
+            }
+            List<GetExpenseDTO> expenseDTOs = new();
+            foreach (Expense expense in expenses)
+            {
+                expenseDTOs.Add(expense.ToGetExpenseDTO());
+            }
+            return expenseDTOs;
+        }
     }
 }

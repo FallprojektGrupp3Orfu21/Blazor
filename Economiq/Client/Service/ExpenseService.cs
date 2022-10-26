@@ -1,4 +1,5 @@
 ﻿using Economiq.Shared.DTO;
+using Newtonsoft.Json;
 using System.Net.Http.Json;
 
 namespace Economiq.Client.Service
@@ -27,6 +28,14 @@ namespace Economiq.Client.Service
         public async Task<List<GetExpenseDTO>> GetRecentExpenses()
         {
             return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("getRecent");
+        }
+
+        public async Task<List<GetExpenseDTO>> GetExpensesInCategoryInBudget(BudgetAndCategoryIdDTO dto)
+        {
+            HttpResponseMessage response = await _apiService.GetExpenseClient().PostAsJsonAsync("getExpensesInCategoryInBudget", dto);
+            string responseString = await response.Content.ReadAsStringAsync();
+            List<GetExpenseDTO> deserialized = JsonConvert.DeserializeObject<List<GetExpenseDTO>>(responseString);
+            return deserialized;
         }
 
     }

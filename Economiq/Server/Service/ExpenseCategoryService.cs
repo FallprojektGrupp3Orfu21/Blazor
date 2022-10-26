@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -118,7 +119,8 @@ namespace Economiq.Server.Service
                 CategorySumDTO categorySumDTO = new()
                 {
                     CategoryName = category.CategoryName,
-                    TotalSum = totalAmount
+                    TotalSum = totalAmount,
+                    CategoryId = category.Id
                 };
                 sumDTOs.Add(categorySumDTO);
             }

@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace Economiq.Shared.DTO
 {
-    public class CategorySumDTO
+    public class BudgetAndCategoryIdDTO
     {
-        public string CategoryName { get; set; }
-        public decimal TotalSum { get; set; }
         public int CategoryId { get; set; }
-
-
-
+        public string BudgetId { get; set; }
     }
 }

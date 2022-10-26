@@ -6,6 +6,7 @@
 @implements IDisposable
 @inject BudgetService _budgetService;
 @inject ExpenseCategoryService _expenseCategoryService;
+@inject ExpenseService _expenseService;
 
 
 
@@ -22,15 +23,19 @@
             </CustomGraphics>
 
         </MudChart>
-        
+
 
     </MudPaper>
     <MudPaper Class="pa-4 mt-2 d-flex justify-center">
-    
-          @if(Index != -1)
+
+        @if (Index != -1)
         {
             <MudText Typo="Typo.h6">@labels[Index]: @data[Index]</MudText>
-
+            @*expensesInCategory = GetExpensesInCategory(categoryIds[Index]);
+            @foreach(var expense in expensesInCategory)
+            {
+                <p>@expense.Amount</p>
+            }*@
         }
     </MudPaper>
 
@@ -40,30 +45,29 @@
 
     if (_budget.Expenses != null)
     {
-
         <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-                <th>Recipient</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var expense in _budget.Expenses)
-            {
+            <thead>
                 <tr>
-                    <td>@expense.Title</td>
-                    <td>@expense.Amount</td>
-                    <td>@expense.categoryName</td>
-                    <td>@expense.ExpenseDate</td>
-                    <td>@expense.RecipientName</td>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Recipient</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var expense in _budget.Expenses)
+                {
+                    <tr>
+                        <td>@expense.Title</td>
+                        <td>@expense.Amount</td>
+                        <td>@expense.categoryName</td>
+                        <td>@expense.ExpenseDate</td>
+                        <td>@expense.RecipientName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 
 }
@@ -75,6 +79,9 @@
     private List<CategorySumDTO>? _sum;
     private string[]? labels;
     private double[]? data;
+    private int[]? categoryIds;
+    private int Index = -1;
+    private List<GetExpenseDTO> expensesInCategory = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,15 +92,18 @@
         _sum = await _expenseCategoryService.GetGraphInfo(Id);
         List<string> Labels = new();
         List<double> Data = new();
+        List<int> CategoryIds = new();
 
         foreach (var item in _sum)
         {
             Labels.Add(item.CategoryName);
             Data.Add((double)item.TotalSum);
+            CategoryIds.Add(item.CategoryId);
 
         }
         labels = Labels.ToArray();
         data = Data.ToArray();
+        categoryIds = CategoryIds.ToArray();
     }
 
 
@@ -102,37 +112,10 @@
         _appState.OnStateChange -= StateHasChanged;
     }
 
-
-
-    private int Index = -1; 
-    int dataSize = 4;
-    
-
-    Random random = new Random();
-
-    void RandomizeData()
+    private List<GetExpenseDTO> GetExpensesInCategory(int categoryId)
     {
-        var new_data = new double[dataSize];
-        for (int i = 0; i < new_data.Length; i++)
-            new_data[i] = random.NextDouble() * 100;
-        data = new_data;
-        StateHasChanged();
+        var expenses = System.Threading.Tasks.Task.Run(() => _expenseService.GetExpensesInCategoryInBudget(new BudgetAndCategoryIdDTO() { BudgetId = IdAsString, CategoryId = categoryId })).GetAwaiter().GetResult();
+        return expenses;
     }
 
-    void AddDataSize()
-    {
-        if (dataSize < 20)
-        {
-            dataSize = dataSize + 1;
-            RandomizeData();
-        }
-    }
-    void RemoveDataSize()
-    {
-        if (dataSize > 0)
-        {
-            dataSize = dataSize - 1;
-            RandomizeData();
-        }
-    }
 }

@@ -93,5 +93,19 @@ namespace API.Controllers
                 return BadRequest("User not logged in");
             }
         }
+
+        [HttpPost("getExpensesInCategoryInBudget")]
+        public async Task<IActionResult> GetExpensesInCategoryInBudget(BudgetAndCategoryIdDTO dto)
+        {
+            try
+            {
+                List<GetExpenseDTO> expenses = await _expenseService.GetExpensesInBudgetByCategoryId(TempUser.Id, dto);
+                return StatusCode(200, expenses);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }
