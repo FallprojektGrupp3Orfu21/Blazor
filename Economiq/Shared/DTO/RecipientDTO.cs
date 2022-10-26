@@ -7,8 +7,7 @@ namespace Economiq.Shared.DTO
         public int Id { get; set; }
         [Required(ErrorMessage = "Recipient Name Required")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Recipient City Required")]
-        public string ExtraInfo { get; set; }
+        public string ExtraInfo { get; set; } = String.Empty;
 
         
     }
