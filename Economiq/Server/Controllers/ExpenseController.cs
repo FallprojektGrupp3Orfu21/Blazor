@@ -70,5 +70,19 @@ namespace API.Controllers
             }
 
         }
+
+        [HttpDelete("{DeleteExpenseId}")]
+        public async Task<IActionResult> DeleteExpense(int DeleteExpenseId)
+        {
+            try
+            {
+                await _expenseService.DeleteExpenseById(DeleteExpenseId,TempUser.Id);
+                return Ok(); 
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

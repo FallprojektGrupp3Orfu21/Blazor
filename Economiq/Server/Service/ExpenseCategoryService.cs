@@ -1,4 +1,4 @@
-﻿using Economiq.Server.Data;
+using Economiq.Server.Data;
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +33,7 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<bool> CreateExpenseCategory(int userId, string categoryName)
+        public async Task<ExpenseCategoryDTO> CreateExpenseCategory(int userId, string categoryName)
         {
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Categories).FirstOrDefaultAsync();
             if (user == null)
@@ -59,7 +59,7 @@ namespace Economiq.Server.Service
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return true;
+                    return new ExpenseCategoryDTO() { CategoryId = expenseCategory.Id, CategoryName=expenseCategory.CategoryName};
                 }
                 catch
                 {
@@ -81,7 +81,7 @@ namespace Economiq.Server.Service
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return true;
+                    return new ExpenseCategoryDTO() { CategoryId=category.Id, CategoryName=category.CategoryName};
                 }
                 catch
                 {
@@ -91,12 +91,12 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<List<CategorySumDTO>> GetGraphInfo(int userId)
+        public async Task<List<CategorySumDTO>> GetGraphInfo(int userId, Guid budgetId)
         {
             User? user = await _context.Users
                 .Where(u => u.Id == userId)
                 .Include(u => u.Categories)
-                .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId))
+                .ThenInclude(u => u.Expenses.Where(e=>e.UserId == userId && e.BudgetId == budgetId))
                 .FirstOrDefaultAsync();
 
             List<ExpenseCategory> categories = user.Categories.ToList();

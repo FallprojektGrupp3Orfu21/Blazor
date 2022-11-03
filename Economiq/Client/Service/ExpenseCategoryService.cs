@@ -4,6 +4,8 @@ using Economiq.Shared;
 using Economiq.Shared.Models;
 using System.Diagnostics.Metrics;
 using System.Net;
+using Newtonsoft.Json;
+
 
 namespace Economiq.Client.Service
 {
@@ -15,12 +17,13 @@ namespace Economiq.Client.Service
         {
             _apiService = apiService;
         }
-
-        public async Task<(HttpStatusCode,string)> CreateExpenseCategory(ExpenseCategoryDTO dto)
+        
+    public async Task<(HttpStatusCode,ExpenseCategoryDTO)> CreateExpenseCategory(ExpenseCategoryDTO dto)
         {
             HttpResponseMessage response = await _apiService.GetExpenseCategoryClient().PostAsJsonAsync("create", dto);
             string responseString = await response.Content.ReadAsStringAsync();
-            return (response.StatusCode, responseString);   
+            ExpenseCategoryDTO deserialized = JsonConvert.DeserializeObject<ExpenseCategoryDTO>(responseString);
+            return (response.StatusCode, deserialized);   
         }
 
 
@@ -29,9 +32,9 @@ namespace Economiq.Client.Service
             return await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<ExpenseCategoryDTO>>("listCategories");
         }
 
-        public async Task<List<CategorySumDTO>> GetGraphInfo()
+        public async Task<List<CategorySumDTO>> GetGraphInfo(Guid budgetId)
         {
-            return await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<CategorySumDTO>>("getGraphInfo");
+            return await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<CategorySumDTO>>($"getGraphInfo/{budgetId}");
         }
     }
 }

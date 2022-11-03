@@ -14,7 +14,8 @@ namespace Economiq.Shared.Extensions
                 categoryName = expense.Category.CategoryName,
                 ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy", new CultureInfo("en-GB")),
                 RecipientName = expense.Recipient.Name,
-                Title = expense.Comment
+                Title = expense.Comment,
+                DeleteExpenseId = expense.Id               
             };
         }
 

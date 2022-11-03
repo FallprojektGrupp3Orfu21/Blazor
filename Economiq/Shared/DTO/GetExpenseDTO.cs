@@ -7,5 +7,6 @@
         public string categoryName { get; set; }
         public string? Title { get; set; }
         public string RecipientName { get; set; }
+        public int DeleteExpenseId { get; set; }
     }
 }
