@@ -71,6 +71,7 @@ namespace API.Controllers
 
         }
 
+        [Authorize]
         [HttpDelete("{DeleteExpenseId}")]
         public async Task<IActionResult> DeleteExpense(int DeleteExpenseId)
         {

@@ -29,17 +29,12 @@ namespace Economiq.Server.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
+
+            try
             {
-                return BadRequest("Invalid Username");
+                ExpenseCategoryDTO newExpense = await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
+                return Created("", newExpense);
             }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    ExpenseCategoryDTO newExpense = await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
-                    return Created("",newExpense);
-                }
 
             catch (Exception err)
             {
@@ -47,9 +42,7 @@ namespace Economiq.Server.Controllers
             }
         }
 
-
-        }
-
+        [Authorize]
         [HttpGet("getGraphInfo/{budgetId}")]
         public async Task<IActionResult> GetGraphInfo(Guid budgetId)
         {
@@ -58,7 +51,7 @@ namespace Economiq.Server.Controllers
                 List<CategorySumDTO> categorySum = await _categoryService.GetGraphInfo(TempUser.Id, budgetId);
                 return Ok(categorySum);
             }
-            catch(ArgumentNullException ex)
+            catch (ArgumentNullException ex)
             {
                 return NotFound(ex.Message);
             }
