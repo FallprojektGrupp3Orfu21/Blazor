@@ -10,6 +10,8 @@ namespace Economiq.Shared.DTO
     {
         public string CategoryName { get; set; }
         public decimal TotalSum { get; set; }
+        public int CategoryId { get; set; } 
+
 
 
 
