@@ -1,10 +1,20 @@
 ﻿@page "/landing"
+@using Economiq.Client.Components.Modals
 @inject NavigationManager _nav;
 
+<style>
+       .hover{
+        cursor: pointer;
+    }
 
+</style>
 <h3>LandingPage</h3>
 
+@if (aboutUs)
+{
+    <LandingPageModal CloseModal="@CloseModal"></LandingPageModal>
 
+}
 
 
 <div>
@@ -18,14 +28,29 @@
   <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
 </div>
 
+<div>
+    <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
+</div>
+
 
 
 
 @code {
+    private bool aboutUs = false;
 
     public void NavigateRegister()
     {
         _nav.NavigateTo("/register");
+    }
+
+    public void ShowModal()
+    {
+        aboutUs = true;
+    }
+
+    public void CloseModal()
+    {
+        aboutUs = false;
     }
 
 }
