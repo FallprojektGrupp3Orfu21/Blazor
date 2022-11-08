@@ -29,7 +29,7 @@ namespace Economiq.Server.Controllers
                 {
                     throw new Exception();
                 }
-                var categories = await _categoryService.GetCatergoryById(user.Id);
+                var categories = await _categoryService.GetCategories(user.Id);
                 return StatusCode(200, categories);
             }
             catch

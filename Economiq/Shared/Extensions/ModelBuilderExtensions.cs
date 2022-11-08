@@ -44,9 +44,6 @@ namespace Economiq.Shared.Extensions
             modelBuilder.Entity<Recipient>().HasData(r1, r2, r3, r4, r5, r6);
 
 
-            var e1 = new Expense() { Id = 1, Amount = 25, Comment = "Glass", CategoryId = 2, CreationDate = DateTime.Now, ExpenseDate = DateTime.Now.Date, UserId = 1 };
-            modelBuilder.Entity<Expense>().HasData(e1);
-
             modelBuilder.Entity<ExpenseCategory>()
             .HasMany(d => d.Users)
             .WithMany(p => p.Categories)
