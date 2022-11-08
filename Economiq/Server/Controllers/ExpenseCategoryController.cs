@@ -19,7 +19,7 @@ namespace Economiq.Server.Controllers
         [HttpGet("listCategories")]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _categoryService.GetCatergoryById(TempUser.Id);
+            var categories = await _categoryService.GetCatergories(TempUser.Id);
             return StatusCode(200, categories);
         }
 

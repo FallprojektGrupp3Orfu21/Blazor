@@ -1,5 +1,6 @@
 using Economiq.Server.Data;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Extensions;
 using Economiq.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,18 +16,31 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<List<ExpenseCategoryDTO>> GetCatergoryById(int UserId)
+        public async Task<List<ExpenseCategoryDTO>> GetCatergories(int UserId)
         {
             var categoriesToReturn = new List<ExpenseCategoryDTO>();
+
             var user = await _context.Users.Include(e => e.Categories)
-                .ThenInclude(e => e.Expenses).FirstOrDefaultAsync(x => x.Id == UserId);
+                .ThenInclude(e => e.Expenses.Where(e => e.UserId == UserId))
+                .ThenInclude(e => e.Recipient)
+                .FirstOrDefaultAsync(x => x.Id == UserId);
             var categories = user.Categories.ToList();
+
             foreach (var category in categories)
             {
+                List<GetExpenseDTO> expensesToReturn = new();
+                foreach (var expense in category.Expenses)
+                {
+                    expensesToReturn.Add(expense.ToGetExpenseDTO());
+                }
+               
                 categoriesToReturn.Add(new ExpenseCategoryDTO()
                 {
                     CategoryName = category.CategoryName,
-                    CategoryId = category.Id
+                    CategoryId = category.Id,
+                    Expenses = expensesToReturn
+                    
+                    
                 });
             }
             return categoriesToReturn;
@@ -118,7 +132,8 @@ namespace Economiq.Server.Service
                 CategorySumDTO categorySumDTO = new()
                 {
                     CategoryName = category.CategoryName,
-                    TotalSum = totalAmount
+                    TotalSum = totalAmount,
+                    CategoryId = category.Id
                 };
                 sumDTOs.Add(categorySumDTO);
             }
