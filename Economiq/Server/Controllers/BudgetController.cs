@@ -4,8 +4,6 @@ using Economiq.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-//Economiq.Server.Service.UserService;
-
 namespace Economiq.Server.Controllers
 {
     [Route("api/[controller]")]

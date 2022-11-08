@@ -1,37 +1,43 @@
-﻿@page "/landing"
+﻿@page "/"
 @using Economiq.Client.Components.Modals
 @inject NavigationManager _nav;
-
+@inject AppState _appState
+@implements IDisposable
 <style>
-       .hover{
+    .hover {
         cursor: pointer;
     }
 
 </style>
-<h3>LandingPage</h3>
 
-@if (aboutUs)
-{
-    <LandingPageModal CloseModal="@CloseModal"></LandingPageModal>
+<AuthorizeView>
+    <Authorized>
+        <h2>Welcome @context.User.Identity.Name</h2>
+    </Authorized>
+    <NotAuthorized>
+        @if (aboutUs)
+        {
+            <LandingPageModal CloseModal="@CloseModal"></LandingPageModal>
 
-}
+        }
 
 
-<div>
-    <p>Here comes the logo</p>
-</div>
+        <div>
+            <p>Here comes the logo</p>
+        </div>
 
 
-<div>
-    
-  <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)" >Register</MudButton>
-  <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
-</div>
+        <div>
 
-<div>
-    <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
-</div>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)">Register</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
+        </div>
 
+        <div>
+            <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 
 
@@ -53,4 +59,14 @@
         aboutUs = false;
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        _appState.SetPageTitle("Economiq");
+        _appState.OnStateChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _appState.OnStateChange -= StateHasChanged;
+    }
 }
