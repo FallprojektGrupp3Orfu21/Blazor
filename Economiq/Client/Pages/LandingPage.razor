@@ -1,4 +1,5 @@
 ﻿@page "/landing"
+@inject NavigationManager _nav;
 
 
 <h3>LandingPage</h3>
@@ -12,10 +13,19 @@
 
 
 <div>
-  <MudButton Variant="Variant.Outlined" Color="Color.Primary">Register</MudButton>
+    
+  <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)" >Register</MudButton>
   <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
 </div>
 
+
+
+
 @code {
+
+    public void NavigateRegister()
+    {
+        _nav.NavigateTo("/register");
+    }
 
 }
