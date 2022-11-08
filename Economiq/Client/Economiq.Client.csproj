@@ -10,7 +10,6 @@
     <None Include="Pages\Budget.razor" />
     <None Include="Pages\BudgetSpecification.razor" />
     <None Include="Pages\Expense.razor" />
-    <None Include="Pages\Index.razor" />
     <None Include="Pages\Recipient.razor" />
     <None Include="Pages\RegisterUser.razor" />
   </ItemGroup>
