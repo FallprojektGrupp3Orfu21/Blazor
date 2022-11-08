@@ -1,6 +1,9 @@
 using Economiq.Server.Data;
 using Economiq.Server.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,20 @@ builder.Services.AddTransient<ExpenseService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<RecipientService>();
 builder.Services.AddTransient<BudgetService>();
-
+builder.Services.AddTransient<AuthenticationService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration.GetSection("Jwt")["Issuer"],
+            ValidAudience = builder.Configuration.GetSection("Jwt")["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt")["Key"]))
+        };
+    });
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
@@ -37,7 +53,8 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

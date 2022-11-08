@@ -13,11 +13,6 @@
             NotifyStateChanged();
         }
 
-        public void SetUserLoggedIn()
-        {
-            IsLoggedIn = true;
-            NotifyStateChanged();
-        }
 
         public void NotifyStateChanged() => OnStateChange?.Invoke();
     }

@@ -11,30 +11,30 @@ namespace Economiq.Client.Service
 {
     public class ExpenseCategoryService
     {
-        private readonly ApiService _apiService;
+        private readonly HttpClient _client;
 
-        public ExpenseCategoryService(ApiService apiService)
+        public ExpenseCategoryService(HttpClient client)
         {
-            _apiService = apiService;
+            _client = client;
         }
-        
-    public async Task<(HttpStatusCode,ExpenseCategoryDTO)> CreateExpenseCategory(ExpenseCategoryDTO dto)
+
+        public async Task<(HttpStatusCode, ExpenseCategoryDTO)> CreateExpenseCategory(ExpenseCategoryDTO dto)
         {
-            HttpResponseMessage response = await _apiService.GetExpenseCategoryClient().PostAsJsonAsync("create", dto);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/category/create", dto);
             string responseString = await response.Content.ReadAsStringAsync();
             ExpenseCategoryDTO deserialized = JsonConvert.DeserializeObject<ExpenseCategoryDTO>(responseString);
-            return (response.StatusCode, deserialized);   
+            return (response.StatusCode, deserialized);
         }
 
 
         public async Task<List<ExpenseCategoryDTO>> GetCategoryList()
         {
-            return await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<ExpenseCategoryDTO>>("listCategories");
+            return await _client.GetFromJsonAsync<List<ExpenseCategoryDTO>>("api/category/getAll");
         }
 
         public async Task<List<CategorySumDTO>> GetGraphInfo(Guid budgetId)
         {
-            return await _apiService.GetExpenseCategoryClient().GetFromJsonAsync<List<CategorySumDTO>>($"getGraphInfo/{budgetId}");
+            return await _client.GetFromJsonAsync<List<CategorySumDTO>>($"api/category/getGraphInfo/{budgetId}");
         }
     }
 }

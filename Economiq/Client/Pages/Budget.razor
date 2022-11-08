@@ -5,6 +5,7 @@
 @inject AppState _appState
 @inject NavigationManager _navigationManager
 @implements IDisposable
+@attribute [Authorize]
 
 <h3 class="d-flex justify-content-center">Your Budgets</h3>
 @foreach (var item in AllBudgets)

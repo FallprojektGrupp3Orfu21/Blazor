@@ -1,6 +1,7 @@
 ﻿using Economiq.Server;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -10,19 +11,20 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private UserService _us;
+        private UserService _userService;
 
         public UserController(UserService userService)
         {
-            _us = userService;
+            _userService = userService;
         }
 
-        [HttpPost("createUser")]
-        public IActionResult CreateUser([FromBody] UserDTO userDTO)
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser(UserDTO userDTO)
         {
             try
             {
-                _us.RegisterUser(userDTO);
+                await _userService.RegisterUser(userDTO);
                 return Ok(userDTO);
             }
 
@@ -31,38 +33,6 @@ namespace API.Controllers
                 return BadRequest(err.Message);
             }
         }
-        [HttpPost("login")]
-        public IActionResult LoginUser()
-        {
-            if (!_us.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid Username");
-            }
-            else
-            {
-                _us.LoginUser(TempUser.Username, TempUser.Password);
-                return Ok("User Logged In");
-            }
-        }
-        [HttpPost("logout")]
-        public IActionResult LogoutUser()
-        {
-            if (!_us.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid Username");
-            }
-            try
-            {
-                _us.LogoutUser(TempUser.Username, TempUser.Password);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
-            return Ok("User logged out");
-        }
-
-
     }
 }
 

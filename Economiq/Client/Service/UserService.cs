@@ -5,23 +5,16 @@ namespace Economiq.Client.Service
 {
     public class UserService
     {
-        private readonly ApiService _apiService;
+        private readonly HttpClient _client;
 
-        public UserService(ApiService apiService)
+        public UserService(HttpClient client)
         {
-            _apiService = apiService;
+            _client = client;
         }
 
         public async Task<string> CreateUser(UserDTO userDTO)
         {
-            HttpResponseMessage response = await _apiService.GetUserClient().PostAsJsonAsync("createUser", userDTO);
-            string responseString = await response.Content.ReadAsStringAsync();
-            return responseString;
-        }
-
-        public async Task<string> Login()
-        {
-            HttpResponseMessage response = await _apiService.GetUserClient().PostAsJsonAsync("login", String.Empty);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/user/register", userDTO);
             string responseString = await response.Content.ReadAsStringAsync();
             return responseString;
         }

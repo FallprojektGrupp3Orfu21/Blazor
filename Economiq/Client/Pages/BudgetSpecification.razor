@@ -2,71 +2,65 @@
 @using Economiq.Client.Components.Expense
 @using Economiq.Client.Service
 @using Economiq.Shared.DTO
+@inject HttpClient httpClient
 @inject AppState _appState
 @implements IDisposable
 @inject BudgetService _budgetService;
 @inject ExpenseCategoryService _expenseCategoryService;
-
+@attribute [Authorize]
 
 
 
 @if (_budget != null)
 {
-
+<h3>@_budget.YearAndMonth</h3>
     <MudPaper Class="pa-4">
-        <MudText Typo="Typo.h6">Budget chart</MudText>
-        <MudChart ChartType="ChartType.Donut" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="300px" Height="300px">
-            <CustomGraphics>
-                <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2">Total</text>
-                <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
-            </CustomGraphics>
-
+        <MudText Typo="Typo.h5">Total Expenses is: @data.Sum().ToString()</MudText>
+         <MudText Typo="Typo.h6">Max Budget: @_budget.MaxAmount</MudText>
+        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="300px" Height="300px">
         </MudChart>
-        
-
     </MudPaper>
     <MudPaper Class="pa-4 mt-2 d-flex justify-center">
-    
-          @if(Index != -1)
+        @if (Index != -1)
         {
-            <MudText Typo="Typo.h6">@labels[Index]: @data[Index]</MudText>
+            <div hidden="@isShown">
 
+                @(currentCategory = GetCurrentCategory(myId[Index]))
+            </div>
+            <MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;" Breakpoint="Breakpoint.Sm">
+               <thead>
+                    @if (Index != -1)
+                    {
+                        <MudText Typo="Typo.h6">@labels[Index] total is @data[Index]:-</MudText>
+                    }
+                </thead>
+                
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Recipient</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var expense in currentCategory.Expenses)
+                    {
+                        <tr>
+                            <td>@expense.Title</td>
+                            <td>@expense.Amount</td>
+                            <td>@expense.categoryName</td>
+                            <td>@expense.ExpenseDate</td>
+                            <td>@expense.RecipientName</td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
         }
     </MudPaper>
-
-
-    <h3>@_budget.YearAndMonth</h3>
-    <p>@_budget.MaxAmount</p>
-
-    if (_budget.Expenses != null)
-    {
-
-        <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-                <th>Recipient</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var expense in _budget.Expenses)
-            {
-                <tr>
-                    <td>@expense.Title</td>
-                    <td>@expense.Amount</td>
-                    <td>@expense.categoryName</td>
-                    <td>@expense.ExpenseDate</td>
-                    <td>@expense.RecipientName</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    }
-
 }
+
 @code {
     [Parameter]
     public string IdAsString { get; set; }
@@ -75,64 +69,50 @@
     private List<CategorySumDTO>? _sum;
     private string[]? labels;
     private double[]? data;
+    private int[]? myId;
+    private List<ExpenseCategoryDTO>? _category;
+    private ExpenseCategoryDTO currentCategory = new();
+    public bool isShown = true;
+
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
 
     protected override async Task OnInitializedAsync()
     {
         Id = Guid.Parse(IdAsString);
-
         _budget = await _budgetService.GetBudgetById(Id);
-
+        _category = await _expenseCategoryService.GetCategoryList();
         _sum = await _expenseCategoryService.GetGraphInfo(Id);
+
         List<string> Labels = new();
         List<double> Data = new();
+        List<int> Ids = new();
 
         foreach (var item in _sum)
         {
             Labels.Add(item.CategoryName);
             Data.Add((double)item.TotalSum);
-
+            Ids.Add(item.CategoryId);
         }
         labels = Labels.ToArray();
         data = Data.ToArray();
+        myId = Ids.ToArray();
     }
 
+    private ExpenseCategoryDTO GetCurrentCategory(int Id)
+    {
+        return _category.Where(x => x.CategoryId == Id).FirstOrDefault();
+    }
 
     public void Dispose()
     {
         _appState.OnStateChange -= StateHasChanged;
     }
 
-
-
-    private int Index = -1; 
-    int dataSize = 4;
-    
-
-    Random random = new Random();
-
-    void RandomizeData()
-    {
-        var new_data = new double[dataSize];
-        for (int i = 0; i < new_data.Length; i++)
-            new_data[i] = random.NextDouble() * 100;
-        data = new_data;
-        StateHasChanged();
-    }
-
-    void AddDataSize()
-    {
-        if (dataSize < 20)
-        {
-            dataSize = dataSize + 1;
-            RandomizeData();
-        }
-    }
-    void RemoveDataSize()
-    {
-        if (dataSize > 0)
-        {
-            dataSize = dataSize - 1;
-            RandomizeData();
-        }
-    }
+    private int Index = -1;
+   
 }
+
+  
