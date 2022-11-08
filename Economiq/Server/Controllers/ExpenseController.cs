@@ -1,6 +1,8 @@
 ﻿using Economiq.Server;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,87 +21,84 @@ namespace API.Controllers
 
         }
 
-        [HttpPost("createExpense")]
+        [Authorize]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO expenseDTO)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
+            try
             {
-                return BadRequest("Invalid Username");
-            }
-
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
                 {
-                    await _expenseService.AddExpense(expenseDTO, TempUser.Id);
-                    return StatusCode(200, "Expense Successfully Created");
+                    throw new Exception();
                 }
-
-                catch (Exception err)
-                {
-                    return StatusCode(500, "Failed to create Expense");
-                }
+                await _expenseService.AddExpense(expenseDTO, user.Id);
+                return StatusCode(200, "Expense Successfully Created");
             }
-            else
+
+            catch (Exception err)
             {
-                return BadRequest("User not logged in");
+                return StatusCode(500, "Failed to create Expense");
             }
-
         }
 
-        [HttpGet("listExpense")]
+        [Authorize]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetExpenses()
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
-            {
-                return BadRequest("Invalid Username");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
-                {
-                    List<GetExpenseDTO> listToReturn = await _expenseService.GetAllExpensesByUserId(TempUser.Id);
-                    return StatusCode(200, listToReturn);
-                }
 
-                catch (Exception err)
-                {
-                    return StatusCode(500, "Could not fetch Expenses");
-                }
-            }
-            else
+            try
             {
-                return BadRequest("User not logged in");
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                List<GetExpenseDTO> listToReturn = await _expenseService.GetAllExpensesByUserId(user.Id);
+                return StatusCode(200, listToReturn);
             }
+
+            catch (Exception err)
+            {
+                return StatusCode(500, "Could not fetch Expenses");
+            }
+
         }
 
+        [Authorize]
         [HttpGet("getRecent")]
         public async Task<IActionResult> GetRecentExpenses()
         {
-            if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
+
+            try
             {
-                try
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
                 {
-                    List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Id);
-                    return StatusCode(200, recentExpenses);
+                    throw new Exception();
                 }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, "Failed to fetch recent Expenses");
-                }
+                List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(user.Id);
+                return StatusCode(200, recentExpenses);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("User not logged in");
+                return StatusCode(500, "Failed to fetch recent Expenses");
             }
+
         }
 
+        [Authorize]
         [HttpDelete("{DeleteExpenseId}")]
         public async Task<IActionResult> DeleteExpense(int DeleteExpenseId)
         {
             try
             {
-                await _expenseService.DeleteExpenseById(DeleteExpenseId,TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                await _expenseService.DeleteExpenseById(DeleteExpenseId,user.Id);
                 return Ok(); 
             }
             catch(Exception ex)

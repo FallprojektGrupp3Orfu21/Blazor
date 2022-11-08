@@ -5,6 +5,7 @@
 @inject AppState _appState
 @inject ExpenseService _expenseService
 @implements IDisposable
+@attribute [Authorize]
 
 <div>
     <button class="mx-auto w-25 btn btn-success" @onclick="()=> {ShowList=false;}">Create</button>
@@ -19,6 +20,7 @@ else
 {
     <ListExpense></ListExpense>
 }
+
 @code {
     private RecentExpense _recentExpenseRef;
     private List<GetExpenseDTO> _expenses = new();

@@ -1,10 +1,12 @@
 ﻿using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Economiq.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/category")]
     [ApiController]
     public class ExpenseCategoryController : ControllerBase
     {
@@ -16,50 +18,64 @@ namespace Economiq.Server.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet("listCategories")]
+        [Authorize]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _categoryService.GetCatergories(TempUser.Id);
-            return StatusCode(200, categories);
+            try
+            {
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                var categories = await _categoryService.GetCategories(user.Id);
+                return StatusCode(200, categories);
+            }
+            catch
+            {
+                return StatusCode(500, "Could not fetch categories");
+            }
         }
 
+
+        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateExpenseCategory([FromBody] ExpenseCategoryDTO expenseCategoryDTO)
         {
-            if (!_userService.DoesUserExist(TempUser.Username))
+
+            try
             {
-                return BadRequest("Invalid Username");
-            }
-            else if (_userService.IsUserLoggedIn(TempUser.Username, TempUser.Password))
-            {
-                try
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
                 {
-                    ExpenseCategoryDTO newExpense = await _categoryService.CreateExpenseCategory(TempUser.Id, expenseCategoryDTO.CategoryName);
-                    return Created("",newExpense);
+                    throw new Exception();
                 }
-
-                catch (Exception err)
-                {
-                    return StatusCode(500, "Failed to create Category");
-                }
+                ExpenseCategoryDTO newExpense = await _categoryService.CreateExpenseCategory(user.Id, expenseCategoryDTO.CategoryName);
+                return Created("", newExpense);
             }
-            else
+
+            catch (Exception err)
             {
-                return BadRequest("User not logged in");
+                return StatusCode(500, "Failed to create Category");
             }
-
-
         }
 
+        [Authorize]
         [HttpGet("getGraphInfo/{budgetId}")]
         public async Task<IActionResult> GetGraphInfo(Guid budgetId)
         {
             try
             {
-                List<CategorySumDTO> categorySum = await _categoryService.GetGraphInfo(TempUser.Id, budgetId);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                List<CategorySumDTO> categorySum = await _categoryService.GetGraphInfo(user.Id, budgetId);
                 return Ok(categorySum);
             }
-            catch(ArgumentNullException ex)
+            catch (ArgumentNullException ex)
             {
                 return NotFound(ex.Message);
             }

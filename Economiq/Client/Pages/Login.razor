@@ -1,0 +1,33 @@
+﻿@page "/login"
+@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILocalStorageService LocalStorage
+@inject AuthService Service
+@inject NavigationManager NavManager
+
+<h3>Login</h3>
+
+<EditForm Model="userLogin" OnSubmit="HandleLogin">
+    <label for="username">Username</label>
+    <InputText id="username" @bind-Value="userLogin.Username"/> 
+    <br />
+    <label for="password">Password</label>
+    <InputText id="password" type="password" @bind-Value="userLogin.Password"/>
+    <br />
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    Credentials userLogin = new();
+    string token = String.Empty;
+
+    private async Task HandleLogin()
+    {
+        token = await Service.Login(userLogin);
+        Console.WriteLine(token);
+        await LocalStorage.SetItemAsync("token", token);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+        NavManager.NavigateTo("/");
+    }
+}

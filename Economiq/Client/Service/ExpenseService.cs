@@ -5,33 +5,33 @@ namespace Economiq.Client.Service
 {
     public class ExpenseService
     {
-        private readonly ApiService _apiService;
+        private readonly HttpClient _client;
 
-        public ExpenseService(ApiService apiService)
+        public ExpenseService(HttpClient client)
         {
-            _apiService = apiService;
+            _client = client;
         }
 
         public async Task<string> CreateExpense(ExpenseDTO expenseDTO)
         {
-            HttpResponseMessage response = await _apiService.GetExpenseClient().PostAsJsonAsync("createExpense", expenseDTO);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/expense/create", expenseDTO);
             string responseString = await response.Content.ReadAsStringAsync();
             return responseString;
         }
 
         public async Task<List<GetExpenseDTO>> GetExpenses()
         {
-            return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("listExpense");
+            return await _client.GetFromJsonAsync<List<GetExpenseDTO>>("api/expense/getAll");
         }
 
         public async Task<List<GetExpenseDTO>> GetRecentExpenses()
         {
-            return await _apiService.GetExpenseClient().GetFromJsonAsync<List<GetExpenseDTO>>("getRecent");
+            return await _client.GetFromJsonAsync<List<GetExpenseDTO>>("api/expense/getRecent");
         }
 
         public async Task<HttpResponseMessage> DeleteExpense(int DeleteExpenseId)
         {
-            HttpResponseMessage _response = await _apiService.GetExpenseClient().DeleteAsync(DeleteExpenseId.ToString());
+            HttpResponseMessage _response = await _client.DeleteAsync($"api/expense/{DeleteExpenseId.ToString()}");
             return _response;
         }
 

@@ -1,43 +1,35 @@
 ﻿using Economiq.Server.Data;
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Economiq.Server.Service
 {
     public class UserService
     {
-        private ExpenseCategoryService _categoryService;
-        private GetExpenseDTO _expenseDTO;
         private readonly EconomiqContext _context;
+        private readonly int _minimumPasswordLength;
 
         public UserService(EconomiqContext context, ExpenseCategoryService categoryService)
         {
             _context = context;
-            _categoryService = categoryService;
-            _expenseDTO = new GetExpenseDTO();
+            _minimumPasswordLength = 8;
         }
 
-        private int _minimumPasswordLength = 8;
-        private bool IsPasswordOk(string password)
-        {
-            return password.Length >= _minimumPasswordLength;
-        }
-        public void RegisterUser(UserDTO newUser)
+        public async Task RegisterUser(UserDTO newUser)
         {
             if (!IsPasswordOk(newUser.password))
             {
                 throw new Exception("Password is too weak");
             }
-            if (_context.Users.Where(user => user.UserName.ToLower() == newUser.Username.ToLower()).Count() > 0)
+            if (DoesUserExist(newUser.Username))
             {
-                throw new Exception("Username allready exists");
+                throw new Exception("Username already exists");
             }
-            var email = new Email
-            {
-                Mail = newUser.email.ToLower()
-            };
-            var Emails = new List<Email>();
-            Emails.Add(email);
+
+            List<Email> Emails = new();
+            Emails.Add(new() { Mail = newUser.email.ToLower() });
+
             _context.Users.Add(new User
             {
                 Fname = newUser.Fname,
@@ -50,89 +42,30 @@ namespace Economiq.Server.Service
                 City = newUser.City.ToLower(),
                 Gender = newUser.Gender.ToLower()
             });
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-        public bool LoginUser(string userName, string password)
-        {
-            var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
-            if (user is null)
-            {
-                throw new Exception("Invalid Username");
-            }
-
-            if (user.UserName == userName && user.Password == password)
-            {
-                try
-                {
-                    user.IsLoggedIn = true;
-                    _context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
-            }
-            else
-            {
-                throw new Exception("Invalid username or password");
-            }
-
-            return true;
-        }
-        public bool DoesPasswordMatch(string username, string password)
-        {
-            var user = _context.Users.Where(user => user.UserName == username).FirstOrDefault();
-            return (user.Password == password);
+            await _context.SaveChangesAsync();
         }
 
-
-        public bool LogoutUser(string userName, string password)
-        {
-            var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
-            if (user is null)
-            {
-                throw new Exception("Invalid username");
-            }
-            else if (!IsUserLoggedIn(userName, password))
-            {
-                throw new Exception("User not logged in");
-            }
-            else
-            {
-                user.IsLoggedIn = false;
-                _context.SaveChanges();
-            }
-            return true;
-        }
-        public bool IsUserLoggedIn(string userName, string password)
-        {
-            var user = _context.Users.Where(user => user.UserName == userName).FirstOrDefault();
-            if (user == null)
-            {
-                return false;
-            }
-            else if (user.UserName == userName && user.Password == password)
-            {
-                return user.IsLoggedIn;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
         public bool DoesUserExist(string userName)
         {
-            return (_context.Users.Where(user => user.UserName == userName) != null);
+            return (_context.Users.Any(user => user.UserName.ToLower() == userName.ToLower()));
+        }
+
+        private bool IsPasswordOk(string password)
+        {
+            return password.Length >= _minimumPasswordLength;
+        }
+
+        public User? GetCurrentUser(string jwt)
+        {
+            var actualToken = jwt.Split(" ")[1];
+            JwtSecurityTokenHandler tokenHandler = new();
+            JwtSecurityToken token = tokenHandler.ReadJwtToken(actualToken);
+            var IsParsed = int.TryParse(token.Subject, out int idAsInt);
+            if (IsParsed)
+            {
+                return _context.Users.FirstOrDefault(u => u.Id == idAsInt);
+            }
+            return null;
         }
     }
 }
