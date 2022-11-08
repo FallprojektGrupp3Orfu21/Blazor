@@ -19,13 +19,6 @@
          <MudText Typo="Typo.h6">Max Budget: @_budget.MaxAmount</MudText>
         <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="300px" Height="300px">
         </MudChart>
-           
-           @* <CustomGraphics>
-                <text class="donut-inner-text" x="47%" y="40%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2">Total Expenses</text>
-                <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">@data.Sum().ToString()</text>
-                <text class="donut-inner-text" x="47%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2">Max Budget</text>
-                <text class="donut-inner-text" x="47%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2">@_budget.MaxAmount</text>
-            </CustomGraphics>*@
     </MudPaper>
     <MudPaper Class="pa-4 mt-2 d-flex justify-center">
         @if (Index != -1)
@@ -38,7 +31,7 @@
                <thead>
                     @if (Index != -1)
                     {
-                        <MudText Typo="Typo.h6">@labels[Index] Total is @data[Index] $</MudText>
+                        <MudText Typo="Typo.h6">@labels[Index] total is @data[Index]:-</MudText>
                     }
                 </thead>
                 
@@ -81,12 +74,10 @@
     private ExpenseCategoryDTO currentCategory = new();
     public bool isShown = true;
 
-
     private bool dense = true;
     private bool hover = true;
     private bool striped = true;
     private bool bordered = true;
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,7 +89,6 @@
         List<string> Labels = new();
         List<double> Data = new();
         List<int> Ids = new();
-
 
         foreach (var item in _sum)
         {

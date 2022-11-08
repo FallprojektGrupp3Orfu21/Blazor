@@ -16,7 +16,7 @@ namespace Economiq.Server.Service
         }
 
 
-        public async Task<List<ExpenseCategoryDTO>> GetCatergories(int UserId)
+        public async Task<List<ExpenseCategoryDTO>> GetCategories(int UserId)
         {
             var categoriesToReturn = new List<ExpenseCategoryDTO>();
 
