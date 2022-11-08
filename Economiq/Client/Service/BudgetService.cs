@@ -6,31 +6,29 @@ namespace Economiq.Client.Service
 {
     public class BudgetService
     {
-        private readonly ApiService _apiService;
         private HttpClient _client;
-        public BudgetService(ApiService apiService)
+        public BudgetService(HttpClient client)
         {
-            _apiService = apiService;
-            _client = _apiService.GetBudgetClient();
+            _client = client;
         }
 
         public async Task<List<ListBudgetDTO>> GetAllBudgets()
         {
-            List<ListBudgetDTO> budgets = await _client.GetFromJsonAsync<List<ListBudgetDTO>>("listBudgets");
+            List<ListBudgetDTO> budgets = await _client.GetFromJsonAsync<List<ListBudgetDTO>>("api/budget/getAll");
             return budgets;
         }
 
         public async Task<ListBudgetDTO> GetBudgetById(Guid id)
         {
 
-            ListBudgetDTO budget = await _client.GetFromJsonAsync<ListBudgetDTO>($"getBudgetById/{id}");
+            ListBudgetDTO budget = await _client.GetFromJsonAsync<ListBudgetDTO>($"api/budget/getById/{id}");
             return budget;
         }
 
         public async Task<Guid> CreateBudget(CreateBudgetDTO createBudgetDTO)
         {
             HttpResponseMessage response = await _client
-                .PostAsJsonAsync("createBudget", createBudgetDTO);
+                .PostAsJsonAsync("api/budget/create", createBudgetDTO);
             string responseString = await response.Content
            .ReadAsStringAsync();
             responseString = responseString.Replace("\"", "");
@@ -39,14 +37,14 @@ namespace Economiq.Client.Service
         public async Task<ListBudgetDTO> GetBudgetByDate(CreateBudgetDTO dto)
         {
             HttpResponseMessage response = await _client
-                .PostAsJsonAsync("getBudgetByDate", dto);
+                .PostAsJsonAsync("api/budget/getByDate", dto);
             string responseString = await response.Content.ReadAsStringAsync();
             ListBudgetDTO deserialized = JsonConvert.DeserializeObject<ListBudgetDTO>(responseString);
             return deserialized;
         }
         public async Task<decimal> GetLatestMaxAmount()
         {
-            decimal budgetMaxAmount = await _client.GetFromJsonAsync<decimal>("getLatestMaxAmount");
+            decimal budgetMaxAmount = await _client.GetFromJsonAsync<decimal>("api/budget/getLatestMaxAmount");
             return budgetMaxAmount;
         }
 

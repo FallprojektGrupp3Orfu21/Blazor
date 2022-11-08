@@ -4,18 +4,21 @@
 @inject UserService _userService
 @implements IDisposable
 
-<h1>Welcome!</h1>
+<AuthorizeView>
+    <Authorized>
+        <h2>Welcome @context.User.Identity.Name</h2>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Welcome!</h1>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 
 @code {
 
     protected override async Task OnInitializedAsync()
     {
-        if (!_appState.IsLoggedIn)
-        {
-            await _userService.Login();
-            _appState.SetUserLoggedIn();
-        }
         _appState.SetPageTitle("Economiq");
         _appState.OnStateChange += StateHasChanged;
     }

@@ -6,16 +6,16 @@ namespace Economiq.Client.Service
 {
     public class RecipientService
     {
-        private readonly ApiService _apiService;
+        private readonly HttpClient _client;
 
-        public RecipientService(ApiService apiService)
+        public RecipientService(HttpClient client)
         {
-            _apiService = apiService;
+            _client = client;
         }
 
         public async Task<string> CreateRecipient(RecipientDTO recipientDTO)
         {
-            HttpResponseMessage response = await _apiService.GetRecipientClient().PostAsJsonAsync("createRecipient", recipientDTO);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/recipient/create", recipientDTO);
             string responseString = await response.Content.ReadAsStringAsync();
             return responseString;
 
@@ -23,7 +23,7 @@ namespace Economiq.Client.Service
 
         public async Task<List<RecipientDTO>> GetRecipients(string? searchString = null)
         {
-            HttpResponseMessage response = await _apiService.GetRecipientClient().PostAsJsonAsync("listRecipients", searchString);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/recipient/getAll", searchString);
             string responseString = await response.Content.ReadAsStringAsync();
             List<RecipientDTO> deserialized = JsonConvert.DeserializeObject<List<RecipientDTO>>(responseString);
             return deserialized;

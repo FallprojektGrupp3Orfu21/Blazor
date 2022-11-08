@@ -1,13 +1,14 @@
 ﻿using Economiq.Server;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
 
-    [Route("api/")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RecipientController : ControllerBase
     {
@@ -19,13 +20,18 @@ namespace API.Controllers
             _recipientService = recipientService;
         }
         [Authorize]
-        [HttpPost("createRecipient")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateRecipient([FromBody] RecipientDTO recipientDTO)
         {
 
             try
             {
-                await _recipientService.CreateRecipient(TempUser.Id, recipientDTO);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if(user == null)
+                {
+                    throw new Exception();
+                }
+                await _recipientService.CreateRecipient(user.Id, recipientDTO);
                 return Ok("Recipient Created");
             }
 
@@ -36,13 +42,18 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("listRecipients")]
+        [HttpPost("getAll")]
         public async Task<IActionResult> GetRecipients(string? searchString = null)
         {
 
             try
             {
-                var listToReturn = await _recipientService.GetRecipients(TempUser.Id, searchString);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                var listToReturn = await _recipientService.GetRecipients(user.Id, searchString);
 
                 return StatusCode(200, listToReturn);
             }

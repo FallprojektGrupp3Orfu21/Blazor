@@ -1,6 +1,7 @@
 ﻿using Economiq.Server;
 using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,12 +22,17 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("createExpense")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateExpense([FromBody] ExpenseDTO expenseDTO)
         {
             try
             {
-                await _expenseService.AddExpense(expenseDTO, TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                await _expenseService.AddExpense(expenseDTO, user.Id);
                 return StatusCode(200, "Expense Successfully Created");
             }
 
@@ -37,13 +43,18 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("listExpense")]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetExpenses()
         {
 
             try
             {
-                List<GetExpenseDTO> listToReturn = await _expenseService.GetAllExpensesByUserId(TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                List<GetExpenseDTO> listToReturn = await _expenseService.GetAllExpensesByUserId(user.Id);
                 return StatusCode(200, listToReturn);
             }
 
@@ -61,7 +72,12 @@ namespace API.Controllers
 
             try
             {
-                List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                List<GetExpenseDTO> recentExpenses = await _expenseService.GetRecentExpenses(user.Id);
                 return StatusCode(200, recentExpenses);
             }
             catch (Exception ex)
@@ -77,7 +93,12 @@ namespace API.Controllers
         {
             try
             {
-                await _expenseService.DeleteExpenseById(DeleteExpenseId,TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                await _expenseService.DeleteExpenseById(DeleteExpenseId,user.Id);
                 return Ok(); 
             }
             catch(Exception ex)

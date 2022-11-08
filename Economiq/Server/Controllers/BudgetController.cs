@@ -1,5 +1,6 @@
 ﻿using Economiq.Server.Service;
 using Economiq.Shared.DTO;
+using Economiq.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,14 +23,17 @@ namespace Economiq.Server.Controllers
         }
 
         [Authorize]
-        [HttpGet("listBudgets")]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAllBudgets()
         {
-
-
             try
             {
-                List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                List<ListBudgetDTO> allBudgets = await _budgetService.GetAllBudgets(user.Id);
                 return StatusCode(200, allBudgets);
             }
             catch (Exception err)
@@ -39,10 +43,9 @@ namespace Economiq.Server.Controllers
         }
 
         [Authorize]
-        [HttpGet("getBudgetById/{id}")]
+        [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetBudgetById(Guid id)
         {
-
             try
             {
                 ListBudgetDTO budgetById = await _budgetService.GetBudgetById(id);
@@ -56,13 +59,17 @@ namespace Economiq.Server.Controllers
         }
 
         [Authorize]
-        [HttpPost("getBudgetByDate")]
+        [HttpPost("getByDate")]
         public async Task<IActionResult> GetBudgetByDate(CreateBudgetDTO dto)
         {
-
             try
             {
-                var relevantBudget = await _budgetService.GetBudgetByDate(dto, TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                var relevantBudget = await _budgetService.GetBudgetByDate(dto, user.Id);
                 return StatusCode(200, relevantBudget);
             }
             catch (Exception ex)
@@ -75,10 +82,14 @@ namespace Economiq.Server.Controllers
         [HttpGet("getLatestMaxAmount")]
         public async Task<IActionResult> GetLatestMaxAmount()
         {
-
             try
             {
-                decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount(TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount(user.Id);
 
                 return StatusCode(200, latestMaxAmount);
             }
@@ -89,13 +100,17 @@ namespace Economiq.Server.Controllers
         }
 
         [Authorize]
-        [HttpPost("createBudget")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateBudget([FromBody] CreateBudgetDTO createBudgetDTO)
         {
-
             try
             {
-                Guid createdBudgetId = await _budgetService.CreateBudget(createBudgetDTO, TempUser.Id);
+                User? user = _userService.GetCurrentUser(Request.Headers.Authorization);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+                Guid createdBudgetId = await _budgetService.CreateBudget(createBudgetDTO, user.Id);
                 return StatusCode(200, createdBudgetId);
             }
 

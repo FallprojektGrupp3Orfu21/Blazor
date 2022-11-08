@@ -34,7 +34,8 @@ namespace Economiq.Server.Service
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Fname)
             };
             var token = new JwtSecurityToken(
                 _configuration.GetSection("Jwt")["Issuer"],

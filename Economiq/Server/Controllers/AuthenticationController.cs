@@ -20,7 +20,7 @@ namespace Economiq.Server.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(Credentials credentials)
+        public async Task<ActionResult<string>> Login(Credentials credentials)
         {
             User? currentUser = await _service.Authenticate(credentials);
             if(currentUser == null)
@@ -28,7 +28,7 @@ namespace Economiq.Server.Controllers
                 return Unauthorized();
             }
             string token = _service.GenerateToken(currentUser);
-            return Accepted(new { Value = token });
+            return token;
         }
     }
 }
