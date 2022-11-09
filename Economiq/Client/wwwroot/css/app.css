@@ -8,7 +8,8 @@ body {
 }
 
 h2,h3 {
-    font-family: 'Comfortaa'
+    font-family: 'Comfortaa';
+        color: white;
 }
 h1:focus {
     outline: none;
@@ -19,7 +20,7 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: black;
+    color: white;
     background-color: transparent;
     border-color: #1861ac;
 }

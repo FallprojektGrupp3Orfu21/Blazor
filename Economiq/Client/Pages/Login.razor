@@ -10,11 +10,18 @@
     .login{
         font-family: Comfortaa;
         color: white;
- 
+       display: grid;
+        justify-content: center;
+        justify-items: center;
 
     }
     .users{
+
         color: white;
+        display: grid;
+        justify-content: center;
+        justify-items: center;
+
 
     }
 
@@ -24,16 +31,17 @@
 <h2 class="login">Login</h2>
 <br />
 
-<EditForm Model="userLogin" OnSubmit="HandleLogin">
-  <div class="users">  <label for="username">Username</label>
+<EditForm Model="userLogin" OnSubmit="HandleLogin"><br />
+  <div class="users">  <label for="username">Username</label><br />
 
     <InputText id="username" @bind-Value="userLogin.Username"/> <br />
     <br />
     <label for="password">Password</label>&nbsp;
     <InputText id="password" type="password" @bind-Value="userLogin.Password"/>
-        <br /><br /><br />
+        <br /><br />
+        <button type="submit" class="btn btn-primary">Login</button>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+
 
 </EditForm>
 
