@@ -7,7 +7,19 @@
     .hover {
         cursor: pointer;
     }
-
+    .logo{
+        display: flex;
+        justify-content: center;
+        z-index:10;
+        color: white;
+        font-size: 40px;
+        font-family: Comfortaa;
+     
+    }
+    .logo_links{
+        display:flex;
+        justify-content: center;
+    }
 </style>
 
 <AuthorizeView>
@@ -20,22 +32,23 @@
             <LandingPageModal CloseModal="@CloseModal"></LandingPageModal>
 
         }
+      <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
-
-        <div>
-            <p>Here comes the logo</p>
+        <div class="logo">
+            <p>Economiq</p>
+      
         </div>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
+        <div class="logo_links">
 
-        <div>
-
-            <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)">Register</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)">Register</MudButton>&nbsp;&nbsp;&nbsp;
             <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
         </div>
-
+@*
         <div>
             <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
-        </div>
+        </div>*@
     </NotAuthorized>
 </AuthorizeView>
 
