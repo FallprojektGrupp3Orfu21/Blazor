@@ -23,6 +23,12 @@
 
 
     }
+
+    .logo_links2 {
+        display: flex;
+        justify-content: center;
+        color: white;
+    }
     .welcome{
         color:white;
     }
@@ -50,12 +56,12 @@
 
             <button class="btn btn-primary" @onclick="@(NavigateRegister)">Register</button>&nbsp;&nbsp;&nbsp;
             <button class="btn btn-primary" @onclick="Login">Log in</button>
-        </div>
+         
+          
+        </div>  <br />     <div class="logo_links2">
+        <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p></div>
         <br /><br /><br /><br /><br /><br /><br /><br />
-@*
-        <div>
-            <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
-        </div>*@
+
     </NotAuthorized>
 </AuthorizeView>
 
