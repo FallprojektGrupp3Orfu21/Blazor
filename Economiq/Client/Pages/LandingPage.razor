@@ -2,6 +2,7 @@
 @using Economiq.Client.Components.Modals
 @inject NavigationManager _nav;
 @inject AppState _appState
+@inject NavigationManager NavigationManager
 @implements IDisposable
 <style>
     .hover {
@@ -19,12 +20,17 @@
     .logo_links{
         display:flex;
         justify-content: center;
+
+
+    }
+    .welcome{
+        color:white;
     }
 </style>
 
 <AuthorizeView>
     <Authorized>
-        <h2>Welcome @context.User.Identity.Name</h2>
+        <h2 class="welcome">Welcome @context.User.Identity.Name</h2>
     </Authorized>
     <NotAuthorized>
         @if (aboutUs)
@@ -32,20 +38,20 @@
             <LandingPageModal CloseModal="@CloseModal"></LandingPageModal>
 
         }
-      <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br />
 
         <div class="logo">
             <p>Economiq</p>
       
         </div>
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br /><br />
 
         <div class="logo_links">
 
             <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)">Register</MudButton>&nbsp;&nbsp;&nbsp;
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="Login">Log in</MudButton>
         </div>
-        <br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br /><br />
 @*
         <div>
             <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
@@ -82,5 +88,9 @@
     public void Dispose()
     {
         _appState.OnStateChange -= StateHasChanged;
+    }
+    void Login()
+    {
+        NavigationManager.NavigateTo("login");
     }
 }

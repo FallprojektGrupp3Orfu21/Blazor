@@ -6,17 +6,37 @@
 @inject AuthService Service
 @inject NavigationManager NavManager
 
-<h3>Login</h3>
+<style>
+    .login{
+        font-family: Comfortaa;
+        color: white;
+ 
+
+    }
+    .users{
+        color: white;
+
+    }
+
+</style>
+<br />
+
+<h2 class="login">Login</h2>
+<br />
 
 <EditForm Model="userLogin" OnSubmit="HandleLogin">
-    <label for="username">Username</label>
-    <InputText id="username" @bind-Value="userLogin.Username"/> 
+  <div class="users">  <label for="username">Username</label>
+
+    <InputText id="username" @bind-Value="userLogin.Username"/> <br />
     <br />
-    <label for="password">Password</label>
+    <label for="password">Password</label>&nbsp;
     <InputText id="password" type="password" @bind-Value="userLogin.Password"/>
-    <br />
+        <br /><br /><br />
+    </div>
     <button type="submit" class="btn btn-primary">Login</button>
+
 </EditForm>
+
 
 @code {
     Credentials userLogin = new();

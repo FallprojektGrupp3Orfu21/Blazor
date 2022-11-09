@@ -6,7 +6,13 @@
 @implements IDisposable
 @attribute [Authorize]
 
-<h3>Add Recipient</h3>
+<style>
+    .recipient{
+        color: white;
+    }
+</style>
+
+<h3 class="recipient">Add Recipient</h3>
 <fieldset>
 <EditForm Model ="@NewRecipient" OnValidSubmit="AddRecipient">
         <DataAnnotationsValidator />
@@ -28,7 +34,7 @@
         </EditForm>
 </fieldset>
 <hr class="separator" />
-<h2>Recipients</h2>
+<h2 class="recipient">Recipients</h2>
 <table class="table table-bordered table-striped">
     <thead>
     <tr>

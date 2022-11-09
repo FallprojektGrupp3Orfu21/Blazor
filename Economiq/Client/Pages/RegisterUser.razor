@@ -9,12 +9,15 @@
     .register{
        color: white;
     }
+    .message{
+        color: white;
+    }
 </style>
 
 <PageTitle>Register</PageTitle>
 
 <h2 class="register">Register</h2>
-<p>@_succesMessage</p>
+<p class="message">@_succesMessage</p>
 <fieldset>
     <EditForm Model=@NewUser OnValidSubmit="OnSubmit">
         <DataAnnotationsValidator />
@@ -55,24 +58,15 @@
 
 
         <div>
-            <button class="mx-auto w-25 btn btn-success">Register</button>
+       
+
+            <button class="btn btn-primary">Register</button>
+
 
         </div>
 
     </EditForm>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
+
 </fieldset>
 
 
