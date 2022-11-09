@@ -2,17 +2,41 @@
 @using Economiq.Client.Components.Modals
 @inject NavigationManager _nav;
 @inject AppState _appState
+@inject NavigationManager NavigationManager
 @implements IDisposable
 <style>
     .hover {
         cursor: pointer;
     }
+    .logo{
+        display: flex;
+        justify-content: center;
+        z-index:10;
+        color: white;
+        font-size: 40px;
+        font-family: Comfortaa;
+     
+    }
+    .logo_links{
+        display:flex;
+        justify-content: center;
 
+
+    }
+
+    .logo_links2 {
+        display: flex;
+        justify-content: center;
+        color: white;
+    }
+    .welcome{
+        color:white;
+    }
 </style>
 
 <AuthorizeView>
     <Authorized>
-        <h2>Welcome @context.User.Identity.Name</h2>
+        <h2 class="welcome">Welcome @context.User.Identity.Name</h2>
     </Authorized>
     <NotAuthorized>
         @if (aboutUs)
@@ -20,22 +44,24 @@
             <LandingPageModal CloseModal="@CloseModal"></LandingPageModal>
 
         }
+      <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br />
 
-
-        <div>
-            <p>Here comes the logo</p>
+        <div class="logo">
+            <p>Economiq</p>
+      
         </div>
+        <br /><br /><br /><br /><br /><br /><br />
 
+        <div class="logo_links">
 
-        <div>
+            <button class="btn btn-primary" @onclick="@(NavigateRegister)">Register</button>&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-primary" @onclick="Login">Log in</button>
+         
+          
+        </div>  <br />     <div class="logo_links2">
+        <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p></div>
+        <br /><br /><br /><br /><br /><br /><br /><br />
 
-            <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="@(NavigateRegister)">Register</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Log in</MudButton>
-        </div>
-
-        <div>
-            <p>About us <span class="hover" @onclick="@(ShowModal)">+</span></p>
-        </div>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -68,5 +94,9 @@
     public void Dispose()
     {
         _appState.OnStateChange -= StateHasChanged;
+    }
+    void Login()
+    {
+        NavigationManager.NavigateTo("login");
     }
 }

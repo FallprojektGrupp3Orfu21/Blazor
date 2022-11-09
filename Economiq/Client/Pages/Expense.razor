@@ -8,8 +8,8 @@
 @attribute [Authorize]
 
 <div>
-    <button class="mx-auto w-25 btn btn-success" @onclick="()=> {ShowList=false;}">Create</button>
-    <button class="mx-auto w-25 btn btn-success" @onclick="()=> {ShowList=true;}">List</button>
+    <button class="btn btn-primary" @onclick="()=> {ShowList=false;}">Create</button>
+    <button class="btn btn-primary" @onclick="()=> {ShowList=true;}">List</button>
 </div>
 @if (!ShowList)
 {

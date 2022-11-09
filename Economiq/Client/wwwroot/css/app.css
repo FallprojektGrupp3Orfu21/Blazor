@@ -1,10 +1,15 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-html, body {
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+html {
+
+}
+body {
+    font-family: 'Comfortaa';
+    background-image: linear-gradient(180deg, #3a0647 30%, white 80%);
 }
 
 h2,h3 {
-    font-family: 'Comfortaa'
+    font-family: 'Comfortaa';
+        color: white;
 }
 h1:focus {
     outline: none;
@@ -15,13 +20,14 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
+    color: white;
+    background-color: transparent;
     border-color: #1861ac;
 }
 
 .content {
     padding-top: 1.1rem;
+    min-height: 60rem;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -65,12 +71,8 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-hr.separator {
-    height: 10px;
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%)
-}
 
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: #570674 !important;
+    background-color: transparent !important;
 }

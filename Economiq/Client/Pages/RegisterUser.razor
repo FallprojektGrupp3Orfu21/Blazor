@@ -5,10 +5,19 @@
 @inject UserService _userService
 @implements IDisposable
 
+<style>
+    .register{
+       color: white;
+    }
+    .message{
+        color: white;
+    }
+</style>
+
 <PageTitle>Register</PageTitle>
 
-<h3>Register</h3>
-<p>@_succesMessage</p>
+<h2 class="register">Register</h2>
+<p class="message">@_succesMessage</p>
 <fieldset>
     <EditForm Model=@NewUser OnValidSubmit="OnSubmit">
         <DataAnnotationsValidator />
@@ -49,12 +58,14 @@
 
 
         <div>
-            <button class="mx-auto w-25 btn btn-success">Register</button>
+       
+
+            <button class="btn btn-primary">Register</button>
+
 
         </div>
 
     </EditForm>
-
 
 </fieldset>
 
