@@ -97,7 +97,7 @@
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     private String NewExpenseCategory { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
-    public bool ShowModal = true;
+    public bool ShowModal = false;
     public void CategoryChanged(string newValue)
     {
         NewExpenseCategory = newValue;
