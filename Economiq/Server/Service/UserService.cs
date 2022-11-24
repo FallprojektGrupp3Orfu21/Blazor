@@ -37,10 +37,8 @@ namespace Economiq.Server.Service
                 UserName = newUser.Username,
                 Password = newUser.password,
                 Emails = Emails,
-                IsLoggedIn = false,
                 CreationDate = DateTime.Now,
                 City = newUser.City.ToLower(),
-                Gender = newUser.Gender.ToLower()
             });
             await _context.SaveChangesAsync();
         }
