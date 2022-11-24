@@ -1,0 +1,21 @@
+﻿@using Economiq.Shared.DTO
+
+<MudExpansionPanels>
+    @foreach(GetExpenseDTO expense in Expenses){
+        PannelTitleAndAmount = $" {expense.Title} {expense.Amount}:-";
+        <MudExpansionPanel Text="@PannelTitleAndAmount" MaxHeight="150">
+            Recipient: @expense.RecipientName
+            <br>
+            Expense Date: @expense.ExpenseDate
+        </MudExpansionPanel>
+    }
+</MudExpansionPanels>
+
+@code {
+    [Parameter]
+    public List<GetExpenseDTO> Expenses { get; set; }
+    private string PannelTitleAndAmount = string.Empty;
+
+    
+
+}

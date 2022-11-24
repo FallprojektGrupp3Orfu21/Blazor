@@ -3,6 +3,7 @@
 @using Economiq.Shared.DTO
 @inject AppState _appState
 @inject UserService _userService
+@inject NavigationManager _navManager
 @implements IDisposable
 
 <style>
@@ -85,6 +86,8 @@
         NewUser.password = string.Empty;
         NewUser.City = string.Empty;
         _succesMessage = "Registration has been succesful!";
+        _navManager.NavigateTo("/");
+
 
     }
 

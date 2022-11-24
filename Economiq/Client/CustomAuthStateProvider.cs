@@ -23,8 +23,15 @@ namespace Economiq.Client
             _client.DefaultRequestHeaders.Authorization = null;
             if (!string.IsNullOrEmpty(token))
             {
-                identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
+                try 
+                {
+                    identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
+                }
+                catch
+                {
+                    _client.DefaultRequestHeaders.Authorization = null;
+                }
             }
 
             ClaimsPrincipal user = new(identity);
@@ -37,10 +44,10 @@ namespace Economiq.Client
 
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
-            var payload = jwt.Split('.')[1];
-            var jsonBytes = ParseBase64WithoutPadding(payload);
-            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-            return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+                var payload = jwt.Split('.')[1];
+                var jsonBytes = ParseBase64WithoutPadding(payload);
+                var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+                return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
         }
 
         private static byte[] ParseBase64WithoutPadding(string base64)

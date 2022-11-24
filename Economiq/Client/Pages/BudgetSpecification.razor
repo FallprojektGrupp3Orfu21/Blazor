@@ -27,36 +27,8 @@
 
                 @(currentCategory = GetCurrentCategory(myId[Index]))
             </div>
-            <MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;" Breakpoint="Breakpoint.Sm">
-               <thead>
-                    @if (Index != -1)
-                    {
-                        <MudText Typo="Typo.h6">@labels[Index] total is @data[Index]:-</MudText>
-                    }
-                </thead>
-                
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Amount</th>
-                        <th>Category</th>
-                        <th>Date</th>
-                        <th>Recipient</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var expense in currentCategory.Expenses)
-                    {
-                        <tr>
-                            <td>@expense.Title</td>
-                            <td>@expense.Amount</td>
-                            <td>@expense.categoryName</td>
-                            <td>@expense.ExpenseDate</td>
-                            <td>@expense.RecipientName</td>
-                        </tr>
-                    }
-                </tbody>
-            </MudSimpleTable>
+            
+            <CollapsableExpenseList Expenses=currentCategory.Expenses/>
         }
     </MudPaper>
 }
