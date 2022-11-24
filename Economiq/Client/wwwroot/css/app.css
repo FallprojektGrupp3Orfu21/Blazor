@@ -4,12 +4,16 @@ html {
 }
 body {
     font-family: 'Comfortaa';
-    background-image: linear-gradient(180deg, #3a0647 30%, white 80%);
+    background-image: linear-gradient(180deg, #5f006c 5%, #fff 80%);
+}
+
+table{
+    background-color: white;
 }
 
 h2,h3 {
     font-family: 'Comfortaa';
-        color: white;
+        color: black;
 }
 h1:focus {
     outline: none;
@@ -20,8 +24,8 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: white;
-    background-color: transparent;
+    color: purple;
+    background-color: deepskyblue;
     border-color: #1861ac;
 }
 
@@ -74,5 +78,5 @@ a, .btn-link {
 
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: transparent !important;
+    background-color: #5f006c !important;
 }
