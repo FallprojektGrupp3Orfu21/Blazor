@@ -4,7 +4,7 @@ html {
 }
 body {
     font-family: 'Comfortaa';
-    background-image: linear-gradient(180deg, #3a0647 30%, white 80%);
+    background-image: linear-gradient(180deg, #3a0647 30%, #7f009e 80%);
 }
 
 table{
@@ -15,6 +15,8 @@ h2,h3 {
     font-family: 'Comfortaa';
         color: white;
 }
+
+
 h1:focus {
     outline: none;
 }
@@ -26,7 +28,8 @@ a, .btn-link {
 .btn-primary {
     color: white;
     background-color: transparent;
-    border-color: #1861ac;
+    border: 2px solid greenyellow;
+   
 }
 
 .content {
