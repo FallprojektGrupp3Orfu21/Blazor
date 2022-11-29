@@ -31,15 +31,14 @@
     }
     .welcome{
         color:white;
+        display:grid;
+        justify-content:space-around;
     }
 </style>
 
 <AuthorizeView>
     <Authorized>
         <h2 class="welcome">Welcome @context.User.Identity.Name</h2>
-
-
-
     </Authorized>
     <NotAuthorized>
         @if (aboutUs)

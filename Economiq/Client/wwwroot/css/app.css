@@ -4,7 +4,7 @@ html {
 }
 body {
     font-family: 'Comfortaa';
-    background-image: linear-gradient(180deg, #2f0639 50%, var(--bs-cyan) 70%);
+    background-image: linear-gradient(180deg, #2f0639 40%, var(--bs-cyan) 75%);
 }
 
 table{
