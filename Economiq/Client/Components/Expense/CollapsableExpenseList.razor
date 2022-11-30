@@ -1,12 +1,37 @@
 ﻿@using Economiq.Shared.DTO
-
-<MudExpansionPanels>
-    @foreach(GetExpenseDTO expense in Expenses){
+<style>
+    .expansion-panel {
+        color: #7f009e;
+    }
+    .title-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 0px 10px 0px 0px;
+    }
+</style>
+<MudExpansionPanels Style="width:100%;">
+    @foreach (GetExpenseDTO expense in Expenses)
+    {
         PannelTitleAndAmount = $" {expense.Title} {expense.Amount}:-";
-        <MudExpansionPanel Text="@PannelTitleAndAmount" MaxHeight="150">
-            Recipient: @expense.RecipientName
-            <br>
-            Expense Date: @expense.ExpenseDate
+        <MudExpansionPanel MaxHeight="150" Class="expansion-panel">
+            <TitleContent>
+                <div class="title-container">
+                    <div>
+                        @expense.Title
+                    </div>
+                    <div>
+                        @expense.Amount:-
+                    </div>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                Recipient: @expense.RecipientName
+                <br>
+                Expense Date: @expense.ExpenseDate
+                <br>
+                Category: @expense.categoryName
+            </ChildContent>
+
         </MudExpansionPanel>
     }
 </MudExpansionPanels>
@@ -16,6 +41,6 @@
     public List<GetExpenseDTO> Expenses { get; set; }
     private string PannelTitleAndAmount = string.Empty;
 
-    
+
 
 }
