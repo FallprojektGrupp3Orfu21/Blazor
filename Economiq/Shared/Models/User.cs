@@ -9,7 +9,6 @@ namespace Economiq.Shared.Models
         public string Password { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
-        public string Gender { get; set; }
         public string City { get; set; }
 
         [DataType(DataType.Date)]
@@ -17,7 +16,6 @@ namespace Economiq.Shared.Models
         public List<Expense>? Expenses { get; set; }
         public List<ExpenseCategory>? Categories { get; set; }
         public List<Email> Emails { get; set; }
-        public bool IsLoggedIn { get; set; }
         public List<Recipient>? Recipients { get; set; }
         public List<Budget> Budgets { get; set; }
     }

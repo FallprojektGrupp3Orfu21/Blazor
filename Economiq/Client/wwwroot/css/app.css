@@ -4,7 +4,7 @@ html {
 }
 body {
     font-family: 'Comfortaa';
-    background-image: linear-gradient(180deg, #3a0647 30%, white 80%);
+    background-image: linear-gradient(180deg, #2f0639 40%, var(--bs-cyan) 75%);
 }
 
 table{
@@ -15,6 +15,8 @@ h2,h3 {
     font-family: 'Comfortaa';
         color: white;
 }
+
+
 h1:focus {
     outline: none;
 }
@@ -26,7 +28,7 @@ a, .btn-link {
 .btn-primary {
     color: white;
     background-color: transparent;
-    border-color: #1861ac;
+    border: 2px solid #00d4ff;
 }
 
 .content {
@@ -79,4 +81,379 @@ a, .btn-link {
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
     background-color: transparent !important;
+}
+
+/*html {
+
+    height: auto;
+}
+*/
+body {
+    margin: 0 auto;
+    background-color: black;
+    /*    max-width: 900px;*/
+    font-weight: 700;
+}
+
+
+
+.hidden {
+    display: none;
+}
+
+.landingpage {
+    margin: 8px;
+    margin-top: 10px;
+    padding: 20px 5px 20px;
+    background-position: top;
+    background-image: url("../css/economiq.png");
+    background-repeat: no-repeat;
+    position: relative;
+    max-width: 1100px;
+    min-height: 65rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #000
+}
+
+    .landingpage::before {
+        content: "";
+        position: absolute;
+        width: 173px;
+        z-index: 0;
+        right: 1px;
+        height: 123px;
+        top: 212px;
+        filter: blur(90px);
+        background-color: #5c00f0;
+    }
+
+    .landingpage::after {
+        content: "";
+        position: absolute;
+        width: 145px;
+        height: 131px;
+        z-index: 0;
+        top: 641px;
+        filter: blur(90px);
+        background-color: #6b00ff;
+    }
+
+    .landingpage .navbar {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #00d4ff;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .landingpage .box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 15px;
+        z-index: 2;
+    }
+
+.box {
+    z-index: 2;
+}
+
+.landingpage .auction {
+    margin-top: 10px;
+}
+
+.landingpage .discover {
+    display: flex;
+    flex-direction: column;
+}
+
+.landingpage .footer {
+    margin: 20px 20px;
+    padding-right: 10px;
+    display: flex;
+    color: #fff;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer2 {
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid #00d4ff;
+    padding-top: 10px;
+    position: fixed;
+    bottom: 1px;
+    height: 7rem;
+}
+
+
+.navbar .createbtn {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    width: 126px;
+    height: 45px;
+    color: #fff;
+    font-family: "Comfortaa";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+    .navbar .createbtn.selectedbtn {
+        border: 1px solid #fff;
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+/*.navbar .navlogo {
+    height: 100%;
+    background: linear-gradient(93.51deg, #9B51E0 3.84%, #3081ED 96.18%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Comfortaa";
+    font-style: normal;
+
+    letter-spacing: -2px;
+    font-weight: 700;
+    font-size: 34px;
+}*/
+
+.navbar .navlink {
+    margin-top: 4.5rem;
+    font-family: "Comfortaa";
+    font-style: normal;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 16px;
+    /*    background: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);*/
+}
+
+.navlink.selectedlink {
+    background: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
+    -webkit-background-clip: text;
+    z-index: 1;
+    -webkit-text-fill-color: transparent;
+}
+
+.navbar .navlink:not(:last-child) {
+    margin-right: 32px;
+}
+
+.box .infobox {
+    animation-name: leftslide;
+    animation-duration: 0.8s;
+    z-index: 2;
+    max-height: 400px;
+    max-width: 80%;
+    overflow: hidden;
+}
+
+.box .infobox-boldtext {
+    margin: 0;
+    font-family: Comfortaa;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+}
+
+.box .infobox-slimtext {
+    margin: 14px 0;
+    font-family: Comfortaa;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+.box .infobox-btnwrapper {
+    display: flex;
+    z-index: 1;
+}
+
+.box .infobox-explorebtn {
+    cursor: pointer;
+    display: flex;
+    max-width: 70%;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid #00d4ff;
+    padding: 18px 38px;
+    border-radius: 16px;
+    font-family: "Comfortaa";
+    z-index: 1;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+}
+
+.box .infobox-createbtn {
+    cursor: pointer;
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 8px 38px;
+    border: 2px solid #fff;
+    border-radius: 16px;
+    font-family: "Comfortaa";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+}
+
+.box .infobox .selected {
+    z-index: 1;
+   
+  
+}
+
+
+
+.footer-main {
+    max-width: 100%;
+    font-family: "Comfortaa";
+    font-style: normal;
+    font-weight: 700;
+    border-bottom: 1px solid white;
+    font-size: 20px;
+    line-height: 40px;
+    color: white;
+}
+
+
+
+
+@media screen and (max-width: 1500px) {
+    .landingpage {
+        max-width: 1200px;
+    }
+}
+
+@media screen and (max-width: 1040px) {
+    .box {
+        flex-direction: column;
+  
+    }
+
+        .box .infobox {
+            max-height: 450px;
+            max-width: none;
+            margin-bottom: 50px;
+            display: grid;
+            justify-items: center;
+        }
+
+
+   
+}
+
+
+
+@media screen and (max-width: 700px) {
+
+    .navlink :hover {
+        color: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
+    }
+
+
+    .box {
+        flex-direction: column;
+      display:grid;
+    }
+
+        .box .infobox {
+            display:grid;
+         
+            max-height: none;
+            max-width: none;
+            margin-bottom: 12px;
+        }
+}
+
+@media screen and (max-width: 600px) {
+
+
+
+
+    .box .infobox-boldtext {
+        font-size: 20px;
+        line-height: 50px;
+    }
+
+
+        .navbar .navlink.selectedlink {
+            background: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            z-index: 1;
+        }
+
+
+    .navlink :hover {
+        color: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
+    }
+
+
+
+}
+
+@media screen and (max-width: 480px) {
+    .landingpage .box .infobox-boldtext {
+        font-size: 20px;
+        line-height: 1.4em;
+        text-align: center;
+        z-index: 1;
+    }
+
+
+    .navbar .navlink.selectedlink {
+        background: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
+        -webkit-background-clip: text;
+        z-index: 1;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .navlink :hover {
+        color: linear-gradient(93.51deg, #9B51E0 2.84%, #3081ED 99.18%);
+    }
+
+
+    .landingpage .box .infobox-btnwrapper {
+        z-index: 1;
+        justify-content: center;
+    }
+
+
+
+    @keyframes leftslide {
+        from {
+            transform: translateX(-700px);
+        }
+
+        to {
+            transform: translateX(0px);
+        }
+    }
+
+    @keyframes rightslide {
+        from {
+            transform: translateX(550px);
+        }
+
+        to {
+            transform: translateX(0px);
+        }
+    }
 }

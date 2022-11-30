@@ -25,13 +25,13 @@
         <ValidationSummary />
 
         <div class="mb-2 form-group form-floating">
-            <InputText id="Fname" placeholder="FirstName" @bind-Value="@NewUser.Fname" class="form-control" />
-            <label for="Fname">FirstName:</label>
+            <InputText id="Fname" placeholder="Firstname" @bind-Value="@NewUser.Fname" class="form-control" />
+            <label for="Fname">Firstname:</label>
             <ValidationMessage For="@(() => NewUser.Fname)" />
         </div>
         <div class="mb-2 form-group form-floating">
-            <InputText id="Lname" placeholder="LastName" @bind-Value="@NewUser.Lname" class="form-control" />
-            <label for="Lname">LastName:</label>
+            <InputText id="Lname" placeholder="Lastname" @bind-Value="@NewUser.Lname" class="form-control" />
+            <label for="Lname">Lastname:</label>
             <ValidationMessage For="@(() => NewUser.Lname)" />
         </div>
         <div class="mb-2 form-group form-floating">
@@ -40,12 +40,12 @@
             <ValidationMessage For="@(() => NewUser.Username)" />
         </div>
         <div class="mb-2 form-group form-floating">
-            <InputText id="email" placeholder="email" @bind-Value="@NewUser.email" class="form-control" />
+            <InputText id="email" placeholder="Email" @bind-Value="@NewUser.email" class="form-control" />
             <label for="email">Email:</label>
             <ValidationMessage For="@(() => NewUser.email)" />
         </div>
         <div class="mb-2 form-group form-floating">
-            <InputText id="password" type="password" placeholder="password" @bind-Value="@NewUser.password" class="form-control" />
+            <InputText id="password" type="Password" placeholder="password" @bind-Value="@NewUser.password" class="form-control" />
             <label for="password">Password:</label>
             <ValidationMessage For="@(() => NewUser.password)" />
         </div>
