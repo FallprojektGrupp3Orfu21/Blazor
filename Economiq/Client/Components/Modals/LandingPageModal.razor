@@ -1,9 +1,9 @@
 ﻿<style>
     .modal{
-        background-color: rgba(255,255,255,0.8);
-         height: 100vh;
+        background-color: #000;
+        height: 100vh;
         width: 100vw; 
-        border: 1px solid black;
+        opacity: 90%;          
         position: absolute; 
         top: 0;
         right: 0;
@@ -12,20 +12,36 @@
         align-items: center;
         justify-content:center;
         flex-direction:column;
-        border: 1px solid black;
+        text-align: center;
+
     }
 
-  
- 
+    .modalText{
+        color: white;
+        display: inline-grid;
+        text-align:center;
 
+
+    }
+    .modal-body{
+    display: inline-grid;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
+
+
+    }
 
 </style>
 
 
 <div class="modal">
     <div class="modal-body">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br /> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<br /> Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-         <button class="btn btn-secondary" @onclick="(CloseModal)" >Return</button>
+        <p class="modalText">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <br /> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+            in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<br /> Excepteur sint occaecat cupidatat non proident,
+            sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+         <button class="btn btn-primary" @onclick="(CloseModal)" >Return</button>
     </div>
 </div>
 
@@ -33,6 +49,5 @@
 
     [Parameter]  
     public Action CloseModal { get; set; }
-
 
 }
