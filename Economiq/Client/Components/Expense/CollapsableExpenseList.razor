@@ -1,0 +1,123 @@
+﻿@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@inject IDialogService DialogService
+@inject ExpenseService _expenseService
+
+<style>
+    .expansion-panel {
+        color: #7f009e;
+    }
+
+    .content-container {
+        display: flex;
+    }
+
+    .icon-container {
+        display: flex;
+        align-items: center;
+        width: 25%;
+        justify-content: flex-end;
+    }
+
+        .icon-container:hover {
+            cursor: pointer;
+        }
+
+    .expense-title {
+        padding-right: 15px;
+        width: 75%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .width {
+        width: 100%;
+    }
+
+    .mud-expand-panel-text {
+        width: 100% !important;
+        flex: 0 0 auto !important;
+    }
+
+    .mud-expand-panel-header {
+        width: 97% !important;
+    }
+
+    .expense-amount {
+        width: 25%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .expense-content-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 0px 10px 0px 0px;
+    }
+</style>
+<MudExpansionPanels Style="width:100%;">
+    @foreach (GetExpenseDTO expense in Expenses)
+    {
+        <MudExpansionPanel MaxHeight="150" Class="expansion-panel width">
+            <TitleContent>
+                <div class="content-container width">
+                    <div class="expense-title">
+                        @expense.Title
+                    </div>
+                    <div class="expense-amount">
+                        @expense.Amount:-
+                    </div>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                <div class="expense-content-container">
+                    <div>
+                        Amount: @expense.Amount
+                        <br>
+                        Recipient: @expense.RecipientName
+                        <br>
+                        Expense Date: @expense.ExpenseDate
+                        <br>
+                        @if (ShowCategory)
+                        {
+                            <span>Category: @expense.categoryName</span>
+                        }
+                    </div>
+                    <div class="icon-container" @onclick="() => Delete(expense)">
+                        <MudIcon Icon="@Icons.Filled.Delete" Title="Delete" Size="Size.Large" />
+                    </div>
+                </div>
+
+
+            </ChildContent>
+
+        </MudExpansionPanel>
+    }
+</MudExpansionPanels>
+
+@code {
+    [Parameter]
+    public List<GetExpenseDTO> Expenses { get; set; }
+    [Parameter]
+    public bool ShowCategory { get; set; } = false;
+
+    private async Task Delete(GetExpenseDTO expense)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, Position = DialogPosition.Center };
+        var dialog = DialogService.Show<ConfirmDeleteDialog>("Delete Expense", options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var response = await _expenseService.DeleteExpense(expense.DeleteExpenseId);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var expenseToDelete = Expenses.Find(expenseInList => expenseInList.DeleteExpenseId == expense.DeleteExpenseId);
+                Expenses.Remove(expenseToDelete);
+                StateHasChanged();
+            }
+        }
+    }
+
+}
