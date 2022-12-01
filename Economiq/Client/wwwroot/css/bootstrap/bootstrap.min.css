@@ -7229,10 +7229,10 @@ textarea.form-control-lg {
     border-color: #fff !important
 }
 
-.border-1 {
-    border-width: 1px !important
+/*.border-1 {
+    border-width: 1px;
 }
-
+*/
 .border-2 {
     border-width: 2px !important
 }
