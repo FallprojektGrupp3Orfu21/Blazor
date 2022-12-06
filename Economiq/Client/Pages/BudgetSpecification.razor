@@ -13,8 +13,24 @@
     .mud-elevation-1{
         box-shadow: none;
     }
-</style>
 
+    .spinners {
+        font-family: Comfortaa;
+        color: #fff;
+    }
+</style>
+@if (loading)
+{
+    <div class="spinners">
+        <div id="app">
+            <div style="position: absolute; top:30vh; width: 100%; text-align: center">
+                <h1>Economiq</h1>
+                <p><i class="fas fa-spin fa-spinner"></i> The application is loading...</p>
+            </div>
+        </div>
+    </div>
+}
+else{
 
 @if (_budget != null)
 
@@ -38,7 +54,7 @@
         }
     </MudPaper>
 }
-
+}
 @code {
     [Parameter]
     public string IdAsString { get; set; }
@@ -51,7 +67,7 @@
     private List<ExpenseCategoryDTO>? _category;
     private ExpenseCategoryDTO currentCategory = new();
     public bool isShown = true;
-
+    private bool loading = true;
     private bool dense = true;
     private bool hover = true;
     private bool striped = true;
@@ -63,6 +79,7 @@
         _budget = await _budgetService.GetBudgetById(Id);
         _category = await _expenseCategoryService.GetCategoryList();
         _sum = await _expenseCategoryService.GetGraphInfo(Id);
+        loading = false;
 
         List<string> Labels = new();
         List<double> Data = new();

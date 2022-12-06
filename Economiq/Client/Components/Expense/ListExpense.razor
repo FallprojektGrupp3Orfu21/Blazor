@@ -12,13 +12,23 @@
     .container{
         margin-top: 25px;
     }
+
+    .spinners {
+        font-family: Comfortaa;
+        color: #fff;
+    }
     </style>
 
 
 @if (loading)
 {
-    <div class="spinner-grow" style="width: 3rem; height: 3rem; color: rebeccapurple;" role="status">
-        <span class="visually-hidden">Loading...</span>
+    <div class="spinners">
+        <div id="app">
+            <div style="position: absolute; top:30vh; width: 100%; text-align: center">
+                <h1>Economiq</h1>
+                <p><i class="fas fa-spin fa-spinner"></i> The application is loading...</p>
+            </div>
+        </div>
     </div>
 }
 else
