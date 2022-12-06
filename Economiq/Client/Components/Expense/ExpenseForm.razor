@@ -1,4 +1,6 @@
-﻿@using Economiq.Client.Service
+﻿@using Economiq.Client.Components.AddCategory
+@using Economiq.Client.Components.Modals
+@using Economiq.Client.Service
 @using Economiq.Shared.DTO
 @using Economiq.Shared.Models
 @inject ExpenseService _expenseService
@@ -20,14 +22,30 @@
         background-color: white;
         transform: translate(-10px, 50%);
     }
+    #NewRecipient{
+        position: absolute;
+        top: 0;
+        border-radius: 5px;
+        right: 8px;
+        z-index: 2;
+        border: none;
+        top: 2px;
+        height: 30px;
+        cursor: pointer;
+        color: black;
+        background-color: white;
+        transform: translate(-10px, 50%);
+    }
 
     .modal {
         position: absolute;
         z-index: 9999;
     }
-    label,input,.form-control {
+
+    label, input, .form-control {
         font-weight: bold;
     }
+
     .no-opacity {
         opacity: 1 !important;
     }
@@ -63,7 +81,7 @@
             }
 
         </InputSelect>
-        <button id="NewCategory" type="button" @onclick="()=> {ChangeShowModal();}">+</button>
+        <button id="NewCategory" type="button" @onclick="()=> {ChangeShowCategoryModal();}">+</button>
         <label for="category" class="no-opacity">Category:</label>
         <ValidationMessage For="@(() => @NewExpense.CategoryId)" />
     </div>
@@ -77,16 +95,26 @@
                 <option Value=@recipient.Id>@recipient.Name</option>
             }
         </InputSelect>
+        <button id="NewRecipient" type="button" @onclick="()=> {ChangeShowRecipientModal();}">+</button>
         <label for="recipient" class="no-opacity">Recipient:</label>
     </div>
     <button class="btn btn-primary" type="submit">Add Expense</button>
 </EditForm>
-@if (ShowModal)
+@if (ShowCategoryModal)
 {
-    <Economiq.Client.Components.AddCategory.AddCategoryModal CloseModalFunction="@ChangeShowModal"
-                                                         SaveNewCategoryFunction="@SaveNewCategory"
-                                                         ExpenseCategoryString="@NewExpenseCategory"
-                                                         CategoryChanged="@CategoryChanged" />
+    <AddCategoryModal CloseModalFunction="@ChangeShowCategoryModal"
+                  SaveNewCategoryFunction="@SaveNewCategory"
+                  ExpenseCategoryString="@NewExpenseCategory"
+                  CategoryChanged="@CategoryChanged" />
+}
+@if (ShowRecipientModal)
+{
+    <AddRecipientModal CloseModalFunction="@ChangeShowRecipientModal"
+                   SaveNewRecipientFunction="@SaveNewRecipient"
+                   RecipientName="@NewRecipientName"
+                   RecipientInfo="@NewRecipientInfo"
+                   RecipientNameChanged="@RecipientNameChanged"
+                   RecipientInfoChanged="@RecipientInfoChanged" />
 }
 @code {
     [Parameter]
@@ -95,13 +123,25 @@
     private List<RecipientDTO> _recipients = new();
     public ExpenseDTO NewExpense { get; set; } = new();
     public DateOnly CreationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    private String NewExpenseCategory { get; set; } = String.Empty;
+    private string NewExpenseCategory { get; set; } = String.Empty;
+    private string NewRecipientName { get; set; } = String.Empty;
+    private string NewRecipientInfo { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
-    public bool ShowModal = false;
+    public bool ShowCategoryModal = false;
+    public bool ShowRecipientModal = false;
     public void CategoryChanged(string newValue)
     {
         NewExpenseCategory = newValue;
     }
+    public void RecipientNameChanged(string newValue)
+    {
+        NewRecipientName = newValue;
+    }
+    public void RecipientInfoChanged(string newValue)
+    {
+        NewRecipientInfo = newValue;
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _recipients = await _recipientService.GetRecipients();
@@ -113,25 +153,52 @@
         }
         StateHasChanged();
     }
-    public void ChangeShowModal()
+
+    public void ChangeShowCategoryModal()
     {
         NewExpenseCategory = String.Empty;
-        this.ShowModal = !this.ShowModal;
+        this.ShowCategoryModal = !this.ShowCategoryModal;
         StateHasChanged();
     }
+
+    public void ChangeShowRecipientModal()
+    {
+        NewRecipientName = String.Empty;
+        this.ShowRecipientModal = !this.ShowRecipientModal;
+        StateHasChanged();
+    }
+
     public async void SaveNewCategory()
     {
         ExpenseCategoryDTO expenseCategory = new()
             {
                 CategoryName = NewExpenseCategory
             };
-      var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
-        if(tmp.Item1==System.Net.HttpStatusCode.Created){
+        var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
+        if (tmp.Item1 == System.Net.HttpStatusCode.Created)
+        {
             _categoryList.Add(tmp.Item2);
             NewExpense.CategoryId = tmp.Item2.CategoryId;
         }
         StateHasChanged();
     }
+
+    public async void SaveNewRecipient()
+    {
+        RecipientDTO newRecipient = new()
+            {
+                Name = NewRecipientName,
+                ExtraInfo = NewRecipientInfo
+            };
+        var request = await _recipientService.CreateRecipient(newRecipient);
+        if (request.Item1 == System.Net.HttpStatusCode.Created)
+        {
+            _recipients.Add(request.Item2);
+            NewExpense.CategoryId = request.Item2.Id;
+        }
+        StateHasChanged();
+    }
+
     public async Task HandleSubmit()
     {
         NewExpense.ExpenseDate = CreationDate.ToString("yyyy-MM-dd");
@@ -142,7 +209,8 @@
             };
         ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(createBudgetDTO);
 
-        if(relevantBudget == null){
+        if (relevantBudget == null)
+        {
             decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
             //If Decimal = 0 show modal.
             //Else show modal for question about using latest one or create new one.
@@ -150,7 +218,8 @@
             Guid budgetID = await _budgetService.CreateBudget(createBudgetDTO);
             NewExpense.BudgetId = budgetID;
         }
-        else{
+        else
+        {
             NewExpense.BudgetId = relevantBudget.Id;
         }
         Confirmation = await _expenseService.CreateExpense(NewExpense);

@@ -7,11 +7,15 @@ namespace Economiq.Shared.Extensions
     {
         public static RecipientDTO ToRecipientDTO(this Recipient recipient)
         {
+            if (!string.IsNullOrEmpty(recipient.ExtraInfo))
+            {
+                recipient.ExtraInfo = recipient.ExtraInfo.FirstCharToUpper();
+            }
             return new RecipientDTO
             {
                 Id = recipient.Id,
                 Name = recipient.Name.FirstCharToUpper(),
-                ExtraInfo = recipient.ExtraInfo.FirstCharToUpper()
+                ExtraInfo = recipient.ExtraInfo
             };
         }
 

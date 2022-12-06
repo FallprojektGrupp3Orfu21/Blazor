@@ -31,8 +31,8 @@ namespace API.Controllers
                 {
                     throw new Exception();
                 }
-                await _recipientService.CreateRecipient(user.Id, recipientDTO);
-                return Ok("Recipient Created");
+                RecipientDTO created = await _recipientService.CreateRecipient(user.Id, recipientDTO);
+                return Created("Recipient Created", created);
             }
 
             catch (Exception ex)
