@@ -19,11 +19,16 @@
     .logo_links{
         display:flex;
         justify-content: center;
+        max-height:40px;
+   
     }
     .logo_links2 {
+        padding-top: 10px;
         display: flex;
         justify-content: center;
         color: white;
+        max-height:30px;
+
     }
     .welcome{
         color:white;
@@ -41,6 +46,9 @@
         display:flex;
         justify-content:center;
         
+    }
+    .hover{
+        max-height: 35px;
     }
 </style>
 <AuthorizeView>
@@ -105,8 +113,10 @@
             <button class="btn btn-primary" @onclick="@(NavigateRegister)">Register</button>&nbsp;&nbsp;&nbsp;
             <button class="btn btn-primary" @onclick="Login">Log in</button>
          
-          
-        </div>  <br />     <div class="logo_links2">
+          <br />
+        </div>  <br /> 
+        <div class="logo_links2">
+            <br /><br />
             <p> <span class="hover" @onclick="@(ShowModal)">About us +</span></p>
         </div>
 
