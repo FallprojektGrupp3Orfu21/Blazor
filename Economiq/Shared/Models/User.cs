@@ -9,7 +9,7 @@ namespace Economiq.Shared.Models
         public string Password { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
-        public string City { get; set; }
+        public string Salt { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }

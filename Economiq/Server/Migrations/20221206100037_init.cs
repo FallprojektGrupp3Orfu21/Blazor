@@ -33,7 +33,7 @@ namespace Economiq.Server.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Fname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Lname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -162,107 +162,6 @@ namespace Economiq.Server.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "ExpensesCategory",
-                columns: new[] { "Id", "CategoryName", "CreationDate" },
-                values: new object[,]
-                {
-                    { 1, "Rent", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6270) },
-                    { 2, "Food", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6273) },
-                    { 3, "Transport", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6274) },
-                    { 4, "Clothing", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6275) },
-                    { 5, "Entertainment", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6277) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "City", "CreationDate", "Fname", "Lname", "Password", "UserName" },
-                values: new object[,]
-                {
-                    { 1, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6091), "Julia", "Hook", "Testing123", "JuliaH" },
-                    { 2, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6117), "Alexander", "Volonen", "Testing234", "AlexV" },
-                    { 3, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6119), "Stefan", "Krakowsky", "Testing345", "Peppo" },
-                    { 4, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6121), "Winnie", "Huynh", "Testing456", "WinnieH" },
-                    { 5, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6122), "Eric", "Flodin", "Testing567", "Ericx" },
-                    { 6, "Fjugesta", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6124), "Anders", "Bergstrom", "Testing678", "AndersB" },
-                    { 7, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6125), "Peter", "Hafid", "Testing789", "PeterH" },
-                    { 8, "Orebro", new DateTime(2022, 12, 1, 12, 23, 33, 361, DateTimeKind.Local).AddTicks(6127), "admin", "admin", "admin", "admin" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Email",
-                columns: new[] { "Mail", "UserId" },
-                values: new object[,]
-                {
-                    { "JuliaH@test.com", 1 },
-                    { "AlexV@test.com", 2 },
-                    { "Peppo@test.com", 3 },
-                    { "WinnieH@test.com", 4 },
-                    { "Ericx@test.com", 5 },
-                    { "AndersB@test.com", 6 },
-                    { "PeterH@test.com", 7 },
-                    { "admin@admin.com", 8 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ExpenseCategoryUser",
-                columns: new[] { "CategoriesId", "UsersId" },
-                values: new object[,]
-                {
-                    { 1, 1 },
-                    { 1, 2 },
-                    { 1, 3 },
-                    { 1, 4 },
-                    { 1, 5 },
-                    { 1, 6 },
-                    { 1, 7 },
-                    { 2, 1 },
-                    { 2, 2 },
-                    { 2, 3 },
-                    { 2, 4 },
-                    { 2, 5 },
-                    { 2, 6 },
-                    { 2, 7 },
-                    { 3, 1 },
-                    { 3, 2 },
-                    { 3, 3 },
-                    { 3, 4 },
-                    { 3, 5 },
-                    { 3, 6 },
-                    { 3, 7 },
-                    { 4, 1 },
-                    { 4, 2 },
-                    { 4, 3 },
-                    { 4, 4 },
-                    { 4, 5 },
-                    { 4, 6 },
-                    { 4, 7 },
-                    { 5, 1 },
-                    { 5, 2 },
-                    { 5, 3 },
-                    { 5, 4 },
-                    { 5, 5 },
-                    { 5, 6 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ExpenseCategoryUser",
-                columns: new[] { "CategoriesId", "UsersId" },
-                values: new object[] { 5, 7 });
-
-            migrationBuilder.InsertData(
-                table: "Recipients",
-                columns: new[] { "Id", "ExtraInfo", "Name", "UserId" },
-                values: new object[,]
-                {
-                    { 1, "", "ICA", 1 },
-                    { 2, "", "H&M", 5 },
-                    { 3, "", "Alfred", 3 },
-                    { 4, "", "Hanna", 4 },
-                    { 5, "", "ICA", 7 },
-                    { 6, "", "Coop", 7 }
                 });
 
             migrationBuilder.CreateIndex(

@@ -2,6 +2,8 @@
 using Economiq.Shared.DTO;
 using Economiq.Shared.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Economiq.Server.Service
 {
@@ -9,11 +11,13 @@ namespace Economiq.Server.Service
     {
         private readonly EconomiqContext _context;
         private readonly int _minimumPasswordLength;
+        private readonly PasswordService _pwService;
 
-        public UserService(EconomiqContext context, ExpenseCategoryService categoryService)
+        public UserService(EconomiqContext context, ExpenseCategoryService categoryService, PasswordService pwService)
         {
             _context = context;
             _minimumPasswordLength = 8;
+            _pwService = pwService;
         }
 
         public async Task RegisterUser(UserDTO newUser)
@@ -30,15 +34,18 @@ namespace Economiq.Server.Service
             List<Email> Emails = new();
             Emails.Add(new() { Mail = newUser.email.ToLower() });
 
+            string salt = _pwService.CreateSalt();
+            string hashedPW = _pwService.HashPassword(newUser.password + salt);
+
             _context.Users.Add(new User
             {
                 Fname = newUser.Fname,
                 Lname = newUser.Lname,
                 UserName = newUser.Username,
-                Password = newUser.password,
+                Password = hashedPW,
                 Emails = Emails,
-                CreationDate = DateTime.Now,
-                City = newUser.City.ToLower(),
+                Salt = salt,
+                CreationDate = DateTime.Now
             });
             await _context.SaveChangesAsync();
         }
