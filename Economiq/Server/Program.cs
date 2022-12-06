@@ -15,6 +15,7 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<RecipientService>();
 builder.Services.AddTransient<BudgetService>();
 builder.Services.AddTransient<AuthenticationService>();
+builder.Services.AddTransient<PasswordService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
         options.TokenValidationParameters = new TokenValidationParameters

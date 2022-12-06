@@ -9,7 +9,6 @@
         public string email { get; set; }
         public string password { get; set; } //This way of authing should in no way shape or form be allowed to persist to release. 
         public string Gender { get; set; }
-        public string City { get; set; }
 
     }
 

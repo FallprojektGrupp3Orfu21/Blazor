@@ -77,10 +77,6 @@ namespace Economiq.Server.Data
                 .WithMany(ex => ex.ExpenseNav)
                 .HasForeignKey(e => e.RecipientId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-
-
-            modelbuilder.Seed();
         }
 
     }

@@ -8,14 +8,14 @@ namespace Economiq.Shared.Extensions
         public static void Seed(this ModelBuilder modelBuilder)
         {
 
-            var u1 = new User() { Id = 1, UserName = "JuliaH", Fname = "Julia", Lname = "Hook", Password = "Testing123", City = "Orebro", CreationDate = DateTime.Now };
-            var u2 = new User() { Id = 2, UserName = "AlexV", Fname = "Alexander", Lname = "Volonen", Password = "Testing234",  City = "Orebro", CreationDate = DateTime.Now };
-            var u3 = new User() { Id = 3, UserName = "Peppo", Fname = "Stefan", Lname = "Krakowsky", Password = "Testing345", City = "Orebro", CreationDate = DateTime.Now };
-            var u4 = new User() { Id = 4, UserName = "WinnieH", Fname = "Winnie", Lname = "Huynh", Password = "Testing456",  City = "Orebro", CreationDate = DateTime.Now };
-            var u5 = new User() { Id = 5, UserName = "Ericx", Fname = "Eric", Lname = "Flodin", Password = "Testing567", City = "Orebro", CreationDate = DateTime.Now };
-            var u6 = new User() { Id = 6, UserName = "AndersB", Fname = "Anders", Lname = "Bergstrom", Password = "Testing678",  City = "Fjugesta", CreationDate = DateTime.Now };
-            var u7 = new User() { Id = 7, UserName = "PeterH", Fname = "Peter", Lname = "Hafid", Password = "Testing789",  City = "Orebro", CreationDate = DateTime.Now };
-            var u8 = new User() { Id = 8, UserName = "admin", Fname = "admin", Lname = "admin", Password = "admin", City = "Orebro", CreationDate = DateTime.Now };
+            var u1 = new User() { Id = 1, UserName = "JuliaH", Fname = "Julia", Lname = "Hook", Password = "Testing123", CreationDate = DateTime.Now };
+            var u2 = new User() { Id = 2, UserName = "AlexV", Fname = "Alexander", Lname = "Volonen", Password = "Testing234", CreationDate = DateTime.Now };
+            var u3 = new User() { Id = 3, UserName = "Peppo", Fname = "Stefan", Lname = "Krakowsky", Password = "Testing345", CreationDate = DateTime.Now };
+            var u4 = new User() { Id = 4, UserName = "WinnieH", Fname = "Winnie", Lname = "Huynh", Password = "Testing456", CreationDate = DateTime.Now };
+            var u5 = new User() { Id = 5, UserName = "Ericx", Fname = "Eric", Lname = "Flodin", Password = "Testing567", CreationDate = DateTime.Now };
+            var u6 = new User() { Id = 6, UserName = "AndersB", Fname = "Anders", Lname = "Bergstrom", Password = "Testing678", CreationDate = DateTime.Now };
+            var u7 = new User() { Id = 7, UserName = "PeterH", Fname = "Peter", Lname = "Hafid", Password = "Testing789", CreationDate = DateTime.Now };
+            var u8 = new User() { Id = 8, UserName = "admin", Fname = "admin", Lname = "admin", Password = "admin", CreationDate = DateTime.Now };
             modelBuilder.Entity<User>().HasData(u1, u2, u3, u4, u5, u6, u7, u8);
 
             var em1 = new Email() { Mail = "JuliaH@test.com", UserId = 1 };
