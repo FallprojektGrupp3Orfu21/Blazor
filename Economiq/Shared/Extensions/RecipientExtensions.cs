@@ -10,8 +10,8 @@ namespace Economiq.Shared.Extensions
             return new RecipientDTO
             {
                 Id = recipient.Id,
-                Name = recipient.Name,
-                ExtraInfo = recipient.ExtraInfo
+                Name = recipient.Name.FirstCharToUpper(),
+                ExtraInfo = recipient.ExtraInfo.FirstCharToUpper()
             };
         }
 
