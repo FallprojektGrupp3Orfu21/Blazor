@@ -36,7 +36,7 @@ namespace Economiq.Server.Service
                
                 categoriesToReturn.Add(new ExpenseCategoryDTO()
                 {
-                    CategoryName = category.CategoryName,
+                    CategoryName = category.CategoryName.FirstCharToUpper(),
                     CategoryId = category.Id,
                     Expenses = expensesToReturn
                     
@@ -131,7 +131,7 @@ namespace Economiq.Server.Service
 
                 CategorySumDTO categorySumDTO = new()
                 {
-                    CategoryName = category.CategoryName,
+                    CategoryName = category.CategoryName.FirstCharToUpper(),
                     TotalSum = totalAmount,
                     CategoryId = category.Id
                 };

@@ -11,10 +11,10 @@ namespace Economiq.Shared.Extensions
             return new()
             {
                 Amount = expense.Amount,
-                categoryName = expense.Category.CategoryName,
+                categoryName = expense.Category.CategoryName.FirstCharToUpper(),
                 ExpenseDate = expense.ExpenseDate.ToString("dd/MM/yyyy", new CultureInfo("en-GB")),
-                RecipientName = expense.Recipient.Name,
-                Title = expense.Comment,
+                RecipientName = expense.Recipient.Name.FirstCharToUpper(),
+                Title = expense.Comment.FirstCharToUpper(),
                 DeleteExpenseId = expense.Id               
             };
         }
