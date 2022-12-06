@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Economiq.Server.Service
@@ -13,17 +14,27 @@ namespace Economiq.Server.Service
     {
         private readonly IConfiguration _configuration;
         private readonly EconomiqContext _context;
+        private readonly PasswordService _pwService;
         
-        public AuthenticationService(IConfiguration config, EconomiqContext context)
+        public AuthenticationService(IConfiguration config, EconomiqContext context, PasswordService pwService)
         {
             _configuration = config;
             _context = context;
+            _pwService = pwService;
         }
 
         public async Task<User?> Authenticate(Credentials credentials)
         {
-            User? currentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserName.ToLower() == credentials.Username.ToLower() && u.Password == credentials.Password);
-            return currentUser;
+            bool userFound = await _context.Users.AnyAsync(u => u.UserName.ToLower().Equals(credentials.Username.ToLower()));
+            if(userFound)
+            {
+                User? userToLogin = await _context.Users.FirstOrDefaultAsync(u => u.UserName.ToLower().Equals(credentials.Username.ToLower()));
+                if(_pwService.HashPassword($"{credentials.Password}{userToLogin.Salt}").Equals(userToLogin.Password))
+                {
+                    return userToLogin;
+                }
+            }
+            return null;
         }
 
         public string GenerateToken(User user)

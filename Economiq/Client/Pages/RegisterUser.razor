@@ -49,15 +49,6 @@
             <label for="password">Password:</label>
             <ValidationMessage For="@(() => NewUser.password)" />
         </div>
-
-
-        <div class="mb-2 form-group form-floating">
-            <InputText id="City" placeholder="City" @bind-Value="@NewUser.City" class="form-control" />
-            <label for="City">City:</label>
-            <ValidationMessage For="@(() => NewUser.City)" />
-        </div>
-
-
         <div>
        
 
@@ -84,7 +75,6 @@
         NewUser.Username = string.Empty;
         NewUser.email = string.Empty;
         NewUser.password = string.Empty;
-        NewUser.City = string.Empty;
         _succesMessage = "Registration has been succesful!";
         _navManager.NavigateTo("/");
 
