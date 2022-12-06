@@ -1,4 +1,5 @@
-﻿@using Economiq.Client.Service
+﻿@using Economiq.Client.Components.GetNumber;
+@using Economiq.Client.Service
 @using Economiq.Shared.DTO
 @using Economiq.Shared.Models
 @inject ExpenseService _expenseService
@@ -33,6 +34,7 @@
     }
 </style>
 <p>@Confirmation</p>
+<div id="maxamount">@tmpMaxAmount</div>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -81,6 +83,14 @@
     </div>
     <button class="btn btn-primary" type="submit">Add Expense</button>
 </EditForm>
+@if (getNumberUnconditionally)
+{
+    <Economiq.Client.Components.GetNumber.GetNumberModal
+       PlaceHolderText ="New max amount"
+       PromptText = "Enter max amount for budget"
+       TitleText = "Creating new budget for time period containing expense, please enter max amount for the budget"
+       NewMaxAmount="tmpMaxAmount"/>
+}
 @if (ShowModal)
 {
     <Economiq.Client.Components.AddCategory.AddCategoryModal CloseModalFunction="@ChangeShowModal"
@@ -91,6 +101,8 @@
 @code {
     [Parameter]
     public EventCallback UpdateList { get; set; }
+    public int NewMaxAmount;
+    public int tmpMaxAmount; 
     public string Confirmation { get; set; } = String.Empty;
     private List<RecipientDTO> _recipients = new();
     public ExpenseDTO NewExpense { get; set; } = new();
@@ -98,9 +110,14 @@
     private String NewExpenseCategory { get; set; } = String.Empty;
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
     public bool ShowModal = false;
+    public bool getNumberUnconditionally = false;
     public void CategoryChanged(string newValue)
     {
         NewExpenseCategory = newValue;
+    }
+    public void UpdateMaxAmount(GetNumberModal getNumberModal)
+    {
+        
     }
     protected override async Task OnInitializedAsync()
     {
@@ -113,6 +130,7 @@
         }
         StateHasChanged();
     }
+
     public void ChangeShowModal()
     {
         NewExpenseCategory = String.Empty;
@@ -125,7 +143,7 @@
             {
                 CategoryName = NewExpenseCategory
             };
-      var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
+        var tmp = await _categoryService.CreateExpenseCategory(expenseCategory);
         if(tmp.Item1==System.Net.HttpStatusCode.Created){
             _categoryList.Add(tmp.Item2);
             NewExpense.CategoryId = tmp.Item2.CategoryId;
@@ -144,6 +162,11 @@
 
         if(relevantBudget == null){
             decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
+            if(latestMaxAmount == decimal.Zero)
+            {
+                getNumberUnconditionally = true;
+                StateHasChanged();
+            }
             //If Decimal = 0 show modal.
             //Else show modal for question about using latest one or create new one.
             createBudgetDTO.MaxAmount = latestMaxAmount;

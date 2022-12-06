@@ -1,0 +1,70 @@
+﻿<h3>GetNumberModal</h3>
+@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@using Economiq.Shared.Models
+<style>
+    .Modal {
+        background-color: rgba(0,0,0,0.9);
+        height: 1000vh;
+        width: 100vw;
+        border: 1px solid black;
+        position: absolute;
+        z-index: 9999;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px solid black;
+    }
+
+    .container {
+        padding: 1em;
+        width: 80%;
+        margin: auto;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .Modal-Body input {
+        margin-bottom: 1em;
+        text-align: center;
+    }
+</style>  
+<div class="Modal">
+    <div class="container">
+        <div class="Modal-Body">
+            @if(PromptText.Length != 0)
+            {
+            <p>@PromptText</p>    
+            }
+            <input class="form-control"
+                   type="number"
+                   min="0"
+                   placeholder=@PlaceholderText
+                   @bind-value ="NewMaxAmount"
+                   />
+        </div>
+        <div class="Modal-footer">
+            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string PlaceholderText { get; set; }
+    [Parameter]
+    public string PromptText { get; set; }
+    [Parameter]
+    public string TitleText { get; set; }
+    [Parameter]
+    public Action SaveFunction { get; set; }
+    [Parameter]
+    public int NewMaxAmount { get; set; }
+}
