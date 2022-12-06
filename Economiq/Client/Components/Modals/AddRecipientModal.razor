@@ -1,0 +1,139 @@
+﻿@using Economiq.Client.Service
+@using Economiq.Shared.DTO
+@using Economiq.Shared.Models
+<style>
+    .Modal {
+        background-color: rgba(0,0,0,0.9);
+        height: 1000vh;
+        width: 100vw;
+        border: 1px solid black;
+        position: absolute;
+        z-index: 9999;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px solid black;
+    }
+
+    .btn-primary1 {
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #0d6efd;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        border-radius: .25rem;
+    }
+
+    .container {
+        padding: 1em;
+        width: 80%;
+        margin: auto;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .Modal-Body input {
+        margin-bottom: 1em;
+        text-align: center;
+    }
+
+    .header {
+        color: black;
+        text-align: center;
+    }
+    .errorMessage{
+        color: darkred;
+        text-align: center;
+    }
+</style>
+<div class="Modal">
+    <div class="container">
+        <div class="Modal-Body">
+            <h2 class="header">Add Category</h2>
+            <p class="errorMessage">@errorMessage</p>
+            <input class="form-control"
+                   type="text"
+                   placeholder="Recipient Name"
+                   value="@currentName" @oninput="OnNameChanged" />
+            <input class="form-control"
+                   type="text"
+                   placeholder="Extra Info"
+                   value="@currentInfo" @oninput="OnInfoChanged" />
+        </div>
+        <div class="Modal-footer">
+            <button class="btn-primary1" @onclick="RunSaveNewRecipient">Save</button>
+            <button class="btn btn-secondary" @onclick="@RunCloseModalFunction">Cancel</button>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Action CloseModalFunction { get; set; }
+    [Parameter]
+    public Action SaveNewRecipientFunction { get; set; }
+    [Parameter]
+    public String RecipientName { get; set; }
+    [Parameter]
+    public string RecipientInfo { get; set; }
+    [Parameter]
+    public EventCallback<string> RecipientNameChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> RecipientInfoChanged { get; set; }
+
+    private string currentName { get; set; }
+    private string currentInfo { get; set; }
+    private string errorMessage = string.Empty;
+
+    private void RunCloseModalFunction()
+    {
+        CloseModalFunction?.Invoke();
+    }
+    private void RunSaveNewRecipient()
+    {
+        if (!string.IsNullOrEmpty(RecipientName))
+        {
+            SaveNewRecipientFunction?.Invoke();
+            RunCloseModalFunction();
+        }
+        else
+        {
+            errorMessage = "Recipient name required";
+        }
+
+    }
+    protected override void OnInitialized()
+    {
+        currentName = RecipientName;
+        currentInfo = RecipientInfo;
+    }
+
+    
+    private Task OnNameChanged(ChangeEventArgs e)
+    {
+        currentName = e.Value.ToString();
+        return RecipientNameChanged.InvokeAsync(currentName);
+    }
+    private Task OnInfoChanged(ChangeEventArgs e)
+    {
+        currentInfo = e.Value.ToString();
+        return RecipientInfoChanged.InvokeAsync(currentInfo);
+    }
+}
+
+ }
+

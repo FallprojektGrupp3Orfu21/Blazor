@@ -1,5 +1,6 @@
 ﻿using Economiq.Shared.DTO;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace Economiq.Client.Service
@@ -13,11 +14,12 @@ namespace Economiq.Client.Service
             _client = client;
         }
 
-        public async Task<string> CreateRecipient(RecipientDTO recipientDTO)
+        public async Task<(HttpStatusCode, RecipientDTO)> CreateRecipient(RecipientDTO recipientDTO)
         {
             HttpResponseMessage response = await _client.PostAsJsonAsync("api/recipient/create", recipientDTO);
             string responseString = await response.Content.ReadAsStringAsync();
-            return responseString;
+            RecipientDTO deserialized = JsonConvert.DeserializeObject<RecipientDTO>(responseString);
+            return (response.StatusCode, deserialized);
 
         }
 

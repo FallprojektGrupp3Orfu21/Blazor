@@ -50,13 +50,25 @@
         margin-bottom: 1em;
         text-align: center;
     }
+
+    .header {
+        color: black;
+        text-align: center;
+    }
+
+    .errorMessage {
+        color: darkred;
+        text-align: center;
+    }
 </style>
 <div class="Modal">
     <div class="container">
     <div class="Modal-Body">
+        <h2 class="header">Add Category</h2>
+        <p class="errorMessage">@errorMessage</p>
             <input class="form-control"  
                    type="text"  
-                   placeholder="Add New Category" 
+                   placeholder="CategoryName" 
                    value="@currentString" @oninput="OnValueChanged" />
     </div>
     <div class="Modal-footer">
@@ -74,12 +86,21 @@
     public String ExpenseCategoryString { get; set; }
     [Parameter] 
     public EventCallback<string> CategoryChanged { get; set; }
+    private string errorMessage = string.Empty;
+
     private void RunCloseModalFunction(){
         CloseModalFunction?.Invoke(); 
     }
     private void RunSaveNewCategory(){
-        SaveNewCategoryFunction?.Invoke();
-        RunCloseModalFunction();
+        if (!string.IsNullOrEmpty(currentString))
+        {
+            SaveNewCategoryFunction?.Invoke();
+            RunCloseModalFunction();
+        }
+        else
+        {
+            errorMessage = "Category name required";
+        }
     }
     protected override void OnInitialized()
     {

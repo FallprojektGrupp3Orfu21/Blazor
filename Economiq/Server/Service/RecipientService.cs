@@ -14,20 +14,14 @@ namespace Economiq.Server.Service
             _context = context;
         }
 
-        public async Task<bool> CreateRecipient(int userId, RecipientDTO dto)
+        public async Task<RecipientDTO> CreateRecipient(int userId, RecipientDTO dto)
         {
 
             var newRecipient = dto.ToRecipient(userId);
             _context.Recipients.Add(newRecipient);
-            try
-            {
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            await _context.SaveChangesAsync();
+            dto.Id = newRecipient.Id;
+            return dto;
         }
 
 
