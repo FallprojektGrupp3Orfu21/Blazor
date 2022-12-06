@@ -1,4 +1,5 @@
 ﻿using Economiq.Shared.DTO;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace Economiq.Client.Service
@@ -11,11 +12,11 @@ namespace Economiq.Client.Service
         {
             _client = client;
         }
-        public async Task<string> Login(Credentials LoginCredentials)
+        public async Task<(HttpStatusCode, string)> Login(Credentials LoginCredentials)
         {
             HttpResponseMessage response = await _client.PostAsJsonAsync("api/authentication/login", LoginCredentials);
             var token = await response.Content.ReadAsStringAsync();
-            return token;
+            return (response.StatusCode, token);
         }
     }
 }

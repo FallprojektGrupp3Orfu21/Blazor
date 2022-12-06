@@ -1,42 +1,42 @@
 ﻿@page "/login"
 @using Economiq.Client.Service
 @using Economiq.Shared.DTO
+@using System.Net;
 @inject AuthenticationStateProvider AuthStateProvider
 @inject ILocalStorageService LocalStorage
 @inject AuthService Service
 @inject NavigationManager NavManager
 
 <style>
-    .login{
+    .login {
         font-family: Comfortaa;
-        color: white;
-       display: grid;
-        justify-content: center;
-        justify-items: center;
-
-    }
-    .users{
-
         color: white;
         display: grid;
         justify-content: center;
         justify-items: center;
     }
 
-
+    .users {
+        color: white;
+        display: grid;
+        justify-content: center;
+        justify-items: center;
+    }
 </style>
 <br />
 
 <h2 class="login">Login</h2>
 <br />
 
-<EditForm Model="userLogin" OnSubmit="HandleLogin"><br />
-  <div class="users">  <label for="username">Username</label><br />
-
-    <InputText id="username" @bind-Value="userLogin.Username"/> <br />
+<EditForm Model="userLogin" OnSubmit="HandleLogin">
     <br />
-    <label for="password">Password</label>&nbsp;
-    <InputText id="password" type="password" @bind-Value="userLogin.Password"/>
+    <div class="users">
+        <p class="text-danger">@errorMessage</p><br />
+        <label for="username">Username</label><br />
+        <InputText id="username" @bind-Value="userLogin.Username" /> <br />
+        <br />
+        <label for="password">Password</label>&nbsp;
+        <InputText id="password" type="password" @bind-Value="userLogin.Password" />
         <br /><br />
         <button type="submit" class="btn btn-primary">Login</button>
     </div>
@@ -48,12 +48,21 @@
 @code {
     Credentials userLogin = new();
     string token = String.Empty;
+    string errorMessage = String.Empty;
 
     private async Task HandleLogin()
     {
-        token = await Service.Login(userLogin);
-        await LocalStorage.SetItemAsync("token", token);
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        NavManager.NavigateTo("/");
+        (HttpStatusCode, string) response = await Service.Login(userLogin);
+        if (response.Item1 == HttpStatusCode.Unauthorized)
+        {
+            errorMessage = "Incorrect Username or Password";
+        }
+        else
+        {
+            token = response.Item2;
+            await LocalStorage.SetItemAsync("token", token);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            NavManager.NavigateTo("/");
+        }
     }
 }
