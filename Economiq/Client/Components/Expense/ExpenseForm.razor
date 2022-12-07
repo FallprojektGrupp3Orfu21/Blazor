@@ -34,7 +34,6 @@
     }
 </style>
 <p>@Confirmation</p>
-<div id="maxamount">@tmpMaxAmount</div>
 <EditForm Model="@NewExpense" OnValidSubmit="@HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -85,11 +84,21 @@
 </EditForm>
 @if (getNumberUnconditionally)
 {
-    <Economiq.Client.Components.GetNumber.GetNumberModal
+    ExpenseDTO tmp = new ExpenseDTO()
+    {
+        Title = NewExpense.Title,
+        CategoryId = NewExpense.CategoryId,
+        RecipientId = NewExpense.RecipientId,
+        ExpenseDate = NewExpense.ExpenseDate,
+        Amount = NewExpense.Amount,
+    }; 
+    <Economiq.Client.Components.GetNumber.GetNumberModal 
+       CloseModalFunction="@ExitGetNumberModal"
+       SavedExpense="@tmp"
        PlaceHolderText ="New max amount"
        PromptText = "Enter max amount for budget"
        TitleText = "Creating new budget for time period containing expense, please enter max amount for the budget"
-       NewMaxAmount="tmpMaxAmount"/>
+       ValueChanged = "@UpdateMaxAmount"/>
 }
 @if (ShowModal)
 {
@@ -101,8 +110,8 @@
 @code {
     [Parameter]
     public EventCallback UpdateList { get; set; }
-    public int NewMaxAmount;
-    public int tmpMaxAmount; 
+    decimal latestMaxAmount;
+    public int? NewMaxAmount = null;
     public string Confirmation { get; set; } = String.Empty;
     private List<RecipientDTO> _recipients = new();
     public ExpenseDTO NewExpense { get; set; } = new();
@@ -111,13 +120,27 @@
     public List<ExpenseCategoryDTO> _categoryList { get; set; } = new();
     public bool ShowModal = false;
     public bool getNumberUnconditionally = false;
+    public bool confirmCurrentMaxAmmount = false; 
     public void CategoryChanged(string newValue)
     {
         NewExpenseCategory = newValue;
     }
-    public void UpdateMaxAmount(GetNumberModal getNumberModal)
+    public void UpdateMaxAmount(int NewMax)
     {
+        NewMaxAmount = NewMax;
+    }
+    public void ExitGetNumberModal(ExpenseDTO tmp)
+    {
+        NewExpense.Title = tmp.Title;
+        NewExpense.CategoryId = tmp.CategoryId;
+        NewExpense.RecipientId = tmp.RecipientId;
+        NewExpense.BudgetId = tmp.BudgetId;
+        NewExpense.Amount = tmp.Amount;
+        NewExpense.RecipientId = tmp.RecipientId;
+        getNumberUnconditionally = false;
+        confirmCurrentMaxAmmount = false;
         
+        HandleSubmit();
     }
     protected override async Task OnInitializedAsync()
     {
@@ -161,11 +184,19 @@
         ListBudgetDTO relevantBudget = await _budgetService.GetBudgetByDate(createBudgetDTO);
 
         if(relevantBudget == null){
-            decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
-            if(latestMaxAmount == decimal.Zero)
+            if (NewMaxAmount == null)
             {
-                getNumberUnconditionally = true;
-                StateHasChanged();
+                decimal latestMaxAmount = await _budgetService.GetLatestMaxAmount();
+                if (latestMaxAmount == decimal.Zero)
+                {
+                    getNumberUnconditionally = true;
+                    StateHasChanged();
+
+                }
+                else
+                {
+                                    
+                }
             }
             //If Decimal = 0 show modal.
             //Else show modal for question about using latest one or create new one.

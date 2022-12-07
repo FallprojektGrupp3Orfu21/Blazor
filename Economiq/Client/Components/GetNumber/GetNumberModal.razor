@@ -43,28 +43,52 @@
             {
             <p>@PromptText</p>    
             }
-            <input class="form-control"
+            <input class="form-control" 
                    type="number"
                    min="0"
-                   placeholder=@PlaceholderText
-                   @bind-value ="NewMaxAmount"
-                   />
+                   placeholder=@PlaceholderText 
+                   value="@CurrentValue"
+                   @oninput="OnvalueChanged" />
         </div>
         <div class="Modal-footer">
-            <button class="btn btn-primary">Save</button>
-            <button class="btn btn-secondary">Cancel</button>
+            <button class="btn btn-primary" @onclick="@RunCloseModal">Save</button> 
         </div>
     </div>
 </div>
 @code {
+    /* När användaren uppdaterar värdet i inputen så ska detta slå igenom i föräldrakomponenten, ifall användaren trycker på spara så ska modalen stängas och värdet sättas 
+    * 
+    * 
+    */
+    [Parameter]
+    public ExpenseDTO SavedExpense { get; set; }
     [Parameter]
     public string PlaceholderText { get; set; }
     [Parameter]
     public string PromptText { get; set; }
     [Parameter]
     public string TitleText { get; set; }
+    [Parameter] 
+    public EventCallback<ExpenseDTO> CloseModalFunction { get; set; }
+    public int CurrentValue { get; set; } = 0;
     [Parameter]
-    public Action SaveFunction { get; set; }
-    [Parameter]
-    public int NewMaxAmount { get; set; }
+    public EventCallback<int> ValueChanged {get; set;}
+
+    private Task RunCloseModal()
+    {
+        return CloseModalFunction.InvokeAsync(SavedExpense);
+    }
+    private Task OnvalueChanged(ChangeEventArgs e)
+    {
+        var tmp = e.Value.ToString();
+        if (tmp.Length != 0)
+        {
+            CurrentValue = int.Parse(tmp);
+        }
+        else
+        {
+            CurrentValue = 0;
+        }
+        return ValueChanged.InvokeAsync(CurrentValue);
+    }
 }
